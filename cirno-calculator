@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>琪露诺计算器</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            background-image: url(琪露诺.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #e0f7fa; /* 浅蓝色背景 */
+        }
+        input[type="text"] {
+            width: 280px;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-align: right;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            background-color: #b2ebf2; /* 浅蓝色按钮 */
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #80deea;
+        }
+        .operator {
+            background-color: #64b5f6; /* 更深的蓝色按钮 */
+        }
+        .operator:hover {
+            background-color: #4fc3f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="title">琪露诺计算器</div>
+        <a target="_blank" rel="noopener noreferrer" href="https://wyppony.github.io/lovebaka/">大本营</a>
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="setOperation('+')">+</button>
+            
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="setOperation('-')">-</button>
+            
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="setOperation('*')">*</button>
+            
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="calculateResult()">=</button>
+            <button class="operator" onclick="setOperation('/')">/</button>
+        </div>
+    </div>
+
+    <audio id="bakaSound" src="baka.mp3"></audio>
+
+    <script>
+        let currentInput = '';
+        let operation = null;
+
+        function appendNumber(number) {
+            currentInput += number;
+            document.getElementById('display').value = currentInput;
+        }
+
+        function setOperation(op) {
+            operation = op;
+            currentInput = '';
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            operation = null;
+            document.getElementById('display').value = '';
+        }
+
+        function calculateResult() {
+            // Always return 9 regardless of input and operation
+            document.getElementById('display').value = '⑨';
+            playBakaSound();
+        }
+
+        function playBakaSound() {
+            const audio = document.getElementById('bakaSound');
+            audio.currentTime = 0; // Rewind to the start of the sound
+            audio.play().catch(error => {
+                console.error("Error playing sound:", error);
+            });
+        }
+    </script>
+</body>
+</html>
