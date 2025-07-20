@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易工具箱</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .tool-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        input[type="text"], select, input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 计算器 -->
+    <div class="tool-box">
+        <h2>简单计算器</h2>
+        <input type="text" id="calc-input" placeholder="输入表达式...">
+        <button onclick="calculate()">计算</button>
+        <div class="result" id="calc-result"></div>
+    </div>
+
+    <!-- 凯撒密码加密解密器 -->
+    <div class="tool-box">
+        <h2>凯撒密码加密解密</h2>
+        <textarea id="caesar-text" rows="4" placeholder="输入文本..."></textarea>
+        <input type="number" id="shift-value" placeholder="偏移量..." min="-25" max="25">
+        <button onclick="encryptCaesar()">加密</button>
+        <button onclick="decryptCaesar()">解密</button>
+        <div class="result" id="caesar-result"></div>
+    </div>
+
+    <!-- 随机数生成器 -->
+    <div class="tool-box">
+        <h2>随机数生成</h2>
+        <input type="number" id="digit-count" placeholder="数字位数 (1-12)" min="1" max="12">
+        <button onclick="generateRandomNumber()">生成</button>
+        <div class="result" id="random-number-result"></div>
+    </div>
+
+    <!-- 摄氏度、华氏度、开尔文单位转换器 -->
+    <div class="tool-box">
+        <h2>温度单位转换</h2>
+        <input type="number" id="temp-value" placeholder="输入数值...">
+        <select id="from-temp-unit">
+            <option value="celsius">摄氏度 (°C)</option>
+            <option value="fahrenheit">华氏度 (°F)</option>
+            <option value="kelvin">开尔文 (K)</option>
+        </select>
+        <select id="to-temp-unit">
+            <option value="celsius">摄氏度 (°C)</option>
+            <option value="fahrenheit">华氏度 (°F)</option>
+            <option value="kelvin">开尔文 (K)</option>
+        </select>
+        <button onclick="convertTemperature()">转换</button>
+        <div class="result" id="temp-result"></div>
+    </div>
+
+    <!-- 猜数字游戏 -->
+    <div class="tool-box">
+        <h2>猜数字游戏</h2>
+        <p>尝试猜一个1到100之间的数字。</p>
+        <input type="number" id="guess-input" placeholder="你的猜测..." min="1" max="100">
+        <button onclick="checkGuess()">提交猜测</button>
+        <div class="result" id="guess-result"></div>
+    </div>
+
+    <!-- 空白板块 -->
+    <div class="tool-box">
+        <h2>空白板块</h2>
+        <p>这是一个空白板块，你可以在这里添加自定义内容。</p>
+    </div>
+
+    <!-- 颜色代码生成器 -->
+    <div class="tool-box">
+        <h2>随机颜色代码</h2>
+        <button onclick="generateColor()">生成</button>
+        <div class="result" id="color-result"></div>
+        <div style="background-color:#ffffff; height:50px;" id="color-preview"></div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const expression = document.getElementById('calc-input').value;
+        try {
+            const result = eval(expression);
+            document.getElementById('calc-result').innerText = `结果: ${result}`;
+        } catch (e) {
+            document.getElementById('calc-result').innerText = '无效的表达式';
+        }
+    }
+
+    function encryptCaesar() {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('shift-value').value) || 0;
+        document.getElementById('caesar-result').innerText = caesarCipher(text, shift);
+    }
+
+    function decryptCaesar() {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('shift-value').value) || 0;
+        document.getElementById('caesar-result').innerText = caesarCipher(text, -shift);
+    }
+
+    function caesarCipher(text, shift) {
+        if (!text) return '';
+        let result = '';
+
+        for (let i = 0; i < text.length; i++) {
+            let charCode = text.charCodeAt(i);
+
+            if (charCode >= 65 && charCode <= 90) { // A-Z
+                charCode = ((charCode - 65 + shift) % 26 + 26) % 26 + 65;
+            } else if (charCode >= 97 && charCode <= 122) { // a-z
+                charCode = ((charCode - 97 + shift) % 26 + 26) % 26 + 97;
+            }
+
+            result += String.fromCharCode(charCode);
+        }
+
+        return result;
+    }
+
+    function generateRandomNumber() {
+        const digitCount = parseInt(document.getElementById('digit-count').value) || 1;
+        if (digitCount < 1 || digitCount > 12) {
+            document.getElementById('random-number-result').innerText = '请输入1到12之间的数字';
+            return;
+        }
+        const randomNumber = Math.floor(Math.random() * (Math.pow(10, digitCount))) % Math.pow(10, digitCount);
+        document.getElementById('random-number-result').innerText = `随机数: ${randomNumber.toString().padStart(digitCount, '0')}`;
+    }
+
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+
+    function checkGuess() {
+        const guess = parseInt(document.getElementById('guess-input').value);
+        attempts++;
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            document.getElementById('guess-result').innerText = '请输入1到100之间的数字';
+            return;
+        }
+        if (guess === secretNumber) {
+            document.getElementById('guess-result').innerText = `恭喜你！你在${attempts}次尝试中猜对了数字${secretNumber}！`;
+            resetGame();
+        } else if (guess < secretNumber) {
+            document.getElementById('guess-result').innerText = '太低了，再试一次。';
+        } else {
+            document.getElementById('guess-result').innerText = '太高了，再试一次。';
+        }
+    }
+
+    function resetGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        document.getElementById('guess-input').value = '';
+    }
+
+    function convertTemperature() {
+        const value = parseFloat(document.getElementById('temp-value').value);
+        const fromUnit = document.getElementById('from-temp-unit').value;
+        const toUnit = document.getElementById('to-temp-unit').value;
+
+        let celsius;
+        switch (fromUnit) {
+            case 'celsius':
+                celsius = value;
+                break;
+            case 'fahrenheit':
+                celsius = (value - 32) * 5 / 9;
+                break;
+            case 'kelvin':
+                celsius = value - 273.15;
+                break;
+        }
+
+        let result;
+        switch (toUnit) {
+            case 'celsius':
+                result = celsius.toFixed(2) + ' °C';
+                break;
+            case 'fahrenheit':
+                result = (celsius * 9 / 5 + 32).toFixed(2) + ' °F';
+                break;
+            case 'kelvin':
+                result = (celsius + 273.15).toFixed(2) + ' K';
+                break;
+        }
+
+        document.getElementById('temp-result').innerText = `${value} ${fromUnit.toUpperCase()} = ${result}`;
+    }
+
+    function generateColor() {
+        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('color-result').innerText = `颜色代码: ${randomColor}`;
+        document.getElementById('color-preview').style.backgroundColor = randomColor;
+    }
+</script>
+
+</body>
+</html>
