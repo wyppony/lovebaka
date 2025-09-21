@@ -1,88 +1,319 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>爱⑨之家</title>
-  <style>
-  body {
-      background-color: #CECEFE;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      background-attachment: fixed;
-  }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱⑨之家</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #add8e6; /* 浅蓝色背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .head-box {
+            background-color: #87ceeb; /* 浅蓝色背景 */
+            color: white;
+            text-align: right;
+            padding: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .head-box a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .head-box img {
+            vertical-align: middle;
+            height: 24px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            right: 1em;
+            top: 3.5em;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .dropdown-menu a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .main-box {
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px; /* 确保内容不被头栏遮挡 */
+        }
+        header {
+            background-color: #b0e0e6; /* 天青色背景 */
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .subtitle {
+            position: absolute;
+            right: 1em;
+            bottom: 1em;
+            background-color: transparent; /* 透明背景 */
+            color: white;
+            text-align: right;
+            font-size: 1.2em;
+        }
+        .introduction {
+            background-color: #f9f9f9; /* 浅灰色背景 */
+            color: black;
+            text-align: center;
+            padding: 20px;
+            width: 90%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .content-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .image-container {
+            position: relative;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .image-container:hover {
+            transform: scale(1.05);
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            transition: .5s ease;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .image-container:hover .overlay {
+            height: 50%;
+        }
+        .text {
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+        }
+        .footer {
+            background-color: #ffffff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-top: 1px solid #ddd;
+        }
+        @media (max-width: 600px) {
+            .content-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-<div style="
-  text-align:center;
-  line-height:1.7;
-">
-<hezi style="height: 50px; background: blue; display: block; color:white; font-size:30px;">爱⑨之家<hezi>
+
+<div class="head-box">
+    <div onclick="toggleDropdown()" style="cursor: pointer;">
+        ≡
+    </div>
+    <div id="dropdownMenu" class="dropdown-menu">
+        <a href="https://www.thwiki.cc/%E7%90%AA%E9%9C%B2%E8%AF%BA">关于琪露诺</a>
+        <a href="profile.html">关于⑨教</a>
+        <a href="gallery.html">琪露诺美图</a>
+        <a href="https://wyppony.github.io/lovebaka/cirno-calculator.html">琪露诺计算器</a>
+        <a href="https://wyppony.github.io/lovebaka/tool-box.html">小工具</a>
+    </div>
+    <a href="https://space.bilibili.com/488255719?spm_id_from=333.1007.0.0" target="_blank">作者:驴德来</a>
+    <a href="https://space.bilibili.com/488255719?spm_id_from=333.1007.0.0" target="_blank"><img src="驴德来.png" alt="驴德来"></a>
 </div>
-<div style="
-  text-align:center;
-  margin:15px auto;
-  padding:15px;
-  line-height:1.7;
-">
-<img src='baka.gif' alt="baka" width="80px" height="80px"><p style="color: white; font-size:20px;">永远追随⑨的步伐，琪露诺酱是最强的哇！</p>
-<p style="color: white; font-size:50px;">教会群聊：869308557</p>
+
+<div class="main-box">
+    <header>
+        <h1 style="margin: 0;">爱⑨之家</h1>
+        <div class="subtitle">V2.0</div>
+    </header>
+    <div class="introduction">
+        这里是琪露诺粉丝站站点，原琪露诺粉丝团体“拜baka教”的官方网站，这里你可以了解琪露诺的很多讯息
+    </div>
+    <div class="content-container">
+        <a href="9jiao.html">
+            <div class="image-container">
+                <img src="1.jpg" alt="关于⑨教">
+                <div class="overlay">
+                    <div class="text">⑨教</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/touhouphotos/cirno.html">
+            <div class="image-container">
+                <img src="2.jpg" alt="琪露诺画廊">
+                <div class="overlay">
+                    <div class="text">画廊</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/touhoumusic">
+            <div class="image-container">
+                <img src="4.png" alt="东方音乐播放器">
+                <div class="overlay">
+                    <div class="text">音乐</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/touhouvideo">
+            <div class="image-container">
+                <img src="3.jpg" alt="东方视频播放器">
+                <div class="overlay">
+                    <div class="text">二创视频</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/lovebaka/question.html">
+            <div class="image-container">
+                <img src="head4.jpg" alt="东方问答题">
+                <div class="overlay">
+                    <div class="text">问答</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/touhouphotos/hcsq.html">
+            <div class="image-container">
+                <img src="head5.jpg" alt="抽幻存神签">
+                <div class="overlay">
+                    <div class="text">抽幻存神签</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/lovebaka/download.html">
+            <div class="image-container">
+                <img src="head6.jpg" alt="下载器">
+                <div class="overlay">
+                    <div class="text">东方下载器</div>
+                </div>
+            </div>
+        </a>
+        <a href="https://wyppony.github.io/touhouphotos">
+            <div class="image-container">
+                <img src="head7.jpg" alt="图片留存器">
+                <div class="overlay">
+                    <div class="text">图片留存器</div>
+                </div>
+            </div>
+        </a>
+        <!-- 添加更多功能块 -->
+    </div>
 </div>
-<div style="
-  text-align:center;
-  margin:15px auto;
-  padding:15px;
-  line-height:1.7;
-">
-<p style="color: white; font-size:40px;">这是什么网站</p>
-<p style="color: white; font-size:20px;">这是亚洲最大的琪露诺粉丝站，目前已发展成专门拥护琪露诺的通俗教派，称之“拜baka教”，简称“⑨教”，教会教主是亲了琪露诺⑨年的<a target="_blank" rel="noopener noreferrer" href="https://space.bilibili.com/488255719?spm_id_from=333.1007.0.0">驴德来</a></p>
-<p style="color: white; font-size:40px;">教会状况</p>
-<p style="color: white; font-size:20px;">教会目前一共有⑨人，教徒姓名不方便透露，这是教堂的照片
-<img src='教堂.png' alt="baka教堂" width="400px" height="150px">
-<p style="color: white; font-size:40px;">加入教派有什么好处</p>
-<p style="color: white; font-size:20px;">好处多多！加入教会一起喜欢琪露诺吧，我们将会在最强琪露诺日（2099年9月9日）在雾之湖琪冻路999号举办盛大的抽奖游行活动，有丰厚的奖品呢！奖池如下：</p>
-<img src='baka吧唧.png' alt="baka吧唧" width="120px" height="150px">
-<p style="color: white; font-size:20px;">⑥等奖：琪露诺吧唧</p>
-<img src='琪露诺票.png' alt="baka票根" width="125px" height="200px">
-<p style="color: white; font-size:20px;">⑤等奖：琪露诺票根</p>
-<img src='琪露诺色纸.png' alt="baka色纸" width="125px" height="200px">
-<p style="color: white; font-size:20px;">④等奖；琪露诺色纸</p>
-<img src='琪露诺明信片.png' alt="baka明信片" width="125px" height="200px">
-<p style="color: white; font-size:20px;">③等奖：琪露诺明信片一包</p>
-<img src='琪露诺玩偶挂件.png' alt="baka挂件" width="150px" height="200px">
-<p style="color: white; font-size:20px;">②等奖：琪露诺玩偶挂件</p>
-<img src='baka.gif' alt="琪露诺fumo" width="100px" height="100px">
-<p style="color: white; font-size:20px;">①等奖：琪露诺fumo</p>
-<p style="color: white; font-size:30px;">你心动了吗？赶紧抓紧时间加入我们的教会吧！</p>
-<p style="color: white; font-size:30px;">如何加入教会？</p>
-<p style="color: white; font-size:20px;">很简单！你只需要交⑨元的入教费，时刻ZUN守教规，你就是咱的教徒了</p>
-<img src='收款码.jpg' alt="收款码" width="100px" height="150px">
-<p style="color: white; font-size:20px;">这是收款码，要交⑨元哦</p>
-<p style="color: white; font-size:30px;">教规</p>
-<p style="color: white; font-size:20px;">如果你加入了⑨教，请时刻ZUN受baka的教义教规，违者变成baka！</p>
-<img src='baka手偶.jpg' alt="教主自拍照" width="100px" height="150px">
-<p style="color: white; font-size:20px;">1.每天欣赏教主自拍照一遍</p>
-<p style="color: white; font-size:20px;">2.每天看一篇关于琪露诺的视频，可以是MV，东方MMD，MAD等</p>
-<p style="color: white; font-size:20px;">3.每天起床第一件事，大喊一声baka</p>
-<p style="color: white; font-size:30px;">教堂礼拜</p>
-<p style="color: white; font-size:20px;">加入⑨教，每年⑨月⑨日需要进行一次礼拜</p>
-<p style="color: white; font-size:20px;">礼拜流程第一步：播放《斯卡雷特警察巡逻贫民区24时》音乐，在琪露诺fumo面前展示足技舞蹈，舞蹈详细教程请看<a target="_blank" rel="noopener noreferrer" href="https://www.bilibili.com/video/BV1fauBz7EC8/">这里</a></p>
-<p style="color: white; font-size:20px;">礼拜流程第二步：在表演结束后大喊一声FUNKY！</p>
-<p style="color: white; font-size:20px;">这样，你一年的任务就完成啦！</p>
-<p style="color: white; font-size:20px;">是不是非常轻松，快去试试吧！</p>
+
+<div class="footer">
+    被访问次数: <span id="visitCount">0</span> | 建站天数: <span id="daysSinceLaunch">0</span>
 </div>
-<div style="
-  text-align:center;
-  margin:15px auto;
-  padding:15px;
-  line-height:1.7;
-">
-<p><a target="_blank" rel="noopener noreferrer" href=" https://wyppony.github.io/touhoumusic/">看累了可以到我的音乐室听音乐</a></p>
-<p><a target="_blank" rel="noopener noreferrer" href=" https://wyppony.github.io/touhouvideos/">收藏的东方小视频</a></p>
-<p><a target="_blank" rel="noopener noreferrer" href=" https://wyppony.github.io/lovebaka/cirno-calculator.html">琪露诺计算器ᗜᴗᗜ</a></p>
-<p><a target="_blank" rel="noopener noreferrer" href=" https://wyppony.github.io/touhouphotos/">图片留存器</a></p>
-<p><a target="_blank" rel="noopener noreferrer" href=" https://wyppony.github.io/lovebaka/tool-box.html">实用工具箱</a></p>
-</div>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.getElementById("dropdownMenu");
+        if (dropdown.style.display === "block") {
+            dropdown.style.display = "none";
+        } else {
+            dropdown.style.display = "block";
+        }
+    }
+
+    // 关闭下拉菜单当点击页面其他地方时
+    window.onclick = function(event) {
+        if (!event.target.matches('.head-box div')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.style.display === "block") {
+                    openDropdown.style.display = "none";
+                }
+            }
+        }
+    }
+
+    // 访问次数统计
+    function updateVisitCount() {
+        let visitCount = localStorage.getItem('visitCount');
+        if (visitCount) {
+            visitCount = parseInt(visitCount) + 1;
+        } else {
+            visitCount = 1;
+        }
+        localStorage.setItem('visitCount', visitCount);
+        document.getElementById('visitCount').textContent = visitCount;
+    }
+
+    // 建站天数计算
+    function calculateDaysSinceLaunch() {
+        const launchDate = new Date('2025-07-12');
+        const today = new Date();
+        const timeDifference = today - launchDate;
+        const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        document.getElementById('daysSinceLaunch').textContent = daysDifference >= 0 ? daysDifference : 0;
+    }
+
+    // 初始化访问次数和建站天数
+    updateVisitCount();
+    calculateDaysSinceLaunch();
+</script>
+
 </body>
+</html>
