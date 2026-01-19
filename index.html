@@ -153,17 +153,6 @@
             width: 100%;
             text-align: center;
         }
-        .footer {
-            background-color: #ffffff;
-            color: #333;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-sizing: border-box;
-            border-top: 1px solid #ddd;
-        }
         @media (max-width: 600px) {
             .content-container {
                 grid-template-columns: 1fr;
@@ -199,7 +188,6 @@
     <div class="introduction">
         这里是琪露诺粉丝站站点，原琪露诺粉丝团体“拜baka教”的官方网站，这里你可以了解琪露诺的很多讯息
     </div>
-    <div>建站天数: <span id="daysSinceLaunch">0</span></div>
     <div class="content-container">
         <a href="9jiao.html">
             <div class="image-container">
@@ -291,35 +279,11 @@
             }
         }
     }
-
-    // 访问次数统计
-    function updateVisitCount() {
-        let visitCount = localStorage.getItem('visitCount');
-        if (visitCount) {
-            visitCount = parseInt(visitCount) + 1;
-        } else {
-            visitCount = 1;
-        }
-        localStorage.setItem('visitCount', visitCount);
-        document.getElementById('visitCount').textContent = visitCount;
-    }
-
-    // 建站天数计算
-    function calculateDaysSinceLaunch() {
-        const launchDate = new Date('2025-07-12');
-        const today = new Date();
-        const timeDifference = today - launchDate;
-        const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-        document.getElementById('daysSinceLaunch').textContent = daysDifference >= 0 ? daysDifference : 0;
-    }
-
-    // 初始化访问次数和建站天数
-    updateVisitCount();
-    calculateDaysSinceLaunch();
 </script>
 
 </body>
 </html>
+
 
 
 
