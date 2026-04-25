@@ -1,0 +1,653 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fumo盲盒拆拆乐</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Microsoft YaHei", sans-serif;
+    user-select:none;
+}
+body{
+    background: #f5f5f5;
+    min-height: 100vh;
+    position: relative;
+    padding: 20px;
+}
+/* 翻页按钮：置顶显示，无其他头栏 */
+.page-btn {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.page-btn button {
+    background: #8D6E63;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0 10px;
+    font-size: 16px;
+}
+.page-btn button.active {
+    background: #5D4037;
+}
+/* 页面容器：抽盒机/收藏架 */
+.page-container {
+    display: none;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.page-container.active {
+    display: block;
+}
+/* 抽盒机页面：强制两步点击，黄色抽取→深蓝色拆盒 */
+.box-machine {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.machine-title {
+    font-size: 28px;
+    color: #5D4037;
+    margin-bottom: 20px;
+}
+/* 抽取提示 */
+.draw-tip {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+}
+/* 标红警告 */
+.warn-tip {
+    font-size: 16px;
+    color: #ff0000;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+/* 按钮样式：黄色长方形抽取 → 深蓝色正方形拆盒 */
+.draw-btn {
+    width: 280px;
+    height: 60px;
+    background: #ffc107;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+/* 拆盒按钮样式：深蓝色正方形 */
+.open-btn {
+    width: 120px;
+    height: 120px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+/* 禁用按钮样式：统一变灰 */
+.draw-btn:disabled, .open-btn:disabled {
+    background: #cccccc !important;
+    color: #999999 !important;
+    cursor: not-allowed !important;
+}
+.box-area {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.blind-box {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 8px 0 #e65100;
+    display: none;
+}
+.blind-box.open {
+    animation: openBox 1s ease forwards;
+}
+@keyframes openBox {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+    100% { transform: scale(0); opacity: 0; }
+}
+.fumo-show {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    display: none;
+    animation: showFumo 0.5s ease forwards;
+}
+@keyframes showFumo {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+/* 收藏架：棕色架子，Fumo卡片自适应换行（核心） */
+.fumo-shelf {
+    background: #8D6E63;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.shelf-title {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+/* 自适应网格：超过屏幕自动换行，适配所有设备 */
+.shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+.fumo-card {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+/* 点击压缩回弹动画 */
+.fumo-card:active {
+    transform: scale(0.95);
+}
+.fumo-img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+.fumo-name {
+    font-weight: bold;
+    color: #333;
+}
+/* 信息侧栏：半透明，移除随机效果 */
+.info-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: rgba(255,255,255,0.95);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    padding: 30px;
+    transition: right 0.3s ease;
+    z-index: 100;
+    overflow-y: auto;
+}
+.info-sidebar.show {
+    right: 0;
+}
+.sidebar-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #ff4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+.fumo-big-img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 0 auto 20px;
+    display: block;
+}
+.fumo-info h3 {
+    font-size: 24px;
+    color: #5D4037;
+    margin-bottom: 10px;
+}
+.fumo-info p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+/* 出售按钮：醒目样式 */
+.sell-btn {
+    background: #ff9800;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+/* 遮罩层 */
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 90;
+}
+.mask.show {
+    display: block;
+}
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .info-sidebar {
+        width: 100%;
+    }
+    .box-machine {
+        padding: 20px;
+    }
+    .box-area {
+        width: 250px;
+        height: 250px;
+    }
+    .draw-btn {
+        width: 220px;
+        height: 50px;
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+<body>
+<!-- 仅保留翻页按钮，无其他头栏 -->
+<div class="page-btn">
+    <button class="active" id="page1Btn">Fumo盲盒机</button>
+    <button id="page2Btn">我的Fumo收藏架</button>
+</div>
+
+<!-- 抽盒机页面：强制两步点击 -->
+<div class="page-container active" id="page1">
+    <div class="box-machine">
+        <h2 class="machine-title">Fumo盲盒拆拆乐</h2>
+        <p class="draw-tip">恭喜你获得了一次抽取fumo的机会，点击按钮抽取fumo</p>
+        <p class="warn-tip">不要未抽取并拆盒就退出网页或切换此页面，否则您这次的抽取机会将作废！</p>
+        <div class="box-area">
+            <div class="blind-box" id="blindBox">Fumo盲盒</div>
+            <img src="" alt="抽到的Fumo" class="fumo-show" id="fumoShow">
+        </div>
+        <!-- 初始黄色长方形抽取按钮（默认禁用） -->
+        <button class="draw-btn" id="drawBtn" disabled>现在无法抽取</button>
+    </div>
+</div>
+
+<!-- 收藏架页面：自适应换行 -->
+<div class="page-container" id="page2">
+    <div class="fumo-shelf">
+        <h2 class="shelf-title">我的Fumo收藏架</h2>
+        <div class="shelf-grid" id="shelfGrid">
+            <div class="fumo-card" style="opacity: 0.5; pointer-events: none;">
+                <img src="https://picsum.photos/120/120?random=0" alt="空" class="fumo-img">
+                <div class="fumo-name">暂无Fumo，快去抽取吧～</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fumo信息侧栏：移除随机效果 -->
+<div class="info-sidebar" id="infoSidebar">
+    <button class="sidebar-close" id="sidebarClose">×</button>
+    <img src="" alt="Fumo详情" class="fumo-big-img" id="fumoBigImg">
+    <div class="fumo-info" id="fumoInfo">
+        <h3 id="fumoName">Fumo名称</h3>
+        <p>稀有度：<span id="fumoRarity">普通</span></p>
+        <p>出售收益：<span id="fumoPrice">50</span> 点数</p>
+    </div>
+    <button class="sell-btn" id="sellBtn">出售此Fumo</button>
+</div>
+
+<!-- 遮罩层 -->
+<div class="mask" id="mask"></div>
+
+<!-- 音效：点击/拆盒/出售 -->
+<audio id="audioClick" src="click.mp3" preload="auto">
+<audio id="audioOpen" src="open.mp3" preload="auto">
+<audio id="audioSell" src="sell.mp3" preload="auto">
+
+<script>
+// 强制联动：读取旋转器点数和跳转标记
+let gameData = JSON.parse(localStorage.getItem('cirnoGameData')) || { count: 0 };
+let fumoData = JSON.parse(localStorage.getItem('fumoCollection')) || { list: [] };
+// 读取跳转有效性标记（从旋转器购买后设置）
+let entryValidity = JSON.parse(localStorage.getItem('fumoValidEntry')) || {
+    isValid: false,
+    expireTime: 0
+};
+
+// 实时保存数据
+function saveFumoData() {
+    localStorage.setItem('fumoCollection', JSON.stringify(fumoData));
+}
+function saveGameData() {
+    localStorage.setItem('cirnoGameData', JSON.stringify(gameData));
+}
+
+// DOM元素
+const page1Btn = document.getElementById('page1Btn');
+const page2Btn = document.getElementById('page2Btn');
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const drawBtn = document.getElementById('drawBtn');
+const blindBox = document.getElementById('blindBox');
+const fumoShow = document.getElementById('fumoShow');
+const shelfGrid = document.getElementById('shelfGrid');
+const infoSidebar = document.getElementById('infoSidebar');
+const mask = document.getElementById('mask');
+const sidebarClose = document.getElementById('sidebarClose');
+const fumoBigImg = document.getElementById('fumoBigImg');
+const fumoName = document.getElementById('fumoName');
+const fumoRarity = document.getElementById('fumoRarity');
+const fumoPrice = document.getElementById('fumoPrice');
+const sellBtn = document.getElementById('sellBtn');
+
+// 音效
+const audioClick = document.getElementById('audioClick');
+const audioOpen = document.getElementById('audioOpen');
+const audioSell = document.getElementById('audioSell');
+
+// 全局状态
+let currentFumoIndex = -1;
+let isDrawn = false; // 是否已点击抽取
+let isOpening = false; // 是否已点击拆盒
+
+// 页面初始化核心：验证入口有效性，仅正规跳转才启用按钮
+function initDrawBtn() {
+    const now = Date.now();
+    // 验证条件：标记有效 + 未过期（5分钟内）
+    if (entryValidity.isValid && now < entryValidity.expireTime) {
+        // 正规入口：启用按钮，恢复黄色样式
+        drawBtn.disabled = false;
+        drawBtn.innerText = "点击抽取";
+    } else {
+        // 非正规入口：禁用按钮，显示"现在无法抽取"
+        drawBtn.disabled = true;
+        drawBtn.innerText = "现在无法抽取";
+        // 清除无效标记
+        localStorage.removeItem('fumoValidEntry');
+    }
+}
+// 页面加载时立即验证
+initDrawBtn();
+
+// 东方Fumo素材库：移除随机效果
+const fumoLibrary = [
+    { name: "琪露诺", img: "琪露诺.png", rarity: "普通", price: 99 },
+    { name: "博丽灵梦", img: "灵梦.png", rarity: "传说", price: 100000 },
+    { name: "雾雨魔理沙", img: "魔理沙.png", rarity: "稀有", price: 300 },
+    { name: "灵乌路空", img: "空.png", rarity: "核弹", price: 666 },
+    { name: "火焰猫燐", img: "燐.png", rarity: "传说", price: 500 },
+    { name: "蕾米莉亚", img: "lmly.png", rarity: "稀有", price: 500 },
+    { name: "帕秋莉", img: "帕秋莉.png", rarity: "普通", price: 100 },
+    { name: "射命丸文", img: "文.png", rarity: "普通", price: 100 },
+    { name: "露米娅", img: "露米娅.png", rarity: "普通", price: 100 },
+    { name: "古明地觉", img: "古明地觉.png", rarity: "稀有", price: 500 },
+    { name: "古明地恋", img: "古明地恋.png", rarity: "稀有", price: 514 },
+    { name: "露娜萨", img: "骚灵黄.png", rarity: "普通", price: 100 },
+    { name: "梅露兰", img: "骚灵蓝.png", rarity: "普通", price: 100 },
+    { name: "莉莉卡", img: "骚灵红.png", rarity: "普通", price: 100 },
+    { name: "LW蕾米莉亚", img: "LW蕾米莉亚.png", rarity: "传说", price: 600 },
+    { name: "LW魔理沙", img: "LW魔理沙.png", rarity: "传说", price: 600 },
+    { name: "LW西行寺幽幽子", img: "LW西行寺幽幽子.png", rarity: "传说", price: 1000 },
+    { name: "爱丽丝", img: "爱丽丝.png", rarity: "普通", price: 100 },
+    { name: "八云蓝", img: "八云蓝.png", rarity: "稀有", price: 188 },
+    { name: "物部布都", img: "布都.png", rarity: "普通", price: 100 },
+    { name: "橙", img: "橙.png", rarity: "普通", price: 100 },
+    { name: "纯狐", img: "纯狐.png", rarity: "传说", price: 815 },
+    { name: "伊吹萃香", img: "萃香.png", rarity: "酒鬼", price: 100 },
+    { name: "大妖精", img: "大妖精.png", rarity: "普通", price: 100 },
+    { name: "菅牧典", img: "典.png", rarity: "普通", price: 100 },
+    { name: "非想天则琪露诺", img: "非想天则琪露诺.png", rarity: "传说", price: 999 },
+    { name: "芙兰朵露", img: "芙兰朵露.png", rarity: "传说", price: 495 },
+    { name: "埴安神袿姬", img: "袿姬.png", rarity: "稀有", price: 170 },
+    { name: "姬海棠果", img: "果.png", rarity: "普通", price: 100 },
+    { name: "河城荷取", img: "荷取.png", rarity: "普通", price: 100 },
+    { name: "赫卡提亚·拉碧斯拉祖利", img: "赫卡提亚.png", rarity: "传说", price: 815 },
+    { name: "黑妖梦", img: "黑妖梦.png", rarity: "传说", price: 1000 },
+    { name: "红美铃", img: "红美铃.png", rarity: "普通", price: 100 },
+    { name: "犬走椛", img: "椛.png", rarity: "普通", price: 100 },
+    { name: "茨木华扇", img: "华扇.png", rarity: "稀有", price: 300 },
+    { name: "蓬莱山辉夜", img: "辉夜.png", rarity: "普通", price: 100 },
+    { name: "魂魄妖梦", img: "魂魄妖梦.png", rarity: "普通", price: 100 },
+    { name: "键山雏", img: "键山雏.png", rarity: "普通", price: 100 },
+    { name: "旧作灵梦", img: "旧作灵梦.png", rarity: "传说", price: 10000 },
+    { name: "旧作魔理沙", img: "旧作魔理沙.png", rarity: "传说", price: 4000 },
+    { name: "蓝灵梦", img: "蓝灵梦.png", rarity: "传说", price: 100000 },
+    { name: "宇佐见莲子", img: "莲子.png", rarity: "传说", price: 800 },
+    { name: "铃仙", img: "铃仙.png", rarity: "普通", price: 100 },
+    { name: "饭纲丸龙", img: "龙.png", rarity: "普通", price: 200 },
+    { name: "梅莉", img: "梅莉.png", rarity: "传说", price: 1700 },
+    { name: "摩多罗隐岐奈", img: "摩多罗.png", rarity: "稀有", price: 300 },
+    { name: "娜兹玲", img: "娜兹玲.png", rarity: "普通", price: 100 },
+    { name: "依神女苑", img: "女苑.png", rarity: "普通", price: 0 },
+    { name: "水桥帕露西", img: "帕露西.png", rarity: "普通", price: 100 },
+    { name: "克劳恩皮丝", img: "皮丝.png", rarity: "普通", price: 100 },
+    { name: "秦心", img: "秦心.png", rarity: "普通", price: 100 },
+    { name: "晒黑了的琪露诺", img: "晒黑了的琪露诺.png", rarity: "稀有", price: 1800 },
+    { name: "丰聪耳神子", img: "神子.png", rarity: "普通", price: 100 },
+    { name: "圣白莲", img: "圣白莲.png", rarity: "普通", price: 100 },
+    { name: "十六夜咲夜", img: "十六夜咲夜.png", rarity: "普通", price: 100 },
+    { name: "四季映姬·亚玛萨那度", img: "四季.png", rarity: "黑白", price: 1000 },
+    { name: "稀神探女", img: "探女.png", rarity: "逆转命运", price: 10000 },
+    { name: "藤原妹红", img: "藤原妹红.png", rarity: "普通", price: 100 },
+    { name: "天弓千亦", img: "天弓千亦.png", rarity: "超稀有", price: 100000000000 },
+    { name: "比那名居天子", img: "天子.png", rarity: "普通", price: 100 },
+    { name: "森近霖之助", img: "香霖.png", rarity: "普通", price: 100 },
+    { name: "香霖堂蕾米莉亚", img: "香霖堂蕾米莉亚.png", rarity: "传说", price: 1000 },
+    { name: "小恶魔", img: "小恶魔.png", rarity: "普通", price: 100 },
+    { name: "多多良小伞", img: "小伞.png", rarity: "普通", price: 100 },
+    { name: "封兽鵺", img: "鵺.png", rarity: "正体不明", price: 1000 },
+    { name: "因幡帝", img: "因幡帝.png", rarity: "传说", price: 1000 },
+    { name: "八意永琳", img: "永琳.png", rarity: "传说", price: 800000000 },
+    { name: "风见幽香", img: "幽香.png", rarity: "普通", price: 100 },
+    { name: "西行寺幽幽子", img: "幽幽子.png", rarity: "普通", price: 100 },
+    { name: "东风谷早苗", img: "早苗.png", rarity: "奇迹", price: 1000 },
+    { name: "鬼人正邪", img: "正邪.png", rarity: "反转", price: -100 },
+    { name: "八云紫", img: "紫.png", rarity: "普通", price: 17 },
+    { name: "依神紫苑", img: "紫苑.png", rarity: "普通", price: 0 },
+    { name: "洩矢诹访子", img: "诹访子.png", rarity: "普通", price: 100 }
+];
+
+// 初始化收藏架
+function renderShelf() {
+    if (fumoData.list.length === 0) {
+        shelfGrid.innerHTML = `
+            <div class="fumo-card" style="opacity: 0.5; pointer-events: none;">
+                <img src="funky.jpg" alt="空" class="fumo-img">
+                <div class="fumo-name">暂无Fumo，快去抽取吧～</div>
+            </div>
+        `;
+        return;
+    }
+    shelfGrid.innerHTML = '';
+    fumoData.list.forEach((fumo, index) => {
+        const card = document.createElement('div');
+        card.className = 'fumo-card';
+        card.innerHTML = `
+            <img src="${fumo.img}" alt="${fumo.name}" class="fumo-img">
+            <div class="fumo-name">${fumo.name}【${fumo.rarity}】</div>
+        `;
+        // 点击压缩回弹+音效+显示侧栏
+        card.onclick = () => {
+            audioClick.currentTime = 0;
+            audioClick.play().catch(()=>{});
+            currentFumoIndex = index;
+            showFumoInfo(fumo);
+        };
+        shelfGrid.appendChild(card);
+    });
+}
+renderShelf();
+
+// 显示Fumo信息侧栏
+function showFumoInfo(fumo) {
+    fumoBigImg.src = fumo.img;
+    fumoName.innerText = fumo.name;
+    fumoRarity.innerText = fumo.rarity;
+    fumoPrice.innerText = fumo.price;
+    infoSidebar.classList.add('show');
+    mask.classList.add('show');
+}
+
+// 关闭侧栏
+function closeSidebar() {
+    infoSidebar.classList.remove('show');
+    mask.classList.remove('show');
+    currentFumoIndex = -1;
+}
+
+// 第一步：点击抽取（仅正规入口可点击，点击后立即禁用，防止重复）
+function startDraw() {
+    if (isDrawn || isOpening || !entryValidity.isValid) return;
+    
+    // 标记为已抽取，禁用按钮（本次会话内不再启用）
+    isDrawn = true;
+    drawBtn.disabled = true;
+    drawBtn.innerText = "正在抽取...";
+    
+    // 1-2秒延迟，切换按钮样式
+    setTimeout(() => {
+        // 切换为深蓝色正方形拆盒按钮（临时启用）
+        drawBtn.className = 'open-btn';
+        drawBtn.innerText = "点击拆盒";
+        drawBtn.disabled = false;
+        // 显示盲盒
+        blindBox.style.display = 'flex';
+        // 绑定拆盒事件
+        drawBtn.onclick = startOpen;
+        // 清除跳转标记（防止刷新后重复使用）
+        localStorage.removeItem('fumoValidEntry');
+        entryValidity.isValid = false;
+    }, Math.floor(Math.random() * 1000) + 1000); // 1-2秒随机延迟
+}
+
+// 第二步：点击拆盒（播放动画+显示Fumo+加入收藏）
+function startOpen() {
+    if (!isDrawn || isOpening) return;
+    isOpening = true;
+    drawBtn.disabled = true; // 拆盒后再次禁用
+    
+    // 播放拆盒音效
+    audioOpen.currentTime = 0;
+    audioOpen.play().catch(()=>{});
+    // 拆盒动画
+    blindBox.classList.add('open');
+    // 随机抽取Fumo
+    const randomIndex = Math.floor(Math.random() * fumoLibrary.length);
+    const randomFumo = fumoLibrary[randomIndex];
+    // 1秒后显示Fumo
+    setTimeout(() => {
+        fumoShow.src = randomFumo.img;
+        fumoShow.style.display = 'block';
+        // 添加到收藏并保存
+        fumoData.list.push(randomFumo);
+        saveFumoData();
+        // 2秒后提示
+        setTimeout(() => {
+            alert(`恭喜！抽到了【${randomFumo.rarity}】${randomFumo.name}！快去收藏架查看～`);
+            // 重置状态
+            isDrawn = false;
+            isOpening = false;
+            drawBtn.className = 'draw-btn';
+            drawBtn.innerText = "抽取已完成";
+            drawBtn.disabled = true;
+            blindBox.classList.remove('open');
+            fumoShow.style.display = 'none';
+            blindBox.style.display = 'none';
+            // 刷新收藏架
+            renderShelf();
+        }, 2000);
+    }, 1000);
+}
+
+// 出售Fumo：强制跳转回旋转器+实时加点数
+function sellFumo() {
+    if (currentFumoIndex === -1 || currentFumoIndex >= fumoData.list.length) return;
+    const sellFumo = fumoData.list[currentFumoIndex];
+    // 增加点数并实时保存到旋转器
+    gameData.count += sellFumo.price;
+    saveGameData();
+    // 播放出售音效
+    audioSell.currentTime = 0;
+    audioSell.play().catch(()=>{});
+    // 移除Fumo并保存收藏
+    fumoData.list.splice(currentFumoIndex, 1);
+    saveFumoData();
+    // 关闭侧栏+刷新收藏架
+    closeSidebar();
+    renderShelf();
+    // 强制跳转回琪露诺旋转器2.html
+    alert(`成功出售【${sellFumo.name}】，获得${sellFumo.price}点数！即将返回旋转器～`);
+    window.location.href = '琪露诺旋转器2.html';
+}
+
+// 事件监听
+// 翻页
+page1Btn.onclick = () => {
+    page1Btn.classList.add('active');
+    page2Btn.classList.remove('active');
+    page1.classList.add('active');
+    page2.classList.remove('active');
+    // 切换回抽盒机页面时，重新验证入口（防止刷新后绕过）
+    initDrawBtn();
+};
+page2Btn.onclick = () => {
+    page2Btn.classList.add('active');
+    page1Btn.classList.remove('active');
+    page2.classList.add('active');
+    page1.classList.remove('active');
+    renderShelf();
+};
+// 初始绑定抽取事件（仅正规入口启用后可点击）
+drawBtn.onclick = startDraw;
+// 关闭侧栏
+sidebarClose.onclick = closeSidebar;
+mask.onclick = closeSidebar;
+// 出售Fumo
+sellBtn.onclick = sellFumo;
+// 保存数据，防止意外丢失
+window.onbeforeunload = () => {
+    saveFumoData();
+    saveGameData();
+};
+</script>
+</body>
+</html>

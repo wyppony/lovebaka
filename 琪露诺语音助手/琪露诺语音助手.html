@@ -1,0 +1,647 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>琪露诺语音助手V1.0 - 爱⑨之家</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f0f8ff;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        /* 顶部导航栏 */
+        .header-nav {
+            width: 100%;
+            background-color: #87ceeb;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 10px;
+        }
+        .home-btn {
+            padding: 6px 12px;
+            background-color: #fff;
+            color: #87ceeb;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .home-btn:hover {
+            background-color: #f5f5f5;
+        }
+        .nav-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 auto;
+        }
+        /* 清除全部按钮容器 */
+        .top-btn {
+            padding: 0 20px 10px 20px;
+            text-align: right;
+        }
+        #clear-all {
+            padding: 6px 12px;
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #clear-all:hover {
+            background-color: #ff4500;
+        }
+        /* 聊天容器 */
+        .chat-container {
+            height: 70vh;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow-y: auto;
+            margin: 0 20px 20px 20px;
+        }
+        /* 单条消息项 */
+        .msg-item {
+            display: flex;
+            margin-bottom: 16px;
+            max-width: 80%;
+        }
+        .kirino-msg {
+            flex-direction: row;
+        }
+        .user-msg {
+            flex-direction: row-reverse;
+            margin-left: auto;
+        }
+        /* 头像样式 */
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+        .kirino-avatar {
+            background-size: cover;
+            background-position: center;
+        }
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* 气泡样式 */
+        .msg-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+            font-size: 15px;
+        }
+        .kirino-bubble {
+            background-color: #f5f5f5;
+            border-bottom-left-radius: 4px;
+        }
+        .user-bubble {
+            background-color: #87ceeb;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        /* 气泡内链接样式 */
+        .msg-bubble a {
+            color: #1890ff;
+            text-decoration: underline;
+        }
+        /* 气泡内音频样式 */
+        .msg-bubble audio {
+            max-width: 100%;
+            margin-top: 8px;
+        }
+        /* 输入框区域 */
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 0 20px 20px 20px;
+        }
+        #msg-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            outline: none;
+            font-size: 15px;
+        }
+        #send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #87ceeb;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #send-btn:hover {
+            background-color: #7cb9e8;
+        }
+        /* 底部提示 */
+        .system-tip {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin: 0 20px 10px 20px;
+        }
+        /* 弹窗遮罩：锁界面 */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            display: none;
+        }
+        /* 确认弹窗 */
+        .modal-box {
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+        .modal-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .modal-btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .modal-confirm {
+            background-color: #ff6347;
+            color: #fff;
+        }
+        .modal-cancel {
+            background-color: #fff;
+            color: #87ceeb;
+            border: 1px solid #87ceeb;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header-nav">
+        <a href="https://wyppony.github.io/lovebaka" class="home-btn" target="_blank">返回主页</a>
+        <h1 class="nav-title">琪露诺语音助手V1.0</h1>
+        <div></div>
+    </div>
+    <!-- 清除全部按钮 -->
+    <div class="top-btn">
+        <button id="clear-all">清除全部对话</button>
+    </div>
+    <!-- 聊天容器 -->
+    <div class="chat-container" id="chat-container"></div>
+    <!-- 输入区域 -->
+    <div class="input-container">
+        <input type="text" id="msg-input" placeholder="输入问题/指令，按回车/点击发送">
+        <button id="send-btn">➤</button>
+    </div>
+    <div class="system-tip">输入「帮助」可查看全部功能索引</div>
+    <!-- 清空确认弹窗（默认隐藏） -->
+    <div class="modal-mask" id="modal-mask">
+        <div class="modal-box">
+            <div class="modal-text">你确定要删除全部对话吗？</div>
+            <div class="modal-btn-group">
+                <button class="modal-btn modal-confirm" id="modal-confirm">确定</button>
+                <button class="modal-btn modal-cancel" id="modal-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ===================== 【可自定义区域1：基础配置】=====================
+        const KIRINO_AVATAR = "qln2.png"; // 琪露诺头像链接
+        const USER_AVATAR_BG = "#90ee90"; // 用户头像背景色
+        const USER_AVATAR_TEXT = "你"; // 用户头像文字
+        const DEFAULT_WELCOME = "我是琪露诺～⑨！有什么问题都可以问我哦，输入「帮助」可以查看全部功能！"; // 首次欢迎语
+        const NO_MATCH_REPLY = "这个问题琪露诺还不知道哦～⑨，换一个问问吧！"; // 无匹配回复
+        const CALC_OVER_REPLY = "等于⑨！"; // 超十以内计算回复
+        const CALC_ZERO_REPLY = "不能除以0哦～⑨"; // 除以0提示
+        const THINK_DELAY = 500; // 琪露诺思考延迟(毫秒)
+        const CHAT_HISTORY_KEY = "kirino_chat_history"; // 本地存储key
+        const HOME_PAGE_URL = "https://wyppony.github.io/lovebaka"; // 返回主页的链接
+        const THB_WIKI_BASE_URL = "https://thbwiki.cc/"; // THBWiki基础链接
+        // ======================================================================
+        // ===================== 【可自定义区域2：帮助功能文本】=====================
+        const HELP_CONTENT = `琪露诺语音助手全部功能索引：<br>
+1. 【计算功能】支持十以内加减乘除<br>
+2. 【时间查询】输入包含「时间/现在几点」的内容，返回当前准确时间<br>
+3. 【链接跳转】输入完整http/https开头的网址，自动生成可点击跳转链接<br>
+4. 【东方角色查询】输入东方官方角色名称，自动生成THBWiki资料跳转链接<br>
+5. 【爱⑨之家页面跳转】输入页面名称（如工具箱、游戏室），自动跳转对应页面<br>
+6. 【同人曲播放】输入「我想听+歌曲名」（支持带/不带中英文冒号），播放琪露诺相关同人曲<br>
+7. 【问答功能】支持琪露诺等相关设定问答`;
+        // ======================================================================
+        // ===================== 【可自定义区域3：爱⑨之家页面跳转映射】=====================
+        // 格式："页面名称": "页面文件名.html" （忽略大小写，直接添加/修改即可）
+        const LOVEBAKA_PAGE_MAP = {
+            "游戏室": "game.html",
+            "音乐室": "https://wyppony.github.io/touhoumusic",
+            "视频室": "https://wyppony.github.io/touhouvideos",
+            "工具箱": "tool-box.html",
+            "琪露诺计算器":"cirno-calculator.html",
+            "9教": "9jiao.html",
+            "⑨教": "9jiao.html",
+            "pony社": "pony-anime-club.html",
+            "泼尼社": "pony-anime-club.html",
+            "琪露诺图片库": "https://wyppony.github.io/touhouphotos/cirno.html",
+            "琪露诺美图": "https://wyppony.github.io/touhouphotos/cirno.html",
+            "图片库": "https://wyppony.github.io/touhouphotos/cirno.html",
+            "东方知识问答": "question.html",
+            "问答": "question.html",
+            "入教问答": "rjcs.html",
+            "⑨教问答": "rjcs.html",
+            "9教问答": "rjcs.html",
+            "入教测试": "rjcs.html",
+            "幻存神签": "hcsq.html",
+            "抽幻存神签": "hcsq.html",
+            "图片留存器": "https://wyppony.github.io/touhouphotos",
+            "东方下载器": "download.html",
+            "下载器": "download.html",
+            "下载": "download.html",
+        };
+        // ======================================================================
+        // ===================== 【可自定义区域4：琪露诺同人曲映射】=====================
+        // 格式："歌曲名": "音频直链" （忽略大小写，支持mp3等格式，直接添加即可）
+        const CIRNO_MUSIC_MAP = {
+            "琪露诺的完美算术教室":"琪露诺的完美算术教室.mp3",
+            "斯卡雷特警察巡逻贫民区24时":"斯卡雷特警察巡逻贫民区24时.mp3"
+        };
+        // ======================================================================
+        // ===================== 【可自定义区域5：东方官方角色白名单】=====================
+        // 仅在此列表内的角色，才会生成THBWiki跳转链接，可自行添加/删除角色
+        const TOUHOU_CHARACTER_LIST = [
+            // 红魔乡角色
+            "琪露诺", "⑨", "博丽灵梦", "灵梦", "雾雨魔理沙", "魔理沙",
+            "蕾米莉亚·斯卡雷特", "蕾米莉亚", "芙兰朵露·斯卡雷特", "芙兰朵露",
+            "十六夜咲夜", "咲夜", "帕秋莉·诺雷姬", "帕秋莉", "红美铃", "美铃",
+            "大妖精", "露米娅", "小恶魔", "冴月麟",
+            // 妖妖梦角色
+            "西行寺幽幽子", "幽幽子", "八云紫", "紫", "八云蓝", "蓝", "橙",
+            "魂魄妖梦", "妖梦", "爱丽丝·玛格特罗伊德", "爱丽丝", "莉莉霍瓦特",
+            // 永夜抄角色
+            "蓬莱山辉夜", "辉夜", "八意永琳", "永琳", "铃仙·优昙华院·因幡", "铃仙",
+            "因幡帝", "帝", "藤原妹红", "妹红", "上白泽慧音", "慧音", "小碎骨", "莉格露",
+            // 风神录角色
+            "东风谷早苗", "早苗", "八坂神奈子", "神奈子", "洩矢诹访子", "诹访子",
+            "键山雏", "河城荷取","荷取", "犬走椛","秋静叶","秋穰子", "射命丸文", "文",
+            "姬海棠果","姬海棠极","姬海棠羽立","果",
+            // 地灵殿角色
+            "古明地觉", "觉", "古明地恋", "恋", "火焰猫燐", "燐", "灵乌路空", "空",
+            "黑谷山女", "山女", "水桥帕露西", "帕露西", "星熊勇仪", "勇仪",
+            // 星神辉天虹角色
+            "圣白莲", "白莲", "封兽鵺", "鵺", "寅丸星", "云居一轮", "村纱水蜜",
+            "娜兹玲", "多多良小伞", "幽谷响子","丰聪耳神子","云山","物部布都","苏我屠自古",
+            "霍青娥", "宫古芳香", "少名针妙丸", "鬼人正邪", "九十九弁弁", "九十九八桥", "堀川雷鼓",
+            "赤蛮奇", "菅牧典", "玉造魅须丸", "驹草山如", "摩多罗隐岐奈", "摩多罗", "丁礼田舞", "尔子田里乃",
+            "寺子田成美", "坂田合欢", "坂田合欢乃", "爱塔尼提拉尔瓦",
+            // 其他官方作品核心角色
+            "伊吹萃香", "萃香", "茨木华扇", "华扇", "稗田阿求", "阿求", "森近霖之助", "霖之助",
+            "本居小铃", "小铃", "朱鹭子", "风见幽香", "幽香", "米斯蒂娅·萝蕾拉", "米斯蒂娅",
+            "若鹭姬", "今泉影狼", "高丽野阿吽", "饭刚丸龙", "天弓千亦", "冈崎梦美","魅魔",
+            "绵月丰姬", "绵月依姬", "纯狐", "赫卡提亚·拉碧斯拉祖利", "赫卡提亚","赫卡","克劳恩皮斯",
+            "清兰", "铃湖", "嫦娥", "稀神探女","探女", "哆来咪·苏依特","哆来咪", "宫出口瑞灵","瑞灵",
+            "吉吊八千慧", "埴安神袿姬", "骊驹早鬼", "饕餮尤魔", "庭渡久侘歌", "豪德寺三花", "三花", "山城高岭",
+            "比那名居天子", "天子", "永江衣玖", "小野冢小町", "小町", "四季映姬·亚玛萨那度", "四季映姬",
+            "孙美天","三头慧之子", "日白残无", "豫母都日狭美", "天火人血枪", "尘塚姥芽", "封兽魑魅", "道神驯子", 
+            "维缦·浅间", "磐永阿梨夜", "渡里贝子", "渡里妮娜", "桑尼米尔克", "露娜切云德", "露娜切露德", "斯塔萨菲雅", 
+            "桑尼", "露娜", "斯塔", "梅蒂欣·梅兰可莉", "梅蒂欣", "戎璎花", "牛崎润美"
+        ]; // 修复：闭合数组
+        // ======================================================================
+        // ===================== 【可自定义区域6：预设问答（精准匹配）】=====================
+        const presetQa = {
+            "琪露诺是谁": "是本小姐啦",
+            "琪露诺的能力": "操纵冷气的能力",
+            "⑨教是什么": "东方⑨教又名baka教，全称东方project琪露诺粉丝教会，2024.11.20成立，隶属于泼尼动漫社",
+            "爱⑨之家网址": "https://wyppony.github.io/lovebaka",            
+            "我不是笨蛋": "哈哈，不！你是baka，我不是",
+            "我喜欢琪露诺": "什么？！本小姐才不需要你的喜欢呢，哼",
+            "baka": "你说谁是baka？！",
+            "琪露诺baka": "你是baka！你是baka！你是baka！"
+        };
+        // ==============================================================================
+        // ===================== 【可自定义区域7：单关键词匹配（包含即触发）】=====================
+        const singleKeyWord = {
+            "你好": "你好呀，我是琪露诺~",
+            "谢谢": "不用谢～这都是小意思啦，我可是最强的！",
+            "冰": "冰是我的技能哦，超厉害的，能冻住一切东西~",
+            "Perfect Freeze": "这是本小姐最强的符卡哦，你想看看吗",
+            "作业": "作业？什么作业？琪露诺可不会写作业哦",
+            "雾之湖": "你是想问我家雾之湖吗，那里很凉快哦",
+            "冻青蛙": "冻青蛙很好玩的！",
+            "抓": "什么?琪露诺是不会被抓住的",
+            "捉迷藏": "你想和琪露诺捉迷藏吗，那就来吧！"
+        };
+        // ======================================================================================
+        // ===================== 【可自定义区域8：多关键词匹配（同时包含所有关键词才触发）】=====================
+        const multiKeyWord = [
+            { keys: ["琪露诺", "不是笨蛋"], reply: "那当然！本小姐是最强的" },
+            { keys: ["琪露诺", "不是baka"], reply: "那当然！本小姐是最强的" },
+            { keys: ["琪露诺", "是笨蛋"], reply: "你才是，bakabakabaka！" },
+            { keys: ["琪露诺", "是baka"], reply: "你才是，bakabakabaka！" },
+            { keys: ["我是", "笨蛋"], reply: "诶，不可以这么说自己哦～" },
+            { keys: ["我是", "baka"], reply: "诶，不可以这么说自己哦～" },
+            { keys: ["琪露诺", "最强"], reply: "那当然啦！我是世界第一强的冰之妖精～⑨⑨⑨" },
+            { keys: ["我爱", "琪露诺"], reply: "啊，怎么突然就对我这么说" },
+            { keys: ["琪露诺", "我喜欢你"], reply: "啊，怎么突然就对我这么说，人家才不需要你的喜欢呢！（扭头）" },
+            { keys: ["琪露诺", "大妖精喜欢"], reply: "太棒了，我要和大妖精做永远的朋友" },
+            { keys: ["琪露诺", "大妖精喜欢我"], reply: "不可能，大酱是绝对不会背叛我的" },
+            { keys: ["你好", "琪露诺"], reply: "你好呀，我是琪露诺" },
+            { keys: ["琪露诺", "笨蛋"], reply: "你才是笨蛋，bakabakabaka！" },
+            { keys: ["带你去", "寺子屋"], reply: "额啊啊啊，琪露诺才不要去寺子屋上学呢！" },
+            { keys: ["送你去", "寺子屋"], reply: "额啊啊啊，琪露诺才不要去寺子屋上学呢！" },
+            { keys: ["我是", "慧音"], reply: "才怪，虽然慧音老师很可怕就是了" },
+            { keys: ["我是", "大妖精"], reply: "骗人，你才不是大妖精！" },
+            { keys: ["我想", "冻青蛙"], reply: "冻青蛙？带我一个呗！" }
+        ];
+        // ======================================================================================================
+        // 基础DOM获取
+        const chatContainer = document.getElementById('chat-container');
+        const msgInput = document.getElementById('msg-input');
+        const sendBtn = document.getElementById('send-btn');
+        const clearAllBtn = document.getElementById('clear-all');
+        const modalMask = document.getElementById('modal-mask');
+        const modalConfirm = document.getElementById('modal-confirm');
+        const modalCancel = document.getElementById('modal-cancel');
+        const homeBtn = document.querySelector('.home-btn');
+        // 页面加载完成初始化
+        window.onload = function() {
+            initChat();
+            bindEvents();
+            homeBtn.href = HOME_PAGE_URL;
+        };
+        // 1. 初始化：加载本地聊天记录
+        function initChat() {
+            const history = getChatHistory();
+            if (history.length === 0) {
+                addMsg(true, DEFAULT_WELCOME, true);
+            } else {
+                history.forEach(item => addMsg(item.isKirino, item.content, true));
+            }
+        }
+        // 2. 本地存储：获取聊天记录
+        function getChatHistory() {
+            try {
+                const str = localStorage.getItem(CHAT_HISTORY_KEY);
+                return str ? JSON.parse(str) : [];
+            } catch (e) {
+                console.error("读取聊天记录失败:", e);
+                return [];
+            }
+        }
+        // 3. 本地存储：保存单条聊天记录
+        function saveChatHistory(isKirino, content) {
+            const history = getChatHistory();
+            history.push({ isKirino, content, time: new Date().getTime() });
+            localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(history));
+        }
+        // 4. 本地存储：清空所有聊天记录
+        function clearChatHistory() {
+            localStorage.removeItem(CHAT_HISTORY_KEY);
+            chatContainer.innerHTML = "";
+            addMsg(true, DEFAULT_WELCOME, true);
+            hideModal();
+        }
+        // 5. 添加消息到页面
+        function addMsg(isKirino, content, isInit = false) {
+            const msgItem = document.createElement('div');
+            msgItem.className = `msg-item ${isKirino ? 'kirino-msg' : 'user-msg'}`;
+            const avatarHtml = isKirino 
+                ? `<div class="avatar kirino-avatar" style="background-image: url(${KIRINO_AVATAR})"></div>`
+                : `<div class="avatar user-avatar" style="background-color: ${USER_AVATAR_BG}">${USER_AVATAR_TEXT}</div>`;
+            const bubbleHtml = `<div class="msg-bubble ${isKirino ? 'kirino-bubble' : 'user-bubble'}">${content}</div>`;
+            msgItem.innerHTML = avatarHtml + bubbleHtml;
+            chatContainer.appendChild(msgItem);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (!isInit) saveChatHistory(isKirino, content);
+        }
+        // 6. 计算式处理：兼容 1+1、1+1=、1+1=？ 格式
+        function formatCalcExpr(msg) {
+            return msg.replace(/[=?]/g, '').trim();
+        }
+        // 7. 十以内加减乘除计算核心
+        function calcTen(numExpr) {
+            const reg = /^([0-9]{1})[\+\-\*\/]([0-9]{1})$/;
+            const pureExpr = formatCalcExpr(numExpr);
+            const match = pureExpr.match(reg);
+            if (!match) return CALC_OVER_REPLY;
+            const [, a, b] = match;
+            const n1 = Number(a), n2 = Number(b);
+            let res;
+            if (pureExpr.includes('+')) res = n1 + n2;
+            else if (pureExpr.includes('-')) res = n1 - n2;
+            else if (pureExpr.includes('*')) res = n1 * n2;
+            else if (pureExpr.includes('/')) {
+                if (n2 === 0) return CALC_ZERO_REPLY;
+                res = n1 / n2;
+            }
+            return res !== undefined ? `${pureExpr} = ${res}` : CALC_OVER_REPLY;
+        }
+        // 8. 获取当前时间
+        function getNowTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            return `${year}年${month}月${day}日 ${h}:${m}:${s}`;
+        }
+        // 9. 多关键词匹配核心
+        function matchMultiKey(msg) {
+            const lowerMsg = msg.toLowerCase();
+            for (const item of multiKeyWord) {
+                const allKeyMatch = item.keys.every(key => lowerMsg.includes(key.toLowerCase()));
+                if (allKeyMatch) return item.reply;
+            }
+            return null;
+        }
+        // 10. 单关键词匹配核心
+        function matchSingleKey(msg) {
+            const lowerMsg = msg.toLowerCase();
+            for (const [key, reply] of Object.entries(singleKeyWord)) {
+                if (lowerMsg.includes(key.toLowerCase())) return reply;
+            }
+            return null;
+        }
+        // 11. 帮助功能匹配
+        function matchHelp(msg) {
+            return msg.trim().toLowerCase() === "帮助" ? HELP_CONTENT : null;
+        }
+        // 12. URL跳转匹配
+        function matchUrl(msg) {
+            const urlReg = /^https?:\/\/.+/;
+            const trimMsg = msg.trim();
+            if (urlReg.test(trimMsg)) {
+                return `点击链接跳转：<a href="${trimMsg}" target="_blank">${trimMsg}</a>`;
+            }
+            return null;
+        }
+        // 13. 爱⑨之家页面跳转匹配（修复：兼容完整URL和相对路径）
+        function matchLovebakaPage(msg) {
+            const trimMsg = msg.trim().toLowerCase();
+            for (const [pageName, pageUrl] of Object.entries(LOVEBAKA_PAGE_MAP)) {
+                if (trimMsg === pageName.toLowerCase()) {
+                    // 判断是否为完整URL，是则直接使用，否则拼接主页URL
+                    const fullUrl = pageUrl.startsWith('http') ? pageUrl : `${HOME_PAGE_URL}/${pageUrl}`;
+                    return `点击跳转爱⑨之家【${pageName}】：<a href="${fullUrl}" target="_blank">${pageName}</a>`;
+                }
+            }
+            return null;
+        }
+        // 14. 东方角色THBWiki跳转匹配（仅白名单内角色触发）
+        function matchThbWiki(msg) {
+            const trimMsg = msg.trim();
+            const lowerMsg = trimMsg.toLowerCase();
+            // 校验是否在角色白名单内（忽略大小写）
+            const isTouhouChar = TOUHOU_CHARACTER_LIST.some(char => char.toLowerCase() === lowerMsg);
+            if (!isTouhouChar) return null; // 非东方角色，不触发跳转
+            // 是东方角色，生成THBWiki链接
+            const pageUrl = `${THB_WIKI_BASE_URL}${encodeURIComponent(trimMsg)}`;
+            return `点击查看【${trimMsg}】的THBWiki官方资料：<a href="${pageUrl}" target="_blank">${trimMsg} 资料页</a>`;
+        }
+        // 15. 同人曲播放匹配
+        function matchMusic(msg) {
+            const musicReg = /^我想听[：:]?\s*(.+)$/;
+            const match = msg.trim().match(musicReg);
+            if (!match) return null;
+            const musicName = match[1].trim();
+            const lowerMusicName = musicName.toLowerCase();
+            // 匹配歌曲
+            for (const [name, url] of Object.entries(CIRNO_MUSIC_MAP)) {
+                if (lowerMusicName === name.toLowerCase()) {
+                    return `正在播放：${name}<br><audio src="${url}" controls preload="metadata">`;
+                }
+            }
+            return `诶？这首「${musicName}」琪露诺还没有哦～换一首试试吧！`;
+        }
+        // 16. 消息处理核心逻辑（修复：计算式匹配正则、无匹配回复统一）
+        function handleMsg(msg) {
+            const rawMsg = msg.trim();
+            const lowerMsg = rawMsg.toLowerCase();
+            // 优先级1：多关键词匹配
+            const multiReply = matchMultiKey(rawMsg);
+            if (multiReply) return multiReply;
+            // 优先级2：帮助功能
+            const helpReply = matchHelp(rawMsg);
+            if (helpReply) return helpReply;
+            // 优先级3：URL跳转
+            const urlReply = matchUrl(rawMsg);
+            if (urlReply) return urlReply;
+            // 优先级4：同人曲播放
+            const musicReply = matchMusic(rawMsg);
+            if (musicReply) return musicReply;
+            // 优先级5：计算式（修复：正则仅匹配十以内纯加减乘除，避免非计算式误触发）
+            if (/^[0-9][\+\-\*\/][0-9][=?]*$/.test(rawMsg.replace(/\s/g, ''))) {
+                return calcTen(rawMsg);
+            }
+            // 优先级6：时间查询
+            if (lowerMsg.includes('时间') || lowerMsg.includes('现在几点')) {
+                return `现在的时间是：${getNowTime()}`;
+            }
+            // 优先级7：爱⑨之家页面跳转
+            const pageReply = matchLovebakaPage(rawMsg);
+            if (pageReply) return pageReply;
+            // 优先级8：东方角色THBWiki跳转
+            const thbReply = matchThbWiki(rawMsg);
+            if (thbReply) return thbReply;
+            // 优先级9：预设精准问答
+            for (const [q, a] of Object.entries(presetQa)) {
+                if (lowerMsg === q.toLowerCase()) return a;
+            }
+            // 优先级10：单关键词匹配
+            const singleReply = matchSingleKey(rawMsg);
+            if (singleReply) return singleReply;
+            // 优先级11：模糊匹配
+            if (lowerMsg.includes('pony社') || lowerMsg.includes('泼尼') || lowerMsg.includes('爱⑨之家') || lowerMsg.includes('9教')) {
+                return "爱⑨之家是琪露诺粉丝的专属网站，隶属于泼尼动漫社，快去逛逛吧～<a href='https://wyppony.github.io/lovebaka' target='_blank'>爱⑨之家</a>";
+            }
+            // 优先级12：无匹配内容（统一使用配置项，避免冲突）
+            return NO_MATCH_REPLY;
+        }
+        // 17. 发送消息核心函数
+        function sendMsg() {
+            const content = msgInput.value.trim();
+            if (!content) return;
+            addMsg(false, content);
+            msgInput.value = '';
+            setTimeout(() => {
+                const kirinoContent = handleMsg(content);
+                addMsg(true, kirinoContent);
+            }, THINK_DELAY);
+        }
+        // 18. 弹窗操作：显示弹窗（锁界面）
+        function showModal() {
+            modalMask.style.display = "flex";
+            msgInput.disabled = true;
+            sendBtn.disabled = true;
+            clearAllBtn.disabled = true;
+            homeBtn.style.pointerEvents = "none";
+        }
+        // 19. 弹窗操作：隐藏弹窗（解锁界面）
+        function hideModal() {
+            modalMask.style.display = "none";
+            msgInput.disabled = false;
+            sendBtn.disabled = false;
+            clearAllBtn.disabled = false;
+            homeBtn.style.pointerEvents = "auto";
+            msgInput.focus();
+        }
+        // 20. 绑定所有事件
+        function bindEvents() {
+            sendBtn.addEventListener('click', sendMsg);
+            msgInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') sendMsg();
+            });
+            clearAllBtn.addEventListener('click', showModal);
+            modalConfirm.addEventListener('click', clearChatHistory);
+            modalCancel.addEventListener('click', hideModal);
+        }
+    </script>
+</body>
+</html>
