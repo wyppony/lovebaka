@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寒境少女绘幻想-原创画室</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:"Microsoft YaHei",sans-serif;
+    background:linear-gradient(135deg, #EEF5FF, #D7E6FF, #C8DAFF);
+    min-height:100vh;
+    padding:20px;
+    color:#2c3e50;
+}
+.studio-container{
+    max-width:1200px;
+    margin:50px auto;
+    background:rgba(255,255,255,0.85);
+    border:1px solid #9ccaff;
+    border-radius:16px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 30px rgba(100,149,237,0.25);
+    overflow:hidden;
+}
+.studio-intro{
+    padding:30px;
+    text-align:center;
+    border-bottom:1px solid #c6d9ff;
+}
+.studio-intro h1{
+    font-size:28px;
+    margin-bottom:20px;
+    color:#3f7cdc;
+    text-shadow:0 0 8px rgba(156,202,255,0.5);
+}
+.studio-intro p{
+    font-size:16px;
+    line-height:1.8;
+    color:#4a5a7a;
+    max-width:900px;
+    margin:0 auto;
+}
+.tab-box{
+    display:flex;
+    border-bottom:1px solid #c6d9ff;
+}
+.tab-btn{
+    flex:1;
+    padding:18px;
+    background:transparent;
+    border:none;
+    color:#557099;
+    font-size:17px;
+    cursor:pointer;
+    transition:all 0.3s;
+    position:relative;
+}
+.tab-btn:hover{
+    color:#3f7cdc;
+    background:rgba(180,212,255,0.3);
+}
+.tab-btn.active{
+    color:#3f7cdc;
+    font-weight:bold;
+}
+.tab-btn.active::after{
+    content:'';
+    position:absolute;
+    bottom:0;left:0;
+    width:100%;height:3px;
+    background:#6ba6ff;
+}
+.content-box{
+    padding:30px;
+    display:none;
+}
+.content-box.show{
+    display:block;
+}
+/* 表格滚动容器 */
+.table-wrap{
+    width:100%;
+    max-height:550px;
+    overflow:auto;
+    border:1px solid #c6d9ff;
+    border-radius:8px;
+}
+.paint-table{
+    width:100%;
+    min-width:850px;
+    border-collapse:collapse;
+    background:rgba(248,250,255,0.9);
+}
+.paint-table th,.paint-table td{
+    border:1px solid #c6d9ff;
+    padding:16px;
+    text-align:center;
+    vertical-align:middle;
+}
+/* 感想列自动换行，限制宽度 */
+.paint-table .desc-col{
+    white-space:normal;
+    word-wrap:break-word;
+    max-width:200px;
+}
+/* 其他列不换行，保证排版 */
+.paint-table .no-wrap{
+    white-space:nowrap;
+}
+.paint-table th{
+    background:#d1e3ff;
+    color:#334a70;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+.paint-table td{
+    color:#3d4a66;
+}
+.img-box{
+    width:170px;height:170px;
+    margin:0 auto;
+    border:1px solid #9ccaff;
+    border-radius:6px;
+    background:#f2f7ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+/* 图片等比例缩略，适配容器 */
+.img-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+/* 占位文字样式 */
+.placeholder{
+    color:#7799cc;
+    font-size:14px;
+}
+</style>
+</head>
+<body>
+<div class="studio-container">
+    <div class="studio-intro">
+        <h1>寒境少女绘幻想-原创画室</h1>
+        <p>欢迎来到寒境少女绘幻想原创画室，这里是位于爱⑨之家的专属绘画展示空间，以清冷笔触勾勒幻想世界，用细腻线条描绘心中美好。画室分为三大板块，贺图室将在节日节点更新专属节日贺图，留存仪式感；自绘室收录个人（B站：驴德来）原创画作，记录创作灵感与成长；赠绘室珍藏友人赠予及授权展示的作品。</p>
+    </div>
+    <div class="tab-box">
+        <button class="tab-btn active" data-target="tab1">贺图室</button>
+        <button class="tab-btn" data-target="tab2">自绘室</button>
+        <button class="tab-btn" data-target="tab3">赠绘室</button>
+    </div>
+    <!-- 贺图室 -->
+    <div class="content-box show" id="tab1">
+        <div class="table-wrap">
+            <table class="paint-table">
+                <tr>
+                    <th class="no-wrap">画作展示</th>
+                    <th class="no-wrap">贺图标题</th>
+                    <th class="no-wrap">节日类型</th>
+                    <th class="no-wrap">完成日期</th>
+                    <th class="no-wrap">上传日期</th>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="https://wyppony.github.io/lovebaka/2026元旦贺图.png" alt="2026年元旦贺图">
+                        </div>
+                    </td>
+                    <td class="no-wrap">001</td>
+                    <td class="no-wrap">2026年元旦贺图</td>
+                    <td class="no-wrap">2025/12/28</td>
+                    <td class="no-wrap">2025/12/28</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">贺图占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">贺图占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">贺图占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">贺图占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- 自绘室 -->
+    <div class="content-box" id="tab2">
+        <div class="table-wrap">
+            <table class="paint-table">
+                <tr>
+                    <th class="no-wrap">画作展示</th>
+                    <th class="no-wrap">画作标题</th>
+                    <th class="no-wrap">画作角色</th>
+                    <th class="no-wrap">完成日期</th>
+                    <th class="no-wrap">上传日期</th>
+                    <th>创作感想</th>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="https://wyppony.github.io/lovebaka/%E6%B9%96%E4%B8%8A%E7%9A%84%E5%86%B0%E7%B2%BE.jpg" alt="湖上的冰精">
+                        </div>
+                    </td>
+                    <td class="no-wrap">湖上的冰精</td>
+                    <td class="no-wrap">琪露诺</td>
+                    <td class="no-wrap">2026/2/17</td>
+                    <td class="no-wrap">2026/2/17 22:34</td>
+                    <td class="desc-col">第一次尝试板绘画的画，画得并不好</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="https://wyppony.github.io/lovebaka/%E7%99%BD%E6%B3%BD%E8%80%81%E5%B8%88%E4%B8%8E%E7%99%BD%E6%B3%BD%E7%90%83.jpg" alt="白泽老师与白泽球">
+                        </div>
+                    </td>
+                    <td class="no-wrap">白泽老师与白泽球</td>
+                    <td class="no-wrap">上白泽慧音</td>
+                    <td class="no-wrap">2026/2/17</td>
+                    <td class="no-wrap">2026/2/17 22:34</td>
+                    <td class="desc-col">受到物凄的影响，当时很喜欢白泽的慧音老师，在去年这个时候还买了可爱的白泽球，于是在这年春节画了一幅关于慧音老师和白泽球的</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="polly.jpg" alt="波利小姐">
+                        </div>
+                    </td>
+                    <td class="no-wrap">波利小姐</td>
+                    <td class="no-wrap">波利克斯·沃尔西斯</td>
+                    <td class="no-wrap">2026/2/18</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">如果你看过我制作的pony-anime-club的页面，你应该认识她，这是我为自己设计的角色画的一幅画，以前只能拿AI生成，现在终于有条件画了</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="L2.jpg" alt="OC练习">
+                        </div>
+                    </td>
+                    <td class="no-wrap">OC练习</td>
+                    <td class="no-wrap">未命名</td>
+                    <td class="no-wrap">2026/2/18</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">蓝发角色十分戳我的XP，非常喜欢沉静的女孩子</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="灵梦.png" alt="乞讨的灵梦fumo">
+                        </div>
+                    </td>
+                    <td class="no-wrap">乞讨的灵梦fumo</td>
+                    <td class="no-wrap">博丽灵梦(fumo)</td>
+                    <td class="no-wrap">2026/2/19</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">这个灵梦形象来源于某一个博主制作的机械灵梦fumo在赛钱箱前挥动御币乞讨的视频，我简要画了出来，但是刚刚学习在电脑上画画，技艺尚不成熟，所以看上去有点粗糙</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="铃仙.jpg" alt="有点热的铃仙">
+                        </div>
+                    </td>
+                    <td class="no-wrap">有点热的铃仙</td>
+                    <td class="no-wrap">铃仙·优昙华院·因幡</td>
+                    <td class="no-wrap">2026/2/20</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">最近有很多人在画铃仙，我也跟风画了一幅，衣服是自己设计的，看上去十分飘逸和涩气，效果还不错</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="小伞.png" alt="多多良小伞">
+                        </div>
+                    </td>
+                    <td class="no-wrap">多多良小伞</td>
+                    <td class="no-wrap">多多良小伞</td>
+                    <td class="no-wrap">2026/2/25</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">这是我拿SAI2画的多多良小伞，虽然只画了线稿（因为真的没有太多时间了），但是很好的表现了灵异的感觉，甚至有种东方异形乡作者那种画风的既视感</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap">
+                        <div class="img-box">
+                            <img src="L3.png" alt="OC2">
+                        </div>
+                    </td>
+                    <td class="no-wrap">OC2</td>
+                    <td class="no-wrap">未命名</td>
+                    <td class="no-wrap">2026/3/2</td>
+                    <td class="no-wrap">2026/4/25</td>
+                    <td class="desc-col">最近看了点蔚蓝档案游戏，于是心血来潮画了一幅背着枪械的少女的线稿，看上去十分帅气</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">自绘占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="desc-col">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">自绘占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="desc-col">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">自绘占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="desc-col">——</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- 赠绘室 -->
+    <div class="content-box" id="tab3">
+        <div class="table-wrap">
+            <table class="paint-table">
+                <tr>
+                    <th class="no-wrap">画作展示</th>
+                    <th class="no-wrap">画作作者</th>
+                    <th class="no-wrap">画作角色</th>
+                    <th class="no-wrap">获取日期</th>
+                    <th>感想与感谢</th>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">赠绘占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="desc-col">——</td>
+                </tr>
+                <tr>
+                    <td class="no-wrap"><div class="img-box"><span class="placeholder">赠绘占位</span></div></td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="no-wrap">——</td>
+                    <td class="desc-col">——</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+const btns=document.querySelectorAll('.tab-btn');
+btns.forEach(b=>{
+    b.addEventListener('click',()=>{
+        btns.forEach(x=>x.classList.remove('active'));
+        document.querySelectorAll('.content-box').forEach(c=>c.classList.remove('show'));
+        b.classList.add('active');
+        document.getElementById(b.dataset.target).classList.add('show');
+    })
+})
+</script>
+</body>
+</html>

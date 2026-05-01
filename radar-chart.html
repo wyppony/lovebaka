@@ -1,0 +1,358 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雷达图生成器 - 爱⑨之家</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        accent: '#8b5cf6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                        mono: ['Courier New', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-thin {
+                scrollbar-width: thin;
+            }
+            .scrollbar-thin::-webkit-scrollbar {
+                width: 6px;
+            }
+            .scrollbar-thin::-webkit-scrollbar-track {
+                background: #f1f5f9;
+                border-radius: 3px;
+            }
+            .scrollbar-thin::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 3px;
+            }
+            .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+            .pip-container {
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                background: #fff;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 999;
+                overflow: hidden;
+                cursor: move;
+            }
+            .pip-controls {
+                height: 30px;
+                background: #f8fafc;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding: 0 8px;
+                cursor: default;
+            }
+            .pip-control-btn {
+                width: 22px;
+                height: 22px;
+                border: none;
+                border-radius: 4px;
+                background: transparent;
+                color: #64748b;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 4px;
+            }
+            .pip-control-btn:hover {
+                background: #e2e8f0;
+                color: #0f172a;
+            }
+            .pip-canvas-container {
+                cursor: default;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col relative">
+    <div class="pip-container hidden" id="pip-container" style="width: 200px; height: 200px;">
+        <div class="pip-controls">
+            <button class="pip-control-btn" id="pip-zoom-in" title="放大">
+                <i class="fa fa-search-plus"></i>
+            </button>
+            <button class="pip-control-btn" id="pip-zoom-out" title="缩小">
+                <i class="fa fa-search-minus"></i>
+            </button>
+            <button class="pip-control-btn" id="pip-close" title="关闭">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="pip-canvas-container w-full h-full" style="height: calc(100% - 30px);">
+            <canvas id="pip-radar-canvas" class="w-full h-full"></canvas>
+        </div>
+    </div>
+    <header class="bg-white shadow-md py-4 px-6 flex items-center">
+        <a href="https://wyppony.github.io/lovebaka" class="flex items-center text-gray-700 hover:text-primary transition-colors mr-6">
+            <i class="fa fa-arrow-left text-xl mr-2"></i>
+            <span>返回</span>
+        </a>
+        <div class="text-center flex-1">
+            <h1 class="text-3xl font-bold text-gray-800">雷达图生成器</h1>
+            <p class="text-gray-500 mt-1">爱⑨之家网站制作</p>
+        </div>
+        <button id="create-pip" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+            <i class="fa fa-clone mr-2"></i>
+            <span>创建预览图画中画</span>
+        </button>
+    </header>
+    <main class="flex-1 container mx-auto px-4 py-6 max-w-6xl">
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">预览区</h2>
+            <div class="flex justify-center items-center">
+                <div id="radar-container" class="relative w-full max-w-lg aspect-square">
+                    <canvas id="radar-canvas" class="w-full h-full border border-gray-200 rounded"></canvas>
+                </div>
+            </div>
+        </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">图表设置</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-3">线条设置</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">线条样式:</label>
+                                <select id="line-style" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                    <option value="solid">实线</option>
+                                    <option value="dashed">虚线</option>
+                                </select>
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-2">
+                                    <label class="w-24 text-gray-600">线条颜色:</label>
+                                    <input type="text" id="line-color-text" value="#000000" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                </div>
+                                <div class="flex space-x-2">
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">R</label>
+                                        <input type="range" id="line-color-r" min="0" max="255" value="0" class="w-full accent-red-500">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">G</label>
+                                        <input type="range" id="line-color-g" min="0" max="255" value="0" class="w-full accent-green-500">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">B</label>
+                                        <input type="range" id="line-color-b" min="0" max="255" value="0" class="w-full accent-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">线条粗细:</label>
+                                <input type="number" id="line-width" value="2" min="1" max="10" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <span class="ml-2 text-gray-500">px</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-3">填充设置</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex items-center mb-2">
+                                    <label class="w-24 text-gray-600">填充颜色:</label>
+                                    <input type="text" id="fill-color-text" value="#000000" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                </div>
+                                <div class="flex space-x-2">
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">R</label>
+                                        <input type="range" id="fill-color-r" min="0" max="255" value="0" class="w-full accent-red-500">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">G</label>
+                                        <input type="range" id="fill-color-g" min="0" max="255" value="0" class="w-full accent-green-500">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="text-xs text-gray-500">B</label>
+                                        <input type="range" id="fill-color-b" min="0" max="255" value="0" class="w-full accent-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">透明度:</label>
+                                <input type="number" id="fill-opacity" value="50" min="0" max="100" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <span class="ml-2 text-gray-500">%</span>
+                            </div>
+                            <!-- 新增：显示蓝色标记点勾选框 -->
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">显示标记点:</label>
+                                <input type="checkbox" id="show-marker" checked class="w-5 h-5 accent-primary cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-3">标题设置</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">主标题:</label>
+                                <input type="text" id="chart-title" value="雷达图" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">副标题:</label>
+                                <input type="text" id="chart-subtitle" value="爱⑨之家制作" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">标题颜色:</label>
+                                <input type="color" id="title-color" value="#000000" class="w-12 h-10 border border-gray-300 rounded-md cursor-pointer">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">字体:</label>
+                                <select id="title-font" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                    <option value="sans">无衬线体</option>
+                                    <option value="serif">衬线体</option>
+                                    <option value="mono">等宽体</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center">
+                                <label class="w-24 text-gray-600">字号:</label>
+                                <input type="number" id="title-size" value="20" min="10" max="40" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <span class="ml-2 text-gray-500">px</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-3">等级设置</h3>
+                        <div id="levels-container" class="space-y-2 mb-3">
+                            <div class="level-item flex items-center">
+                                <input type="text" value="1" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <button class="delete-level ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="level-item flex items-center">
+                                <input type="text" value="2" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <button class="delete-level ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="level-item flex items-center">
+                                <input type="text" value="3" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <button class="delete-level ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="level-item flex items-center">
+                                <input type="text" value="4" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <button class="delete-level ml-2 text-red-500 hover:text-red-700 p-2">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="level-item flex items-center">
+                                <input type="text" value="5" class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                <button class="delete-level ml-2 text-red-500 hover:text-red-700 p-2">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button id="add-level" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-md transition-colors">
+                            <i class="fa fa-plus mr-2"></i>添加等级
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">参数设置</h2>
+                <button id="fill-jojo-template" class="w-full bg-accent hover:bg-accent/90 text-white py-2 rounded-md transition-colors mb-4">
+                    <i class="fa fa-magic mr-2"></i>一键填充JOJO替身面板模板
+                </button>
+                <div id="params-container" class="max-h-96 overflow-y-auto scrollbar-thin space-y-2 mb-3">
+                    <div class="param-item flex items-center">
+                        <input type="text" value="A" class="param-name flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        <select class="param-level ml-2 w-20 border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">3</option>
+                            <option value="3">4</option>
+                            <option value="4">5</option>
+                        </select>
+                        <button class="delete-param ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="param-item flex items-center">
+                        <input type="text" value="B" class="param-name flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        <select class="param-level ml-2 w-20 border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">3</option>
+                            <option value="3">4</option>
+                            <option value="4">5</option>
+                        </select>
+                        <button class="delete-param ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="param-item flex items-center">
+                        <input type="text" value="C" class="param-name flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        <select class="param-level ml-2 w-20 border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">3</option>
+                            <option value="3">4</option>
+                            <option value="4">5</option>
+                        </select>
+                        <button class="delete-param ml-2 text-red-500 hover:text-red-700 p-2" disabled>
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="add-param" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-md transition-colors">
+                    <i class="fa fa-plus mr-2"></i>添加参数
+                </button>
+            </section>
+        </div>
+    </main>
+    <footer class="bg-white shadow-inner py-4 px-6 mt-6">
+        <div class="container mx-auto flex justify-center space-x-4">
+            <button id="save-image" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md transition-colors shadow-md">
+                <i class="fa fa-download mr-2"></i>保存图片
+            </button>
+        </div>
+    </footer>
+    <div id="save-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-80">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">选择保存格式</h3>
+            <div class="space-y-3">
+                <button id="save-png" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md transition-colors">
+                    PNG格式 (透明背景)
+                </button>
+                <button id="save-jpg" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors">
+                    JPG格式 (白色背景)
+                </button>
+                <button id="cancel-save" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-md transition-colors">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="radar-chart.js"></script>
+</body>
+</html>

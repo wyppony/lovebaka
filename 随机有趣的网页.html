@@ -1,0 +1,279 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机有趣的网页</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入字体图标（关闭按钮） -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // 主蓝（按钮主色）
+                        secondary: '#4080FF', // 次蓝（按钮hover）
+                        light: '#E8F3FF', // 浅蓝（背景）
+                        dark: '#0E42C1', // 深蓝（强调）
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-blue-gradient {
+                background: linear-gradient(135deg, #E8F3FF 0%, #C9E2FF 100%);
+            }
+            .btn-shadow {
+                box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+            }
+            .card-shadow {
+                box-shadow: 0 8px 24px rgba(22, 93, 255, 0.15);
+            }
+        }
+    </style>
+</head>
+<body class="bg-blue-gradient min-h-screen flex flex-col items-center justify-center p-4 m-0">
+    <!-- 主容器 -->
+    <div class="bg-white rounded-2xl p-8 md:p-12 card-shadow w-full max-w-md text-center">
+        <!-- 配文 -->
+        <h1 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold text-gray-800 mb-4">是不是特无聊？</h1>
+        <p class="text-[clamp(1rem,3vw,1.2rem)] text-gray-600 mb-10">按下面的按钮，随机传送到一个有趣的页面</p>
+        
+        <!-- 按钮组 -->
+        <div class="flex flex-col gap-4">
+            <button id="randomBtn" class="bg-primary text-white py-4 px-8 rounded-xl text-lg font-medium btn-shadow hover:bg-secondary transition-all duration-300 active:scale-95">
+                随机跳转趣味网页
+            </button>
+            <button id="backBtn" class="bg-light text-primary py-4 px-8 rounded-xl text-lg font-medium border border-primary hover:bg-primary/10 transition-all duration-300 active:scale-95">
+                返回lovebaka
+            </button>
+            <button id="guideBtn" class="bg-light text-primary py-4 px-8 rounded-xl text-lg font-medium border border-primary hover:bg-primary/10 transition-all duration-300 active:scale-95">
+                网页指南
+            </button>
+        </div>
+    </div>
+    <div>
+    <p>爱⑨之家保证内无恶意链接，但不保证所有的网页链接均有效<br>内含外语网页，建议用带有翻译功能的浏览器使用</p>
+    </div>
+    <!-- 网页指南弹窗 -->
+    <div id="guideModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto p-6 md:p-8 card-shadow">
+            <!-- 弹窗头部 -->
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+                <h2 class="text-2xl font-bold text-primary">趣味网页指南（共102个）</h2>
+                <button id="closeModal" class="text-gray-500 hover:text-primary text-2xl transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- 指南内容（分类展示） -->
+            <div id="guideContent" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 由JS动态渲染分类列表 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 整理102个趣味网页（按文档序号，分类整理）
+        const funWebsites = {
+            自然地理: [
+                {name: "实时地球", url: "https://zoom.earth/"},
+                {name: "全球天气", url: "https://earth.nullschool.net/"},
+                {name: "风网", url: "https://www.windy.com/"},
+                {name: "深海", url: "https://neal.fun/deep-sea/"},
+                {name: "ocearch（海洋动物追踪）", url: "https://www.ocearch.org/tracker"},
+                {name: "物种2000中国节点", url: "http://sp2000.org.cn/"},
+                {name: "10万亿像素的夜空", url: "https://viewer.legacysurvey.org/"},
+                {name: "100,000 Stars", url: "https://stars.chromeexperiments.com/"},
+                {name: "地球时间线", url: "https://timelineofearth.com/"},
+                {name: "光污染地图", url: "https://www.lightpollutionmap.info/"},
+                {name: "地球模型", url: "https://3d-app.yunser.com/earth"},
+                {name: "地球旧照", url: "https://3d-app.yunser.com/plateMotion"},
+                {name: "流星雨", url: "https://www.meteorshowers.org/"},
+                {name: "全球海底光缆", url: "https://he.net/3d-map/"},
+                {name: "Earth Clock", url: "https://earthclock.cwandt.com/"}
+            ],
+            文博历史: [
+                {name: "全景故宫", url: "https://pano.dpm.org.cn/"},
+                {name: "数字敦煌", url: "https://www.e-dunhuang.com/"},
+                {name: "故宫博物院数字文物库", url: "https://digicol.dpm.org.cn/"},
+                {name: "中国历史照片", url: "https://www.hpcbristol.net/"},
+                {name: "全历史", url: "https://www.allhistory.com"},
+                {name: "波斯波利斯", url: "https://persepolis.getty.edu/"},
+                {name: "陕西博物馆360度实景浏览", url: "https://www.sxhm.com/online.html"},
+                {name: "CyArk", url: "https://www.cyark.org/"},
+                {name: "钓鱼岛线上博物馆", url: "http://www.diaoyudao.org.cn/dydbwg.html"},
+                {name: "千亿像素看中国", url: "http://bigpixel.cn/zh-CN.html"},
+                {name: "中国国家博物馆VR", url: "http://www.chnmuseum.cn/Portals/0/web/vr/"},
+                {name: "上海博物馆", url: "https://www.shanghaimuseum.net/mu/frontend/pg/index"},
+                {name: "卢浮宫藏品", url: "https://collections.louvre.fr/en/"},
+                {name: "荷兰国家博物馆", url: "https://www.rijksmuseum.nl/nl"},
+                {name: "英特尔虚拟博物馆", url: "https://virtualmuseum.intel.com/"}
+            ],
+            艺术创意: [
+                {name: "Artvee", url: "https://artvee.com/"},
+                {name: "无限3D美术馆", url: "https://gallery.nowaythis.works/"},
+                {name: "Arch Daily", url: "https://www.archdaily.cn/cn"},
+                {name: "濒危声音博物馆", url: "http://savethesounds.info/"},
+                {name: "古典音乐", url: "https://www.kunstderfuge.com/"},
+                {name: "苏联海报", url: "https://reddirect.ru/"},
+                {name: "网站设计博物馆", url: "https://www.webdesignmuseum.org/"},
+                {name: "中华珍宝馆", url: "https://g2.ltfc.net"},
+                {name: "机械键盘博物馆", url: "https://scrapbox.io/MECHKEYS/"},
+                {name: "手机博物馆", url: "https://www.mobilephonemuseum.com/catalogue"},
+                {name: "铅笔收藏馆", url: "https://brandnamepencils.com/"},
+                {name: "物流艺术", url: "https://logisticsartproject.com/"},
+                {name: "Gallerix", url: "https://gallerix.asia/"},
+                {name: "Conserve the Sound", url: "https://www.conservethesound.de/"},
+                {name: "Little Big World", url: "https://www.littlebigworld.de/"}
+            ],
+            数据科普: [
+                {name: "全球贸易数据", url: "https://oec.world/"},
+                {name: "世界人口时钟", url: "https://countrymeters.info/cn"},
+                {name: "全球电力地图", url: "https://openinframap.org/"},
+                {name: "核弹威力", url: "https://nuclearsecrecy.com/nukemap/"},
+                {name: "Exploratorium（星球年龄）", url: "https://exploratorium.edu/ronh/age/"},
+                {name: "全球贸易数据分析", url: "http://globe.cid.harvard.edu/"},
+                {name: "OEC.world", url: "https://oec.world/"},
+                {name: "木材数据库", url: "https://www.wood-database.com/"},
+                {name: "8values中文版", url: "https://songyon.github.io/8valuescn/"},
+                {name: "科普网站(Animagraffs)", url: "https://animagraffs.com/"},
+                {name: "Treeographer", url: "https://thetreeographer.com/archive/"},
+                {name: "世界建筑名录", url: "https://www.worldbuildingsdirectory.com/"},
+                {name: "世界数字图书馆", url: "https://www.loc.gov/collections/"},
+                {name: "世界地图", url: "http://www.onegreen.net/maps/m/world.htm/"},
+                {name: "蚂蚁网", url: "http://www.ants-china.com/"}
+            ],
+            实景探索: [
+                {name: "随机谷歌街景", url: "https://randomstreetview.com/"},
+                {name: "天际网络摄像头", url: "https://www.skylinewebcams.com/"},
+                {name: "FlightAware", url: "https://zh.flightaware.com/"},
+                {name: "国际空间站", url: "https://www.google.com/maps/@29.5602853,95.0853914,2a,75y,212.04h,90t/data=!3m7!1e1!3m5!1szChzPIAn4RIAAAQvxgbyEg!2e0!3e5!7i10000!8i5000?shorturl=1"},
+                {name: "享有海景的车站", url: "https://seaside-station.com/"},
+                {name: "Webcamtaxi", url: "https://www.webcamtaxi.com/"},
+                {name: "环游世界(AirPano)", url: "https://www.airpano.org.cn/"},
+                {name: "百年纪念灯泡", url: "https://www.centennialbulb.org/cam.htm"},
+                {name: "飞机坠毁信息", url: "http://www.planecrashinfo.com/"},
+                {name: "熊猫频道", url: "https://www.ipanda.com/"},
+                {name: "天空之城", url: "https://www.skypixel.com/"}
+            ],
+            文化数字库: [
+                {name: "书格子", url: "https://www.shuge.org/"},
+                {name: "搜韵", url: "https://sou-yun.cn/"},
+                {name: "观沧海", url: "https://www.ageeye.cn/"},
+                {name: "中国纪录片网", url: "http://www.docuchina.cn/"},
+                {name: "韵典网", url: "https://ytenx.org/"},
+                {name: "中国古籍保护网", url: "http://www.nlc.cn/pcab/"},
+                {name: "四大名著", url: "http://www.sdmz.cn/"},
+                {name: "世界数字图书馆", url: "https://www.loc.gov/collections/"},
+                {name: "乡音苑", url: "https://phonemica.net/"},
+                {name: "IDEA(方言档案)", url: "https://www.dialectsarchive.com/"}
+            ],
+            趣味杂项: [
+                {name: "护照博物馆", url: "https://www.passportindex.org/"},
+                {name: "Manhole(井盖地图)", url: "https://manhole.co.il/"},
+                {name: "公共钢琴", url: "https://pianos.pub/"},
+                {name: "阿里云盘资源站", url: "https://www.panjdzy.com"},
+                {name: "薇飞导航", url: "https://www.fwfly.com/"},
+                {name: "World flags", url: "https://world-flags.org/"},
+                {name: "Dollar Street", url: "https://www.gapminder.org/dollar-street"},
+                {name: "Go nomad", url: "https://nomadlist.com/"},
+                {name: "地平说学会协会", url: "https://www.tfes.org/"},
+                {name: "克苏鲁公社", url: "https://www.cthulhuclub.com"},
+                {name: "知妖(中国妖怪)", url: "http://www.cbaigui.com/"},
+                {name: "极像素", url: "https://www.sigoo.com/"},
+                {name: "The Sea We Breathe", url: "https://www.bluemarinefoundation.com/the-sea-we-breathe/"},
+                {name: "模拟器博物馆", url: "http://www.famicn.com/"},
+                {name: "十年前的网页", url: "https://neal.fun/ten-years-ago/"},
+                {name: "Archive.org Serendipity", url: "https://www.locserendipity.com/PushPlay.html"},
+                {name: "开源人物肖像", url: "http://www.facesofopensource.com/"},
+                {name: "信聚网", url: "https://xinjh.info/"},
+                {name: "指尖上", url: "https://www.zhijianshang.com/"},
+                {name: "制服地图", url: "https://uniform.wingzero.tw/"},
+                {name: "星辰协会", url: "http://thestarsetsociety.org/"}
+            ]
+        };
+
+        // 2. 提取所有网页的URL数组（用于随机跳转）
+        const allUrls = Object.values(funWebsites).flatMap(category => category.map(web => web.url));
+
+        // 3. 获取DOM元素
+        const randomBtn = document.getElementById('randomBtn');
+        const backBtn = document.getElementById('backBtn');
+        const guideBtn = document.getElementById('guideBtn');
+        const guideModal = document.getElementById('guideModal');
+        const closeModal = document.getElementById('closeModal');
+        const guideContent = document.getElementById('guideContent');
+
+        // 4. 随机跳转按钮事件
+        randomBtn.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * allUrls.length);
+            window.open(allUrls[randomIndex], '_blank'); // 新标签页打开，不影响原页面
+        });
+
+        // 5. 返回按钮事件
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'https://wyppony.github.io/lovebaka';
+        });
+
+        // 6. 打开网页指南弹窗
+        guideBtn.addEventListener('click', () => {
+            guideModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // 禁止背景滚动
+        });
+
+        // 7. 关闭弹窗（按钮）
+        closeModal.addEventListener('click', closeGuideModal);
+
+        // 8. 点击弹窗遮罩关闭
+        guideModal.addEventListener('click', (e) => {
+            if (e.target === guideModal) closeGuideModal();
+        });
+
+        // 9. 按ESC键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !guideModal.classList.contains('hidden')) {
+                closeGuideModal();
+            }
+        });
+
+        // 关闭弹窗的公共方法
+        function closeGuideModal() {
+            guideModal.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+
+        // 10. 动态渲染网页指南分类内容
+        function renderGuideContent() {
+            let html = '';
+            for (const [category, websites] of Object.entries(funWebsites)) {
+                html += `
+                    <div class="bg-light rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-dark mb-3 border-b border-primary/20 pb-2">${category}（${websites.length}个）</h3>
+                        <ul class="space-y-2 text-sm">
+                            ${websites.map(web => `
+                                <li>
+                                    <a href="${web.url}" target="_blank" class="text-primary hover:text-dark underline hover:no-underline transition-colors">
+                                        ${web.name}
+                                    </a>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            guideContent.innerHTML = html;
+        }
+
+        // 页面加载完成后渲染指南内容
+        window.onload = renderGuideContent;
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支持我们 - 爱⑨之家</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #165DFF;
+            --secondary: #4080FF;
+            --light: #E8F3FF;
+            --dark: #0E42C1;
+        }
+        body {
+            background-color: var(--light);
+            font-family: "Microsoft YaHei", 微软雅黑, sans-serif;
+            /* 取消所有用户选择禁用，保留原生功能 */
+        }
+        .btn-primary {
+            background-color: var(--primary) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--dark) !important;
+        }
+        .btn-secondary {
+            background-color: var(--secondary) !important;
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary) !important;
+        }
+        .qrcode-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        .qrcode-box.show {
+            max-height: 500px;
+        }
+        /* 核心：真码背景容器 + 顶层透明假码img */
+        .qrcode-container {
+            position: relative;
+            width: 80%;
+            height: 0;
+            padding-bottom: 80%;
+            margin: 0 auto;
+            /* 真收款码：CSS背景图，无独立img标签，右键无法直接获取 */
+            background: url(收款码2.jpg) no-repeat center center;
+            background-size: 100% 100%;
+            border-radius: 8px;
+        }
+        /* 假收款码：顶层覆盖，opacity:0完全透明，视觉无感知 */
+        /* 关键：pointer-events: auto 让右键操作完全绑定到假码img */
+        .fake-qrcode {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0; /* 透明，不遮挡真码视觉 */
+            pointer-events: auto; /* 强制右键/点击事件作用于假码 */
+            z-index: 10; /* 确保层级在真码背景之上 */
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 md:px-0">
+    <!-- 左上角返回lovebaka主页面按钮 -->
+    <a href="https://wyppony.github.io/lovebaka" class="fixed top-4 left-4 z-10 bg-white/80 backdrop-blur-sm shadow-sm rounded-full p-3 text-primary hover:text-dark transition-colors">
+        <i class="fas fa-arrow-left text-xl"></i>
+    </a>
+
+    <!-- 页面主容器 -->
+    <div class="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6 md:p-8">
+        <!-- 标题区域 -->
+        <div class="text-center mb-8">
+            <h1 class="text-[clamp(1.5rem,4vw,2rem)] font-bold text-primary mb-2">pony社与东方⑨教需要您的支持！</h1>
+            <p class="text-gray-600 text-lg">您的支持就是我们前进的动力</p>
+            <p class="text-gray-500 mt-2 italic">支持作者？往下看👇</p>
+        </div>
+
+        <!-- 乞讨文案区域 -->
+        <div class="bg-light rounded-lg p-5 mb-8 text-gray-700 leading-relaxed">
+            大家好，我是励志成为主催的驴德来<br><br>
+            时光流逝，按现在算，我从真正接触东方竟已有整整3年了<br><br>
+            从2024年⑨教企划创立，到爱⑨之家网站一路更新到3.0版本，我始终用业余时间坚持开发网站、自制游戏<br><br>
+            由于我还需专注学业，网站更新、内容制作全靠挤时间完成，不少想法也因技术和资金暂时搁置。<br><br>
+            您的每一份支持都能让我们走得更远：不管是小额的金钱资助（用于网站、素材搜集、后续周边制作），还是B站的点赞、投币、关注（给我们坚持的勇气），都是对pony社和⑨教最大的认可！<br><br>
+            感谢每一位支持爱⑨之家、喜欢东方⑨教以及pony社的朋友，我们会继续用心做好每一个内容～
+        </div>
+
+        <!-- 功能按钮区域 -->
+        <div class="flex flex-col gap-4 mb-6">
+            <!-- 金钱支持：展开/收回收款码 -->
+            <button id="moneyBtn" class="btn-primary text-white rounded-lg py-3 px-6 text-lg font-medium flex items-center justify-center gap-2 shadow-sm">
+                <i class="fas fa-red-envelope"></i>
+                用金钱支持我
+            </button>
+            <!-- B站支持：跳转作者主页 -->
+            <a href="https://space.bilibili.com/488255719?spm_id_from=333.1007.0.0" target="_blank" class="btn-secondary text-white rounded-lg py-3 px-6 text-lg font-medium flex items-center justify-center gap-2 shadow-sm">
+                <i class="fab fa-bilibili"></i>
+                用点赞，投币或关注支持我
+            </a>
+        </div>
+
+        <!-- 收款码区域（核心改造：真码背景+透明假码） -->
+        <div id="qrcodeBox" class="qrcode-box text-center">
+            <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                <p class="text-gray-600 mb-2">微信扫码 | 感谢您的资助</p>
+                <!-- 真码背景容器 -->
+                <div class="qrcode-container">
+                    <!-- 假码img：透明顶层，右键/下载/新标签均为该资源 -->
+                    <img src="https://wyppony.github.io/lovebaka/收款码.jpg" alt="微信收款码" class="fake-qrcode">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 原展开/收回收款码交互，无任何新增禁用逻辑
+        const moneyBtn = document.getElementById('moneyBtn');
+        const qrcodeBox = document.getElementById('qrcodeBox');
+        moneyBtn.addEventListener('click', () => {
+            qrcodeBox.classList.toggle('show');
+            // 按钮文字/icon切换
+            if (qrcodeBox.classList.contains('show')) {
+                moneyBtn.innerHTML = '<i class="fas fa-times"></i> 收回收款码';
+            } else {
+                moneyBtn.innerHTML = '<i class="fas fa-red-envelope"></i> 用金钱支持我';
+            }
+        });
+    </script>
+</body>
+</html>
