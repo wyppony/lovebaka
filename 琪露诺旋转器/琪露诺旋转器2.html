@@ -310,9 +310,21 @@ let modalOpen = false;
 const cirno = document.getElementById('cirno');
 const countText = document.getElementById('count');
 const frames = [
-"wps_doc_1.png","wps_doc_2.png","wps_doc_3.png","wps_doc_4.png","wps_doc_5.png",
-"wps_doc_6.png","wps_doc_7.png","wps_doc_8.png","wps_doc_9.png","wps_doc_10.png",
-"wps_doc_11.png","wps_doc_12.png","wps_doc_13.png","wps_doc_14.png","wps_doc_0.png"
+    "./wps_doc_1.png",
+    "./wps_doc_2.png",
+    "./wps_doc_3.png",
+    "./wps_doc_4.png",
+    "./wps_doc_5.png",
+    "./wps_doc_6.png",
+    "./wps_doc_7.png",
+    "./wps_doc_8.png",
+    "./wps_doc_9.png",
+    "./wps_doc_10.png",
+    "./wps_doc_11.png",
+    "./wps_doc_12.png",
+    "./wps_doc_13.png",
+    "./wps_doc_14.png",
+    "./wps_doc_0.png"
 ];
 // 更新显示
 function update() {
@@ -343,6 +355,8 @@ function rotate(times = 1) {
     let loop = 0;
     const rotateSpeed = 50; // 0.05秒/帧
     const itv = setInterval(() => {
+        let img = new Image();
+        img.src = frames[f];
         cirno.src = frames[f];
         f++;
         if (f >= frames.length) {
