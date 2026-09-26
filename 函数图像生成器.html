@@ -1,0 +1,2112 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多功能函数图像生成器</title>
+<link rel="icon" href="https://wyppony.github.io/lovebaka/9-16x16.png">
+<style>
+:root{
+  --bg:#EAF0F6; --card:#FFFFFF; --ink:#1F2937; --muted:#6B7280;
+  --accent:#2563EB; --accent-soft:#EFF4FF; --line:#E5EAF1;
+  --grid:#E9EEF5; --grid-major:#D8DFEA; --axis:#334155; --asym:#C05050;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.app{max-width:1220px;margin:0 auto;padding:14px 16px 44px;}
+header.app-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;padding:8px 2px 14px;}
+h1{font-size:22px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:10px;}
+h1 .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);position:relative;flex-shrink:0;}
+h1 .logo::after{content:"";position:absolute;left:5px;right:5px;top:8px;height:2.4px;border-radius:2px;background:#fff;box-shadow:0 -4px 0 0 #fff,0 4px 0 0 #fff,0 -8px 0 0 #fff;}
+.sub{color:var(--muted);font-size:13px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 3px rgba(15,23,42,.06);}
+.graph-card{overflow:hidden;}
+.graph-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:9px 14px;border-bottom:1px solid var(--line);}
+.tool-hint{font-size:12px;color:var(--muted);}
+.tool-btns{display:flex;gap:6px;align-items:center;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:7px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;font-size:13px;cursor:pointer;transition:all .12s;font-family:inherit;}
+.btn:hover{background:#F3F6FB;border-color:#C9D4E4;}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn.primary:hover{background:#1D4ED8;}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted);}
+.btn.ghost:hover{background:#EEF2F7;color:var(--ink);}
+.canvas-holder{position:relative;}
+canvas#graph{display:block;width:100%;height:520px;touch-action:none;cursor:crosshair;}
+.count-badge{margin-left:4px;font-size:12px;color:var(--muted);font-weight:500;}
+.input-bar{display:flex;gap:10px;margin:14px 0;align-items:stretch;}
+.quick-wrap{flex:1;position:relative;}
+input.quick{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;outline:none;transition:all .12s;background:#fff;font-family:inherit;color:var(--ink);}
+input.quick:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.add-btn{padding:12px 22px;font-size:15px;border-radius:10px;}
+.table-card{margin-top:0;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;}
+colgroup col{display:table-column;}
+th{background:#F8FAFC;font-size:12px;color:var(--muted);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:9px 12px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;}
+tbody tr{cursor:default;transition:background .1s;}
+tbody tr:hover td{background:#F6F9FD;}
+tbody tr.active-row td{background:var(--accent-soft);}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:-1px;flex-shrink:0;}
+.fname{font-weight:700;display:inline-flex;align-items:center;}
+.math{font-family:"Cambria Math",Cambria,Georgia,"Times New Roman",serif;font-size:14.5px;}
+.row-actions{display:flex;gap:4px;}
+.icon-btn{width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all .12s;}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.icon-btn.del:hover{color:#DC2626;border-color:#DC2626;background:#FEF2F2;}
+.empty-row td{text-align:center;color:var(--muted);padding:26px 12px;font-size:13.5px;border-bottom:none;}
+.footer-note{margin-top:12px;font-size:12px;color:var(--muted);text-align:center;}
+
+/* ===== 遮罩层 ===== */
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;animation:fadeIn .15s;}
+.modal-mask[hidden]{display:none;}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:860px;max-height:94vh;overflow:auto;padding:20px 22px 18px;box-shadow:0 24px 64px rgba(15,23,42,.28);animation:popIn .16s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes popIn{from{transform:scale(.97);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal h2{font-size:18px;font-weight:700;margin-bottom:4px;}
+.modal .modal-sub{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+.field-label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px;font-weight:500;}
+.input-frame{position:relative;}
+input.expr-input, input.domain-input{width:100%;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;outline:none;transition:border .12s,box-shadow .12s;font-family:"Cambria Math",Cambria,Georgia,serif;}
+input.expr-input:focus,input.domain-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.pad{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:12px;}
+.pad .grp{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.pad-title{font-size:11px;color:var(--muted);margin-right:4px;flex:1 0 100%;font-weight:600;letter-spacing:.5px;}
+.pad .grp:not(:first-child){margin-top:4px;}
+.pad button{min-width:44px;padding:6px 9px;border:1px solid var(--line);background:#FAFBFD;border-radius:7px;font-size:14px;cursor:pointer;transition:all .1s;font-family:"Cambria Math",Cambria,Georgia,serif;color:var(--ink);}
+.pad button:hover{background:var(--accent-soft);border-color:#BFD3F5;color:var(--accent);}
+.pad button.grp-badge{min-width:auto;background:#F1F4F9;font-size:12px;color:var(--muted);cursor:default;}
+.preview-row{display:flex;gap:14px;margin-top:14px;align-items:stretch;}
+.preview-text{flex:1;background:#F8FAFC;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;overflow:auto;max-height:190px;min-height:120px;}
+.preview-text .lbl{color:var(--muted);}
+.preview-canvas-wrap{border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0;width:300px;height:190px;}
+canvas#previewCanvas{display:block;width:100%;height:100%;background:#fff;}
+.err{color:#DC2626;font-weight:500;}
+.ok{color:#16A34A;font-weight:500;}
+.warn{color:#B45309;}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);}
+
+@media (max-width:760px){
+  canvas#graph{height:360px;}
+  .pad{grid-template-columns:repeat(4,1fr);}
+  .pad .grp{grid-column:1/-1;}
+  .preview-row{flex-direction:column;}
+  .preview-canvas-wrap{width:100%;height:170px;}
+  .app{padding:10px 10px 30px;}
+  h1{font-size:19px;}
+  .input-bar{flex-direction:column;}
+  th,td{font-size:12.5px;padding:8px 8px;}
+}
+@media (max-width:480px){
+  canvas#graph{height:300px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="app-header">
+    <h1><span class="logo"></span>多功能函数图像生成器</h1>
+    <div class="sub">爱⑨之家制作</div>
+  </header>
+
+  <!-- ===== 坐标系画布 ===== -->
+  <section class="card graph-card">
+    <div class="graph-toolbar">
+      <span class="tool-hint" id="graphHint">滚轮缩放 · 拖拽平移 · 悬停查看表达式 · 单击曲线选中</span>
+      <div class="tool-btns">
+        <button class="btn" id="zoomOutBtn" title="缩小">−</button>
+        <button class="btn" id="zoomInBtn" title="放大">+</button>
+        <button class="btn" id="resetViewBtn">重置视图</button>
+        <button class="btn" id="exportBtn">导出 PNG</button>
+      </div>
+    </div>
+    <div class="canvas-holder">
+      <canvas id="graph"></canvas>
+    </div>
+  </section>
+
+  <!-- ===== 快速输入条 ===== -->
+  <section class="input-bar">
+    <div class="quick-wrap">
+      <input class="quick" id="quickInput" placeholder="输入函数表达式后回车添加，如 x^2、sin(x)、1/x、\frac{1}{x}、sqrt(1-x^2)……也可以点击右侧按钮用可视化面板输入">
+    </div>
+    <button class="btn primary add-btn" id="openModalBtn">打开公式面板</button>
+  </section>
+
+  <!-- ===== 函数表格 ===== -->
+  <section class="card table-card">
+    <div class="graph-toolbar">
+      <span class="tool-hint">函数列表（最多 8 个，点击函数名可高亮对应曲线，悬停行高亮曲线）</span>
+      <span class="tool-hint count-badge" id="countBadge">0 / 8</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col style="width:6%"><col style="width:22%"><col style="width:21%"><col style="width:11%"><col style="width:10%"><col style="width:22%"><col style="width:8%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>函数</th><th>表达式</th><th>值域</th><th>奇偶性</th><th>周期</th><th>二阶导数 f″(x)</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="funcTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="footer-note">渐近线以红色虚线标注 · 值域/奇偶/周期/二阶导由内置符号分析引擎计算</p>
+</div>
+
+<!-- ===== 遮罩层：公式输入面板 ===== -->
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal">
+    <h2 id="modalTitle">添加函数</h2>
+    <div class="modal-sub" id="modalSub">输入函数表达式与定义域（可选）。支持自然数学语法与 LaTeX 语法，例如：<span class="math">x^2</span>、<span class="math">1/(x-1)</span>、<span class="math">\frac{1}{x}</span>、<span class="math">\sqrt{x}</span>、<span class="math">\sin(2x)</span></div>
+
+    <label class="field-label" for="exprInput">函数表达式 <span style="font-weight:400">（下方按钮选择特殊数学算符）</span></label>
+    <input class="expr-input" id="exprInput" autocomplete="off" placeholder="例如：x^2 + 1、sin(2x)、1/(x-1)、\frac{x^2}{x-2}、|x|、sqrt(x^2+1)">
+
+    <label class="field-label" for="domainInput">定义域 <span style="font-weight:400">（可选；留空则自动按数学规则，如分母≠0、真数&gt;0、偶次根号下≥0）</span></label>
+    <input class="domain-input" id="domainInput" autocomplete="off" placeholder="例如：x≠0、(-∞,0)∪(0,∞)、[1,5]、x&gt;0、0&lt;x&lt;π、x≠0,x&gt;1">
+    <div class="pad" id="domainPad"></div>
+
+    <div class="pad" id="padPanel"></div>
+
+    <div class="preview-row">
+      <div class="preview-text" id="previewText">等待输入……</div>
+      <div class="preview-canvas-wrap"><canvas id="previewCanvas"></canvas></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" id="cancelBtn">取消</button>
+      <button class="btn primary" id="okBtn">添加</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ================================================================
+ * 1. 工具函数
+ * ================================================================ */
+const TAU = Math.PI * 2;
+function isFiniteNum(v){ return typeof v === 'number' && isFinite(v); }
+function fmtNum(v){
+  if(!isFiniteNum(v)) return '—';
+  if(Number.isInteger(v)) return String(v);
+  if(v !== 0 && Math.abs(v) <= 1e-7) return '0';
+  let s = parseFloat(v.toPrecision(6)).toString();
+  if(s === '-0') s = '0';
+  return s;
+}
+function clamp(v, a, b){ return Math.min(b, Math.max(a, v)); }
+/* 小数 → 有理数近似 {num,den}（连分数） */
+function toFrac(x, eps){
+  if(!isFiniteNum(x) || x === 0) return null;
+  const neg = x < 0; x = Math.abs(x);
+  let h1=1,h2=0,k1=0,k2=1,b=x;
+  for(let i=0;i<18;i++){
+    const a=Math.floor(b);
+    [h1,h2] = [a*h1+h2, h1]; [k1,k2] = [a*k1+k2, k1];
+    const rem = b-a;
+    if(rem < eps || Math.abs(x - h1/k1) < eps) break;
+    b = 1/rem;
+  }
+  if(k1===0) return null;
+  return {num: neg?-h1:h1, den:k1};
+}
+
+/* ================================================================
+ * 2. LaTeX / 自然语法 预处理（把 LaTeX 命令展开为自然数学语法）
+ * ================================================================ */
+const TEX_FUNCS = ['sin','cos','tan','cot','sec','csc','arcsin','arccos','arctan','ln','lg','exp','sinh','cosh','tanh'];
+function texExpand(src){
+  src = String(src||'');
+  let i = 0; const n = src.length; let out = '';
+  function readGroup(){
+    let depth = 0, s = '', started = false;
+    while(i < n){
+      const c = src[i];
+      if(c === '{'){ depth++; started = true; if(depth>1) s += '{'; i++; }
+      else if(c === '}'){ depth--; i++; if(depth === 0) return s; s += '}'; }
+      else { s += c; i++; }
+    }
+    return s;
+  }
+  function readCommand(){
+    const m = /^[a-zA-Z]+/.exec(src.slice(i));
+    const name = m ? m[0] : '';
+    i += name.length;
+    let opt = null, params = [];
+    while(true){
+      while(i<n && /\s/.test(src[i])) i++;
+      if(i<n && src[i] === '['){ // 可选参数 [n]
+        let j = i+1, s = '';
+        while(j<n && src[j] !== ']'){ s += src[j]; j++; }
+        opt = s; i = j+1;
+      } else if(i<n && src[i] === '{' && params.length < 2){ params.push(readGroup()); }
+      else break;
+    }
+    return {name, opt, params};
+  }
+  function readNumberOrGroup(){
+    while(i<n && /\s/.test(src[i])) i++;
+    if(i<n && src[i] === '{') return texExpand(readGroup());
+    const m = /^[0-9.eE+-]+/.exec(src.slice(i));
+    if(m){ i += m[0].length; return m[0]; }
+    if(i<n){ const c = src[i]; i++; return c; }
+    return '';
+  }
+  while(i < n){
+    const c = src[i];
+    if(c === '\\'){
+      i++;
+      if(i >= n) break;
+      const cmd = readCommand();
+      const nm = cmd.name, P = cmd.params;
+      if(nm === 'frac' || nm === 'dfrac' || nm === 'tfrac' || nm === 'cfrac'){
+        out += '(' + texExpand(P[0]) + ')/(' + texExpand(P[1]||'') + ')';
+      } else if(nm === 'sqrt'){
+        if(cmd.opt) out += '(' + texExpand(P[0]||'') + ')^(1/(' + texExpand(cmd.opt) + '))';
+        else out += 'sqrt(' + texExpand(P[0]||'') + ')';
+      } else if(nm === 'abs' || nm === 'lvert'){
+        out += '|' + texExpand(P[0]||'') + '|';
+      } else if(TEX_FUNCS.includes(nm)){
+        const fname = nm === 'arcsin' ? 'asin' : nm === 'arccos' ? 'acos' : nm === 'arctan' ? 'atan' : nm === 'lg' ? 'log10' : nm;
+        let pow = null;
+        while(i<n && /\s/.test(src[i])) i++;
+        if(i<n && src[i] === '^'){ i++; pow = readNumberOrGroup(); }
+        const arg = readNumberOrGroup();
+        let core = fname + '(' + arg + ')';
+        out += pow ? '(' + core + ')^(' + pow + ')' : core;
+      } else if(nm === 'log'){
+        let base = null;
+        while(i<n && /\s/.test(src[i])) i++;
+        if(i<n && src[i] === '_'){ i++; base = readNumberOrGroup(); }
+        const arg = readNumberOrGroup();
+        out += base ? 'log(' + arg + ',' + base + ')' : 'log(' + arg + ')';
+      } else if(nm === 'pi' || nm === 'Pi'){ out += 'pi'; }
+      else if(nm === 'tau'){ out += 'tau'; }
+      else if(nm === 'infty' || nm === 'inf'){ out += 'inf'; }
+      else if(nm === 'cdot' || nm === 'times'){ out += '*'; }
+      else if(nm === 'div'){ out += '/'; }
+      else if(nm === 'over'){ out += '/'; }
+      else if(nm === 'ge' || nm === 'geq'){ out += '>='; }
+      else if(nm === 'le' || nm === 'leq'){ out += '<='; }
+      else if(nm === 'ne' || nm === 'neq'){ out += '!='; }
+      else if(nm === 'cup'){ out += '∪'; }
+      else if(nm === 'in'){ out += '∈'; }
+      else if(nm === 'pm'){ out += '(±)'; }
+      else if(nm === 'quad' || nm === 'qquad' || nm === ',' || nm === '!' || nm === ' '){ out += ' '; }
+      else if(nm === 'mathrm' || nm === 'operatorname' || nm === 'text' || nm === 'rm' || nm === 'mbox' || nm === 'it'){ out += texExpand(P[0]||''); }
+      else { out += P.length ? P.map(p => texExpand(p)).join('') : nm; }
+    } else if(c === '{'){
+      out += '(' + texExpand(readGroup()) + ')';
+    } else if(c === '}'){
+      i++;
+    } else if(c === '^'){
+      i++; out += '^' + readNumberOrGroup();
+    } else if(c === '_'){
+      i++; readNumberOrGroup(); // 下标仅用于 log 底等，此处忽略
+    } else if(c === '|'){
+      let j = i+1; while(j < n && src[j] !== '|') j++;
+      if(j < n){ out += '|' + texExpand(src.slice(i+1, j)) + '|'; i = j+1; }
+      else { out += '|'; i++; }
+    } else if(c === '，' || c === '、'){ out += ','; i++; }
+    else { out += c; i++; }
+  }
+  return out;
+}
+
+/* ================================================================
+ * 3. 词法分析
+ * ================================================================ */
+function tokenize(s){
+  const toks = []; let i = 0; const n = s.length;
+  while(i < n){
+    const c = s[i];
+    if(/\s/.test(c)){ i++; continue; }
+    if(c === '+'){ toks.push({t:'op', v:'+'}); i++; }
+    else if(c === '-'){ toks.push({t:'op', v:'-'}); i++; }
+    else if(c === '*'){ toks.push({t:'op', v:'*'}); i++; }
+    else if(c === '/'){ toks.push({t:'op', v:'/'}); i++; }
+    else if(c === '^'){ toks.push({t:'op', v:'^'}); i++; }
+    else if(c === '('){ toks.push({t:'lp'}); i++; }
+    else if(c === ')'){ toks.push({t:'rp'}); i++; }
+    else if(c === '|'){ toks.push({t:'pipe'}); i++; }
+    else if(c === ','){ toks.push({t:'comma'}); i++; }
+    else if(/[0-9.]/.test(c)){
+      const m = /^(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/.exec(s.slice(i));
+      toks.push({t:'num', v: parseFloat(m[0])}); i += m[0].length;
+    } else if(/[a-zA-Zπ]/i.test(c)){
+      const m = /^[a-zA-Zπ]+/.exec(s.slice(i));
+      toks.push({t:'id', v: m[0]}); i += m[0].length;
+    } else {
+      return {err: '无法识别的字符「' + c + '」'};
+    }
+  }
+  toks.push({t:'eof'});
+  return {toks};
+}
+
+/* ================================================================
+ * 4. 语法分析 → AST（支持隐式乘法、竖线绝对值、sin^2(x) 形式）
+ * ================================================================ */
+const FUNC_NAMES = ['sin','cos','tan','cot','sec','csc','asin','acos','atan','arcsin','arccos','arctan','ln','log','lg','log10','exp','sqrt','cbrt','abs','sign','floor','ceil','sinh','cosh','tanh','asinh','acosh','atanh','min','max','mod','atan2','log2'];
+function parseExpr(src){
+  const r = tokenize(src);
+  if(r.err) return {err: r.err};
+  const ts = r.toks; let pos = 0;
+  const peek = () => ts[pos];
+  const next = () => ts[pos++];
+  function expect(t){
+    const tk = peek();
+    if(tk.t !== t) throw new Error('语法错误：期望 ' + t + (tk.v ? '（遇到 "'+tk.v+'"）' : ''));
+    return next();
+  }
+  function implicitStart(tk){
+    return tk.t === 'num' || tk.t === 'id' || tk.t === 'lp';
+  }
+  function parseAdd(){
+    let e = parseMul();
+    while(peek().t === 'op' && (peek().v === '+' || peek().v === '-')){
+      const op = next().v;
+      e = {t:'bin', op, l:e, r:parseMul()};
+    }
+    return e;
+  }
+  function parseMul(){
+    let e = parseUnary();
+    while(true){
+      const tk = peek();
+      if(tk.t === 'op' && (tk.v === '*' || tk.v === '/')){
+        const op = next().v;
+        e = {t:'bin', op, l:e, r:parseUnary()};
+      } else if(implicitStart(tk)){
+        e = {t:'bin', op:'*', l:e, r:parseUnary()};
+      } else break;
+    }
+    return e;
+  }
+  function parseUnary(){
+    const tk = peek();
+    if(tk.t === 'op' && tk.v === '-'){ next(); return {t:'neg', e:parseUnary()}; }
+    if(tk.t === 'op' && tk.v === '+'){ next(); return parseUnary(); }
+    return parsePow();
+  }
+  function parsePow(){
+    const base = parseAtom();
+    if(peek().t === 'op' && peek().v === '^'){
+      next();
+      return {t:'pow', b:base, e:parseUnary()};
+    }
+    return base;
+  }
+  function parseAtom(){
+    const tk = peek();
+    if(tk.t === 'num'){ next(); return {t:'num', v:tk.v}; }
+    if(tk.t === 'id'){
+      next();
+      const raw = tk.v, name = raw.toLowerCase();
+      if(name === 'pi' || raw === 'π') return {t:'const', name:'π', v:Math.PI};
+      if(name === 'e') return {t:'const', name:'e', v:Math.E};
+      if(name === 'tau') return {t:'const', name:'τ', v:TAU};
+      if(name === 'inf' || name === 'infty') return {t:'const', name:'∞', v:Infinity};
+      if(name === 'x') return {t:'var'};
+      // sin^2(x) 形式
+      if(FUNC_NAMES.includes(name) && peek().t === 'op' && peek().v === '^'){
+        next();
+        const p = parseUnary();
+        if(peek().t === 'lp'){
+          next(); const a = parseAdd(); expect('rp');
+          return {t:'pow', b:{t:'call', f:name, args:[a]}, e:p};
+        }
+        throw new Error('函数 ' + raw + ' 缺少参数');
+      }
+      if(FUNC_NAMES.includes(name) && peek().t === 'lp'){
+        next();
+        const args = [parseAdd()];
+        while(peek().t === 'comma'){ next(); args.push(parseAdd()); }
+        expect('rp');
+        return {t:'call', f:name, args};
+      }
+      if(FUNC_NAMES.includes(name)){
+        throw new Error('函数 ' + raw + ' 需要括号参数，如 ' + raw + '(x)');
+      }
+      throw new Error('未知标识符「' + raw + '」（目前只支持变量 x）');
+    }
+    if(tk.t === 'lp'){
+      next(); const e = parseAdd(); expect('rp'); return e;
+    }
+    if(tk.t === 'pipe'){
+      next(); const e = parseAdd();
+      if(peek().t === 'pipe') next();
+      return {t:'call', f:'abs', args:[e]};
+    }
+    throw new Error('语法错误：意外的符号' + (tk.v ? '「' + tk.v + '」' : ''));
+  }
+  try{
+    const ast = parseAdd();
+    if(peek().t !== 'eof') throw new Error('语法错误：存在多余的输入');
+    return {ast};
+  }catch(e){ return {err: e.message}; }
+}
+
+/* ================================================================
+ * 5. 求值引擎
+ * ================================================================ */
+function evalNode(n, x){
+  switch(n.t){
+    case 'num': return n.v;
+    case 'const': return n.v;
+    case 'var': return x;
+    case 'neg': { const v = evalNode(n.e, x); return isNaN(v) ? NaN : -v; }
+    case 'bin': return evalBin(n, x);
+    case 'pow': return evalPow(n, x);
+    case 'call': return evalCall(n, x);
+  }
+  return NaN;
+}
+function evalBin(n, x){
+  const a = evalNode(n.l, x), b = evalNode(n.r, x);
+  if(isNaN(a) || isNaN(b)) return NaN;
+  switch(n.op){
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b === 0 ? (a === 0 ? NaN : (a > 0 ? Infinity : -Infinity)) : a / b;
+  }
+  return NaN;
+}
+function evalPow(n, x){
+  const b = evalNode(n.b, x), e = evalNode(n.e, x);
+  if(isNaN(b) || isNaN(e)) return NaN;
+  if(b < 0 && !Number.isInteger(e)){
+    const fr = toFrac(e, 1e-9);
+    if(fr && fr.den % 2 === 1){
+      return (b < 0 ? -1 : 1) * Math.pow(Math.abs(b), fr.num / fr.den);
+    }
+    return NaN;
+  }
+  return Math.pow(b, e);
+}
+function evalCall(n, x){
+  const f = n.f, a = n.args.map(g => evalNode(g, x));
+  if(a.some(isNaN)) return NaN;
+  switch(f){
+    case 'sin': return Math.sin(a[0]);
+    case 'cos': return Math.cos(a[0]);
+    case 'tan': { const s = Math.sin(a[0]), c = Math.cos(a[0]); return Math.abs(c) < 1e-15 ? (s >= 0 ? Infinity : -Infinity) : s / c; }
+    case 'cot': { const s = Math.sin(a[0]); return Math.abs(s) < 1e-15 ? (Math.cos(a[0]) >= 0 ? Infinity : -Infinity) : Math.cos(a[0]) / s; }
+    case 'sec': { const c = Math.cos(a[0]); return Math.abs(c) < 1e-15 ? Infinity : 1 / c; }
+    case 'csc': { const s = Math.sin(a[0]); return Math.abs(s) < 1e-15 ? Infinity : 1 / s; }
+    case 'asin': return Math.asin(a[0]);
+    case 'acos': return Math.acos(a[0]);
+    case 'atan': return Math.atan(a[0]);
+    case 'atan2': return Math.atan2(a[0], a[1] === undefined ? 1 : a[1]);
+    case 'ln': return a[0] <= 0 ? NaN : Math.log(a[0]);
+    case 'log': { const base = a[1] === undefined ? 10 : a[1]; if(a[0] <= 0 || base <= 0 || base === 1) return NaN; return Math.log(a[0]) / Math.log(base); }
+    case 'log10': return a[0] <= 0 ? NaN : Math.log10(a[0]);
+    case 'log2': return a[0] <= 0 ? NaN : Math.log2(a[0]);
+    case 'exp': return Math.exp(a[0]);
+    case 'sqrt': return a[0] < 0 ? NaN : Math.sqrt(a[0]);
+    case 'cbrt': return Math.cbrt(a[0]);
+    case 'abs': return Math.abs(a[0]);
+    case 'sign': return Math.sign(a[0]);
+    case 'floor': return Math.floor(a[0]);
+    case 'ceil': return Math.ceil(a[0]);
+    case 'sinh': return Math.sinh(a[0]);
+    case 'cosh': return Math.cosh(a[0]);
+    case 'tanh': return Math.tanh(a[0]);
+    case 'asinh': return Math.asinh(a[0]);
+    case 'acosh': return a[0] < 1 ? NaN : Math.acosh(a[0]);
+    case 'atanh': return (a[0] <= -1 || a[0] >= 1) ? NaN : Math.atanh(a[0]);
+    case 'min': return Math.min(...a);
+    case 'max': return Math.max(...a);
+    case 'mod': return ((a[0] % a[1]) + a[1]) % a[1];
+  }
+  return NaN;
+}
+
+/* ================================================================
+ * 6. 符号求导（d/dx）
+ * ================================================================ */
+function d(node){
+  switch(node.t){
+    case 'num': case 'const': return {t:'num', v:0};
+    case 'var': return {t:'num', v:1};
+    case 'neg': return {t:'neg', e:d(node.e)};
+    case 'bin':
+      if(node.op === '+') return {t:'bin', op:'+', l:d(node.l), r:d(node.r)};
+      if(node.op === '-') return {t:'bin', op:'-', l:d(node.l), r:d(node.r)};
+      if(node.op === '*') return {t:'bin', op:'+', l:{t:'bin', op:'*', l:d(node.l), r:node.r}, r:{t:'bin', op:'*', l:node.l, r:d(node.r)}};
+      if(node.op === '/') return {t:'bin', op:'/', l:{t:'bin', op:'-', l:{t:'bin', op:'*', l:d(node.l), r:node.r}, r:{t:'bin', op:'*', l:node.l, r:d(node.r)}}, r:{t:'pow', b:node.r, e:{t:'num', v:2}}};
+      return {t:'num', v:0};
+    case 'pow': return dPow(node);
+    case 'call': return dCall(node);
+  }
+  return {t:'num', v:0};
+}
+function dPow(node){
+  const b = node.b, e = node.e;
+  if(b.t === 'num' || b.t === 'const'){
+    return {t:'bin', op:'*', l:{t:'bin', op:'*', l:{t:'pow', b:b, e:e}, r:{t:'call', f:'ln', args:[{t:'num', v:b.v}]}}, r:d(e)};
+  }
+  if(e.t === 'num' || e.t === 'const'){
+    return {t:'bin', op:'*', l:{t:'bin', op:'*', l:e, r:{t:'pow', b:b, e:{t:'bin', op:'-', l:e, r:{t:'num', v:1}}}}, r:d(b)};
+  }
+  const du = d(b), dv = d(e);
+  return {t:'bin', op:'*', l:{t:'pow', b:b, e:e}, r:{t:'bin', op:'+', l:{t:'bin', op:'*', l:dv, r:{t:'call', f:'ln', args:[b]}}, r:{t:'bin', op:'*', l:e, r:{t:'bin', op:'/', l:du, r:b}}}};
+}
+function chain(inner, du){ return {t:'bin', op:'*', l:inner, r:du}; }
+function dCall(node){
+  const f = node.f, u = node.args[0], du = d(u);
+  const inv = a => ({t:'bin', op:'/', l:{t:'num', v:1}, r:a});
+  switch(f){
+    case 'sin': return chain({t:'call', f:'cos', args:[u]}, du);
+    case 'cos': return {t:'neg', e:chain({t:'call', f:'sin', args:[u]}, du)};
+    case 'tan': return chain(inv({t:'pow', b:{t:'call', f:'cos', args:[u]}, e:{t:'num', v:2}}), du);
+    case 'cot': return {t:'neg', e:chain(inv({t:'pow', b:{t:'call', f:'sin', args:[u]}, e:{t:'num', v:2}}), du)};
+    case 'sec': return chain({t:'bin', op:'*', l:{t:'call', f:'sec', args:[u]}, r:{t:'call', f:'tan', args:[u]}}, du);
+    case 'csc': return {t:'neg', e:chain({t:'bin', op:'*', l:{t:'call', f:'csc', args:[u]}, r:{t:'call', f:'cot', args:[u]}}, du)};
+    case 'ln': return chain(inv(u), du);
+    case 'log10': case 'lg': return chain(inv({t:'bin', op:'*', l:u, r:{t:'call', f:'ln', args:[{t:'num', v:10}]}}), du);
+    case 'log2': return chain(inv({t:'bin', op:'*', l:u, r:{t:'call', f:'ln', args:[{t:'num', v:2}]}}), du);
+    case 'log': {
+      const base = node.args[1] || {t:'num', v:10};
+      return chain(inv({t:'bin', op:'*', l:u, r:{t:'call', f:'ln', args:[base]}}), du);
+    }
+    case 'exp': return chain({t:'call', f:'exp', args:[u]}, du);
+    case 'sqrt': return chain(inv({t:'bin', op:'*', l:{t:'num', v:2}, r:{t:'call', f:'sqrt', args:[u]}}), du);
+    case 'cbrt': return chain(inv({t:'bin', op:'*', l:{t:'num', v:3}, r:{t:'pow', b:{t:'call', f:'cbrt', args:[u]}, e:{t:'num', v:2}}}), du);
+    case 'abs': return chain({t:'call', f:'sign', args:[u]}, du);
+    case 'asin': return chain(inv({t:'call', f:'sqrt', args:[{t:'bin', op:'-', l:{t:'num', v:1}, r:{t:'pow', b:u, e:{t:'num', v:2}}}]}), du);
+    case 'acos': return {t:'neg', e:chain(inv({t:'call', f:'sqrt', args:[{t:'bin', op:'-', l:{t:'num', v:1}, r:{t:'pow', b:u, e:{t:'num', v:2}}}]}), du)};
+    case 'atan': return chain(inv({t:'bin', op:'+', l:{t:'num', v:1}, r:{t:'pow', b:u, e:{t:'num', v:2}}}), du);
+    case 'atan2': return {t:'call', f:'__num_deriv__', args:[]};
+    case 'sinh': return chain({t:'call', f:'cosh', args:[u]}, du);
+    case 'cosh': return chain({t:'call', f:'sinh', args:[u]}, du);
+    case 'tanh': return chain({t:'bin', op:'-', l:{t:'num', v:1}, r:{t:'pow', b:{t:'call', f:'tanh', args:[u]}, e:{t:'num', v:2}}}, du);
+    case 'asinh': return chain(inv({t:'call', f:'sqrt', args:[{t:'bin', op:'+', l:{t:'pow', b:u, e:{t:'num', v:2}}, r:{t:'num', v:1}}]}), du);
+    case 'acosh': return chain(inv({t:'call', f:'sqrt', args:[{t:'bin', op:'-', l:{t:'pow', b:u, e:{t:'num', v:2}}, r:{t:'num', v:1}}]}), du);
+    case 'atanh': return chain(inv({t:'bin', op:'-', l:{t:'num', v:1}, r:{t:'pow', b:u, e:{t:'num', v:2}}}), du);
+    case 'sign': case 'floor': case 'ceil': return {t:'num', v:0};
+    case 'min': case 'max': case 'mod': return {t:'call', f:'__num_deriv__', args:[]};
+  }
+  return {t:'num', v:0};
+}
+
+/* ================================================================
+ * 7. 代数简化
+ * ================================================================ */
+/* 形如 coeff·x^exp 的幂形式提取（用于约分与合并） */
+function getPowForm(n){
+  if(!n) return null;
+  if(n.t === 'num') return {coeff: n.v, exp: 0};
+  if(n.t === 'var') return {coeff: 1, exp: 1};
+  if(n.t === 'pow' && n.b.t === 'var' && n.e.t === 'num') return {coeff: 1, exp: n.e.v};
+  if(n.t === 'bin' && n.op === '*'){
+    const l = getPowForm(n.l), r = getPowForm(n.r);
+    if(l && r) return {coeff: l.coeff * r.coeff, exp: l.exp + r.exp};
+  }
+  return null;
+}
+function buildPowTerm(coeff, exp){
+  if(exp === 0) return {t:'num', v:coeff};
+  if(exp === 1){
+    if(coeff === 1) return {t:'var'};
+    return {t:'bin', op:'*', l:{t:'num', v:coeff}, r:{t:'var'}};
+  }
+  if(exp < 0){
+    const den = Math.abs(exp) === 1 ? {t:'var'} : {t:'pow', b:{t:'var'}, e:{t:'num', v:Math.abs(exp)}};
+    if(coeff === 1) return {t:'bin', op:'/', l:{t:'num', v:1}, r:den};
+    return {t:'bin', op:'/', l:{t:'num', v:coeff}, r:den};
+  }
+  const p = {t:'pow', b:{t:'var'}, e:{t:'num', v:exp}};
+  if(coeff === 1) return p;
+  return {t:'bin', op:'*', l:{t:'num', v:coeff}, r:p};
+}
+function simplify(n){
+  if(!n) return n;
+  switch(n.t){
+    case 'num': case 'const': case 'var': return n;
+    case 'neg': {
+      const e = simplify(n.e);
+      if(e.t === 'num') return {t:'num', v:-e.v};
+      if(e.t === 'neg') return e.e;
+      if(e.t === 'bin' && e.op === '*'){
+        if(e.l.t === 'num') return {t:'bin', op:'*', l:{t:'num', v:-e.l.v}, r:e.r};
+        if(e.r.t === 'num') return {t:'bin', op:'*', l:e.l, r:{t:'num', v:-e.r.v}};
+      }
+      return {t:'neg', e};
+    }
+    case 'bin': {
+      const l = simplify(n.l), r = simplify(n.r), op = n.op;
+      if(l.t === 'num' && r.t === 'num'){
+        const v = op === '+' ? l.v + r.v : op === '-' ? l.v - r.v : op === '*' ? l.v * r.v : (r.v === 0 ? NaN : l.v / r.v);
+        if(!isNaN(v) && isFinite(v)) return {t:'num', v:v};
+      }
+      if(op === '+'){
+        if(l.t === 'num' && l.v === 0) return r;
+        if(r.t === 'num' && r.v === 0) return l;
+      }
+      if(op === '-'){
+        if(r.t === 'num' && r.v === 0) return l;
+        if(l.t === 'num' && l.v === 0) return {t:'neg', e:r};
+      }
+      if(op === '*'){
+        if((l.t === 'num' && l.v === 0) || (r.t === 'num' && r.v === 0)) return {t:'num', v:0};
+        if(l.t === 'num' && l.v === 1) return r;
+        if(r.t === 'num' && r.v === 1) return l;
+        const fl = getPowForm(l), fr = getPowForm(r);
+        if(fl && fr) return buildPowTerm(fl.coeff * fr.coeff, fl.exp + fr.exp);
+      }
+      if(op === '/'){
+        if(r.t === 'num' && r.v === 1) return l;
+        if(l.t === 'num' && l.v === 0) return {t:'num', v:0};
+        const fl = getPowForm(l), fr = getPowForm(r);
+        if(fl && fr) return buildPowTerm(fl.coeff / fr.coeff, fl.exp - fr.exp);
+        // num / (num·expr)
+        if(l.t === 'num' && r.t === 'bin' && r.op === '*'){
+          const rn = r.l.t === 'num' ? r.l : (r.r.t === 'num' ? r.r : null);
+          const rest = r.l.t === 'num' ? r.r : r.l;
+          if(rn && rn.v !== 0 && l.v % rn.v === 0){
+            const q = l.v / rn.v;
+            if(q === 1) return rest;
+            return {t:'bin', op:'*', l:{t:'num', v:q}, r:rest};
+          }
+        }
+        // num·expr / num
+        if(r.t === 'num' && l.t === 'bin' && l.op === '*'){
+          const ln = l.l.t === 'num' ? l.l : (l.r.t === 'num' ? l.r : null);
+          const rest = l.l.t === 'num' ? l.r : l.l;
+          if(ln && r.v !== 0 && ln.v % r.v === 0){
+            const q = ln.v / r.v;
+            if(q === 1) return rest;
+            return {t:'bin', op:'*', l:{t:'num', v:q}, r:rest};
+          }
+        }
+      }
+      return {t:'bin', op, l, r};
+    }
+    case 'pow': {
+      const b = simplify(n.b), e = simplify(n.e);
+      if(e.t === 'num' && e.v === 1) return b;
+      if(e.t === 'num' && e.v === 0) return {t:'num', v:1};
+      if(b.t === 'num' && b.v === 1) return {t:'num', v:1};
+      if(b.t === 'pow' && e.t === 'num' && b.e.t === 'num'){
+        return simplify({t:'pow', b:b.b, e:{t:'num', v:b.e.v * e.v}});
+      }
+      if(b.t === 'num' && e.t === 'num'){
+        if(b.v >= 0 || Number.isInteger(e.v)){
+          const v = Math.pow(b.v, e.v);
+          if(isFinite(v)) return {t:'num', v};
+        }
+      }
+      return {t:'pow', b, e};
+    }
+    case 'call': {
+      const args = n.args.map(simplify);
+      if(args.every(a => a.t === 'num')){
+        const v = evalCall({t:'call', f:n.f, args:args.map(a => ({t:'num', v:a.v}))}, 0);
+        if(isFiniteNum(v)) return {t:'num', v};
+      }
+      return {t:'call', f:n.f, args};
+    }
+  }
+  return n;
+}
+
+/* ================================================================
+ * 8. AST → 人类可读数学文本（Unicode）
+ * ================================================================ */
+const SUPER = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','.':'·'};
+function toSuper(v){
+  return String(v).split('').map(ch => SUPER[ch] || ch).join('');
+}
+const PREC = {add:1, mul:2, un:3, pow:4, atom:5};
+function precOf(n){
+  if(n.t === 'bin') return (n.op === '+' || n.op === '-') ? PREC.add : PREC.mul;
+  if(n.t === 'neg') return PREC.un;
+  if(n.t === 'pow') return PREC.pow;
+  return PREC.atom;
+}
+function astToText(n){
+  if(!n) return '';
+  switch(n.t){
+    case 'num': return fmtNum(n.v);
+    case 'const': return n.name;
+    case 'var': return 'x';
+    case 'neg': {
+      const inner = astToText(n.e);
+      return precOf(n.e) < PREC.un ? '−(' + inner + ')' : '−' + inner;
+    }
+    case 'bin': {
+      const l = astToText(n.l), r = astToText(n.r), op = n.op;
+      const lp = precOf(n.l), rp = precOf(n.r), mp = (op === '+' || op === '-') ? PREC.add : PREC.mul;
+      const ls = (lp < mp || (op === '-' && lp <= mp) || (op === '*' && (n.l.t === 'bin' && (n.l.op === '+' || n.l.op === '-')))) ? '(' + l + ')' : l;
+      const rs = (rp < mp || (op === '-' && rp <= mp) || (op === '/' && rp <= PREC.mul) || (op === '*' && (n.r.t === 'bin' && (n.r.op === '+' || n.r.op === '-')))) ? '(' + r + ')' : r;
+      const sym = op === '*' ? '·' : op === '/' ? '/' : op === '+' ? '+' : '−';
+      if(op === '*'){
+        const lIsNum = n.l.t === 'num', rIsNum = n.r.t === 'num';
+        if(lIsNum && (n.r.t === 'var' || n.r.t === 'const' || (n.r.t === 'call' && n.r.f !== 'min' && n.r.f !== 'max'))){
+          return ls + rs;
+        }
+        return ls + '·' + rs;
+      }
+      return ls + sym + rs;
+    }
+    case 'pow': {
+      const b = astToText(n.b);
+      const bs = (precOf(n.b) < PREC.pow || (n.b.t === 'bin' && n.b.op === '*')) ? '(' + b + ')' : b;
+      if(n.e.t === 'num' && Number.isInteger(n.e.v) && Math.abs(n.e.v) <= 9) return bs + toSuper(n.e.v);
+      if(n.e.t === 'num' && Math.abs(n.e.v - 0.5) < 1e-9) return '√' + bs;
+      if(n.e.t === 'num' && Math.abs(n.e.v + 0.5) < 1e-9) return '1/√' + bs;
+      const e = astToText(n.e);
+      const es = (precOf(n.e) < PREC.pow) ? '(' + e + ')' : e;
+      return bs + '^' + es;
+    }
+    case 'call': {
+      const f = n.f, a = n.args.map(astToText).join(', ');
+      const FUNC_TEX = {sqrt:'√', abs:'| |', cbrt:'∛', lg:'lg', log10:'lg', asin:'arcsin', acos:'arccos', atan:'arctan', asinh:'arsinh', acosh:'arcosh', atanh:'artanh'};
+      if(f === 'sqrt') return '√(' + a + ')';
+      if(f === 'abs') return '|' + n.args.map(astToText).join(', ') + '|';
+      if(f === '__num_deriv__') return '(数值导数)';
+      return f + '(' + a + ')';
+    }
+  }
+  return '';
+}
+
+/* ================================================================
+ * 9. 定义域解析 → {intervals:[{a,b,aIncl,bIncl}], exclusions:[x]}
+ * ================================================================ */
+function parseDomain(str){
+  str = String(str||'').trim();
+  if(!str) return {intervals:[], exclusions:[]};
+  str = texExpand(str);
+  str = str.replace(/[×\u00d7]/g, ',').replace(/[、；;]/g, ',').replace(/[∞\u221e]/g, '∞');
+  const exclusions = [];
+  const constraints = []; // {a,b,aIncl,bIncl} 区间约束，最后取交集
+  let unionMode = str.indexOf('∪') >= 0;
+  // 括号感知分割：只在括号外的 ∪ / 逗号 处断开
+  function splitTop(s){
+    const parts = []; let depth = 0, cur = '';
+    for(const ch of s){
+      if(ch === '(' || ch === '['){ depth++; cur += ch; }
+      else if(ch === ')' || ch === ']'){ depth--; cur += ch; }
+      else if((ch === '∪' || ch === ',') && depth === 0){ parts.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    parts.push(cur);
+    return parts.map(x => x.trim()).filter(Boolean);
+  }
+  const parts = splitTop(str);
+  let ok = true;
+  const inf = () => Infinity;
+  function readNum(s){
+    s = s.trim().replace(/^(?:x\s*∈)?/,'').replace(/[()[\]]/g,'');
+    if(s === '∞' || s === 'inf' || s === '+∞') return inf();
+    if(s === '-∞' || s === '-inf') return -inf();
+    if(s === '') return null;
+    const v = parseFloat(s.replace(/^π$/,'3.141592653589793'));
+    if(isNaN(v)) return null;
+    return v;
+  }
+  for(const raw of parts){
+    const p = raw.trim();
+    if(!p) continue;
+    // 区间字面量：(a,b) [a,b) …
+    const mRange = /^([(\[])\s*([^,)\]]+?)\s*,\s*([^)\]]+?)\s*([)\]])$/.exec(p);
+    if(mRange){
+      const a = readNum(mRange[2]), b = readNum(mRange[3]);
+      if(a === null || b === null){ ok = false; break; }
+      constraints.push({a, b, aIncl: mRange[1] === '[', bIncl: mRange[4] === ']'});
+      continue;
+    }
+    // x∈[a,b]
+    const mIn = /^x\s*∈\s*([(\[])\s*([^,)\]]+?)\s*,\s*([^)\]]+?)\s*([)\]])$/.exec(p);
+    if(mIn){
+      const a = readNum(mIn[2]), b = readNum(mIn[3]);
+      if(a === null || b === null){ ok = false; break; }
+      constraints.push({a, b, aIncl: mIn[1] === '[', bIncl: mIn[4] === ']'});
+      continue;
+    }
+    // x≠a
+    const mNe = /^x\s*(?:!=|≠)\s*(.+)$/.exec(p);
+    if(mNe){
+      const v = readNum(mNe[1]);
+      if(v === null || !isFiniteNum(v)){ ok = false; break; }
+      exclusions.push(v);
+      continue;
+    }
+    // a<x<b 连不等式
+    const mChain = /^(.+?)\s*(?:<|≤)\s*x\s*(?:<|≤)\s*(.+?)$/.exec(p);
+    if(mChain){
+      const a = readNum(mChain[1].replace(/^x\s*(?:>|≥)\s*/,''));
+      const b = readNum(mChain[2]);
+      const aOp = /≥\s*x/.test(mChain[1]) ? '≥' : (/>\s*x/.test(mChain[1]) ? '>' : '');
+      const bOp = mChain[2].includes('≤') ? '≤' : '<';
+      if(a === null || b === null){ ok = false; break; }
+      constraints.push({a, b, aIncl: aOp === '≥', bIncl: bOp === '≤'});
+      continue;
+    }
+    // x>a / x≥a / x<a / x≤a
+    const mIneq = /^x\s*(>=|<=|≥|≤|>|<)\s*(.+)$/.exec(p);
+    if(mIneq){
+      const op = mIneq[1] === '≥' ? '>=' : mIneq[1] === '≤' ? '<=' : mIneq[1];
+      const v = readNum(mIneq[2]);
+      if(v === null){ ok = false; break; }
+      if(op === '>') constraints.push({a:v, b:inf(), aIncl:false, bIncl:false});
+      else if(op === '>=') constraints.push({a:v, b:inf(), aIncl:true, bIncl:false});
+      else if(op === '<') constraints.push({a:-inf(), b:v, aIncl:false, bIncl:false});
+      else if(op === '<=') constraints.push({a:-inf(), b:v, aIncl:false, bIncl:true});
+      continue;
+    }
+    // 纯 R
+    if(/^R$|^ℝ$|^(-∞,∞)$/.test(p.replace(/\s/g,''))){ continue; }
+    ok = false;
+  }
+  if(!ok) return {err: '无法解析定义域「' + str + '」，示例：x≠0、(-∞,0)∪(0,∞)、[1,5]、x>0、0<x<π'};
+  // 取交集
+  let intervals = constraints;
+  if(intervals.length === 0) intervals = [];
+  else if(unionMode && constraints.length > 0){
+    // 用户显式用 ∪：视为区间列表（并集）
+    intervals = constraints;
+  } else {
+    let cur = [{a:-inf(), b:inf(), aIncl:true, bIncl:true}];
+    const endpointIncl = (iv, x) => {
+      if(x === iv.a) return iv.aIncl;
+      if(x === iv.b) return iv.bIncl;
+      return x > iv.a && x < iv.b;
+    };
+    for(const c of constraints){
+      const next = [];
+      for(const iv of cur){
+        const a = Math.max(iv.a, c.a), b = Math.min(iv.b, c.b);
+        if(a > b) continue;
+        if(a === b){
+          const incl = endpointIncl(iv, a) && endpointIncl(c, a);
+          if(!incl) continue;
+          next.push({a, b:a, aIncl:true, bIncl:true});
+          continue;
+        }
+        next.push({a, b, aIncl:endpointIncl(iv, a) && endpointIncl(c, a), bIncl:endpointIncl(iv, b) && endpointIncl(c, b)});
+      }
+      cur = next;
+      if(cur.length === 0) break;
+    }
+    intervals = cur;
+  }
+  // 合并相邻区间
+  intervals.sort((p,q) => p.a - q.a);
+  const merged = [];
+  for(const iv of intervals){
+    const last = merged[merged.length-1];
+    if(last && (iv.a < last.b || (iv.a === last.b && (iv.aIncl || last.bIncl)))){
+      if(iv.b > last.b){ last.b = iv.b; last.bIncl = iv.bIncl; }
+      else if(iv.b === last.b){ last.bIncl = last.bIncl || iv.bIncl; }
+    } else merged.push({a:iv.a, b:iv.b, aIncl:iv.aIncl, bIncl:iv.bIncl});
+  }
+  return {intervals: merged, exclusions};
+}
+function makeDomainOk(domain){
+  const ivs = domain.intervals || [], ex = domain.exclusions || [];
+  if(ivs.length === 0){
+    return function(x){ return ex.every(p => Math.abs(x - p) > 1e-9); };
+  }
+  return function(x){
+    if(ex.some(p => Math.abs(x - p) < 1e-9)) return false;
+    for(const iv of ivs){
+      if(x < iv.a || x > iv.b) continue;
+      if(x === iv.a && !iv.aIncl) continue;
+      if(x === iv.b && !iv.bIncl) continue;
+      return true;
+    }
+    return false;
+  };
+}
+function domainToText(domain){
+  const ivs = domain.intervals || [], ex = domain.exclusions || [];
+  if(ivs.length === 0 && ex.length === 0) return 'R（自动）';
+  const fmt = v => (v === Infinity) ? '+∞' : (v === -Infinity) ? '-∞' : fmtNum(v);
+  const ivTxt = ivs.map(iv => (iv.aIncl?'[':'(') + fmt(iv.a) + ', ' + fmt(iv.b) + (iv.bIncl?']':')'));
+  const exTxt = ex.map(v => 'x≠' + fmtNum(v));
+  let t = ivs.length ? ivTxt.join(' ∪ ') : 'R';
+  if(ex.length) t = exTxt.concat(t === 'R' ? [] : [t]).join('，');
+  return t;
+}
+
+/* ================================================================
+ * 10. 函数对象构建
+ * ================================================================ */
+const COLORS = ['#E03131','#1971C2','#2F9E44','#F08C00','#9C36B5','#0C8599','#A34A2E','#D6336C'];
+const FNAMES = ['f','g','h','i','j','k','l','m'];
+function buildFunc(input, domainInput){
+  const expanded = texExpand(input);
+  const r = parseExpr(expanded);
+  if(r.err) return {err: r.err};
+  const dr = parseDomain(domainInput);
+  if(dr.err) return {err: dr.err};
+  const ast = r.ast;
+  const d1 = simplify(d(ast));
+  const d2 = simplify(d(d1));
+  const hasNumDeriv = node => node && (node.t === 'call' && node.f === '__num_deriv__') ||
+    (node.t === 'bin' && (hasNumDeriv(node.l) || hasNumDeriv(node.r))) ||
+    (node.t === 'neg' && hasNumDeriv(node.e)) ||
+    (node.t === 'pow' && (hasNumDeriv(node.b) || hasNumDeriv(node.e)));
+  const domain = dr;
+  const domainOk = makeDomainOk(dr);
+  return {
+    input, domainInput,
+    ast, d1, d2,
+    hasNumDeriv: hasNumDeriv(d1) || hasNumDeriv(d2),
+    domain, domainOk,
+    f: x => {
+      if(!domainOk(x)) return NaN;
+      const v = evalNode(ast, x);
+      return isFiniteNum(v) ? v : NaN;
+    }
+  };
+}
+function evalAt(fn, x){
+  if(!fn.domainOk(x)) return null;
+  const v = evalNode(fn.ast, x);
+  return isFiniteNum(v) ? v : null;
+}
+
+/* ================================================================
+ * 11. 分析：值域 / 奇偶性 / 周期性
+ * ================================================================ */
+function analyzeFunc(fn){
+  const asym = findAsymptotes(fn);
+  return {
+    range: computeRange(fn, asym),
+    parity: computeParity(fn),
+    period: computePeriod(fn),
+    asym
+  };
+}
+function isDivergent(trend){
+  if(trend.length < 3) return false;
+  const s0 = Math.sign(trend[0]);
+  if(s0 === 0) return false;
+  for(let i = 1; i < trend.length; i++){
+    if(Math.sign(trend[i]) !== s0) return false;
+    if(Math.abs(trend[i]) < Math.abs(trend[i-1]) * 1.02) return false;
+  }
+  return true;
+}
+/* x→±∞ 行为：发散(单侧/双侧)/收敛到0/收敛到常数/震荡 */
+function endBehavior(fn, dir){
+  const ks = [10, 50, 100, 200, 400];
+  const vs = [];
+  for(const k of ks){
+    const v = evalAt(fn, dir * k);
+    if(v === null) return {type:'none'};
+    vs.push(v);
+  }
+  const s0 = Math.sign(vs[0]);
+  if(s0 !== 0){
+    let same = true, grow = true;
+    for(let i = 1; i < vs.length; i++){
+      if(Math.sign(vs[i]) !== s0) same = false;
+      if(Math.abs(vs[i]) < Math.abs(vs[i-1]) * 1.02) grow = false;
+    }
+    if(grow && same) return {type:'div', sign: s0};
+    if(grow && !same) return {type:'divBoth'};
+  }
+  let monoDown = true;
+  for(let i = 1; i < vs.length; i++){
+    if(Math.abs(vs[i]) >= Math.abs(vs[i-1])){ monoDown = false; break; }
+  }
+  if(monoDown && Math.abs(vs[4]) < 0.02) return {type:'conv0', sign: Math.sign(vs[4])};
+  if(Math.abs(vs[3] - vs[4]) < 1e-2 && Math.abs(vs[4]) < 1e5 && Math.abs(vs[1] - vs[4]) < 0.5){
+    return {type:'convY', val: vs[4]};
+  }
+  return {type:'osc'};
+}
+function segRange(fn, s, cuts){
+  const a = s.a, b = s.b;
+  const isCut = x => cuts.indexOf(x) >= 0;
+  let lo, hi;
+  if(a === -Infinity && b === Infinity){ lo = -500; hi = 500; }
+  else if(a === -Infinity){ lo = Math.max(-1e5, b - 2000); hi = b; }
+  else if(b === Infinity){ lo = a; hi = Math.min(1e5, a + 2000); }
+  else { lo = a; hi = b; }
+  if(!isFiniteNum(lo)) lo = -500;
+  if(!isFiniteNum(hi)) hi = 500;
+  const N = 2000;
+  let minV = Infinity, maxV = -Infinity, maxVX = null, minVX = null;
+  const ys = [];
+  const evalPt = x => { if(!fn.domainOk(x)) return null; const v = evalAt(fn, x); return v; };
+  const isSegEdge = x => (isFiniteNum(a) && x === a) || (isFiniteNum(b) && x === b);
+  const boundPts = [];
+  let prevOk = null, prevX2 = null;
+  for(let i = 0; i <= N; i++){
+    const x = lo + (hi - lo) * i / N;
+    const v = evalPt(x);
+    const ok = v !== null;
+    if(prevOk !== null && ok !== prevOk) boundPts.push((prevX2 + x) / 2);
+    if(v !== null && isFiniteNum(v) && !isSegEdge(x)){
+      if(v < minV){ minV = v; minVX = x; }
+      if(v > maxV){ maxV = v; maxVX = x; }
+      ys.push(v);
+    }
+    prevOk = ok; prevX2 = x;
+  }
+  if(minV === Infinity) return null;
+  // 导数零点细化
+  const fp = x => { if(!fn.domainOk(x)) return null; const v = evalNode(fn.d1, x); return isFiniteNum(v) ? v : null; };
+  const refineAt = x0 => {
+    const w = Math.max(Math.abs(hi - lo) * 1e-4, 1e-3);
+    for(let k = 0; k < 100; k++){
+      const x = x0 - w + 2 * w * k / 100;
+      const v = evalPt(x);
+      if(v !== null && isFiniteNum(v)){
+        if(v < minV) minV = v;
+        if(v > maxV) maxV = v;
+      }
+    }
+  };
+  let prevX = null, prevV = null;
+  let lastFX = null, lastFV = null;
+  for(let i = 0; i <= N; i++){
+    const x = lo + (hi - lo) * i / N;
+    const v = fp(x);
+    if(v !== null){
+      if(v === 0){
+        refineAt(x);
+      } else if(lastFV !== null && v * lastFV < 0){
+        let pa = lastFX, pb = x, fa = lastFV, fb = v;
+        for(let k = 0; k < 30; k++){
+          const m = (pa + pb) / 2;
+          const vm = fp(m);
+          if(vm === null) break;
+          if((fa < 0) === (vm < 0)){ pa = m; fa = vm; } else { pb = m; fb = vm; }
+        }
+        refineAt((pa + pb) / 2);
+      }
+      lastFX = x; lastFV = v;
+    }
+    prevX = x; prevV = v;
+  }
+  // 有效定义域边界（如 sqrt(1-x²) 的 ±1）附近细化
+  for(const bx of boundPts) refineAt(bx);
+  let lower = minV, upper = maxV, lowerOpen = false, upperOpen = false;
+  // 左端点 a
+  if(a === -Infinity){
+    const eb = endBehavior(fn, -1);
+    if(eb.type === 'div'){
+      if(eb.sign < 0) lower = -Infinity; else upper = Infinity;
+    } else if(eb.type === 'divBoth'){
+      lower = -Infinity; upper = Infinity;
+    } else if(eb.type === 'conv0'){
+      if(eb.sign > 0 && 0 < lower){ lower = 0; lowerOpen = true; }
+      if(eb.sign < 0 && 0 > upper){ upper = 0; upperOpen = true; }
+    } else if(eb.type === 'convY'){
+      if(eb.val < lower - 1e-9){ lower = eb.val; lowerOpen = true; }
+      if(eb.val > upper + 1e-9){ upper = eb.val; upperOpen = true; }
+    }
+  } else if(a === b){
+    const vA = evalPt(a);
+    if(vA !== null && isFiniteNum(vA)){
+      if(vA < lower - 1e-9){ lower = vA; lowerOpen = !s.aIncl; }
+      if(vA > upper + 1e-9){ upper = vA; upperOpen = !s.aIncl; }
+    }
+  } else {
+    const vA = evalPt(a);
+    const cutA = isCut(a);
+    if(cutA || vA === null){
+      const inner = [];
+      for(const eps of [1e-4, 1e-6, 1e-8]){
+        const v = evalPt(a + eps);
+        if(v === null) break;
+        inner.push(v);
+      }
+      if(inner.length >= 2){
+        const s0 = Math.sign(inner[0]), s1 = Math.sign(inner[inner.length - 1]);
+        if(s0 !== 0 && s0 === s1){
+          let mono = true;
+          for(let k = 1; k < inner.length; k++){
+            if(Math.abs(inner[k]) <= Math.abs(inner[k-1])){ mono = false; break; }
+          }
+          if(mono && Math.abs(inner[inner.length - 1]) > 5){
+            if(s0 < 0) lower = -Infinity; else upper = Infinity;
+          }
+        }
+        if(Math.abs(inner[inner.length - 1]) < 1e-3){
+          if(inner[inner.length - 1] < lower - 1e-9){ lower = inner[inner.length - 1]; lowerOpen = cutA; }
+          if(inner[inner.length - 1] > upper + 1e-9){ upper = inner[inner.length - 1]; upperOpen = cutA; }
+        }
+      }
+    } else if(vA !== null && isFiniteNum(vA)){
+      if(vA < lower - 1e-9){ lower = vA; lowerOpen = !s.aIncl; }
+      if(vA > upper + 1e-9){ upper = vA; upperOpen = !s.aIncl; }
+    }
+  }
+  // 右端点 b
+  if(b === Infinity){
+    const eb = endBehavior(fn, 1);
+    if(eb.type === 'div'){
+      if(eb.sign < 0) lower = -Infinity; else upper = Infinity;
+    } else if(eb.type === 'divBoth'){
+      lower = -Infinity; upper = Infinity;
+    } else if(eb.type === 'conv0'){
+      if(eb.sign > 0 && 0 < lower){ lower = 0; lowerOpen = true; }
+      if(eb.sign < 0 && 0 > upper){ upper = 0; upperOpen = true; }
+    } else if(eb.type === 'convY'){
+      if(eb.val < lower - 1e-9){ lower = eb.val; lowerOpen = true; }
+      if(eb.val > upper + 1e-9){ upper = eb.val; upperOpen = true; }
+    }
+  } else if(a !== b){
+    const vB = evalPt(b);
+    const cutB = isCut(b);
+    if(cutB || vB === null){
+      const inner = [];
+      for(const eps of [1e-4, 1e-6, 1e-8]){
+        const v = evalPt(b - eps);
+        if(v === null) break;
+        inner.push(v);
+      }
+      if(inner.length >= 2){
+        const s0 = Math.sign(inner[0]), s1 = Math.sign(inner[inner.length - 1]);
+        if(s0 !== 0 && s0 === s1){
+          let mono = true;
+          for(let k = 1; k < inner.length; k++){
+            if(Math.abs(inner[k]) <= Math.abs(inner[k-1])){ mono = false; break; }
+          }
+          if(mono && Math.abs(inner[inner.length - 1]) > 5){
+            if(s0 < 0) lower = -Infinity; else upper = Infinity;
+          }
+        }
+        if(Math.abs(inner[inner.length - 1]) < 1e-3){
+          if(inner[inner.length - 1] < lower - 1e-9){ lower = inner[inner.length - 1]; lowerOpen = cutB; }
+          if(inner[inner.length - 1] > upper + 1e-9){ upper = inner[inner.length - 1]; upperOpen = cutB; }
+        }
+      }
+    } else if(vB !== null && isFiniteNum(vB)){
+      if(vB < lower - 1e-9){ lower = vB; lowerOpen = !s.bIncl; }
+      if(vB > upper + 1e-9){ upper = vB; upperOpen = !s.bIncl; }
+    }
+  }
+  // 无界震荡补充：整段 (-∞,∞) 且一侧已发散、另一侧极值(大值)落在采样边界时，保守视为无界
+  if(a === -Infinity && b === Infinity){
+    const span = hi - lo;
+    if(lower === -Infinity && maxVX !== null && Math.abs(maxV) > 100){
+      if(maxVX > hi - span * 0.02 || maxVX < lo + span * 0.02) upper = Infinity;
+    }
+    if(upper === Infinity && minVX !== null && Math.abs(minV) > 100){
+      if(minVX > hi - span * 0.02 || minVX < lo + span * 0.02) lower = -Infinity;
+    }
+  }
+  // 微小值归零（eˣ、2ˣ 在 x→-∞ 处极限为 0⁺ 等）
+  if(lower > 0 && lower < 1e-7){ lower = 0; lowerOpen = true; }
+  if(upper < 0 && upper > -1e-7){ upper = 0; upperOpen = true; }
+  if(lower === Infinity || upper === -Infinity) return null;
+  return {low: lower, high: upper, lowOpen: lowerOpen, highOpen: upperOpen};
+}
+function computeRange(fn, asym){
+  const ivs = fn.domain.intervals;
+  const cuts = asym.v.filter(x => isFiniteNum(x)).sort((a,b) => a - b);
+  let segs = [];
+  if(ivs.length === 0) segs = [{a:-Infinity, b:Infinity, aIncl:false, bIncl:false}];
+  else segs = ivs.map(iv => ({a:iv.a, b:iv.b, aIncl:iv.aIncl, bIncl:iv.bIncl}));
+  for(const c of cuts){
+    const next = [];
+    for(const s of segs){
+      if(c <= s.a || c >= s.b){ next.push(s); continue; }
+      next.push({a:s.a, b:c, aIncl:s.aIncl, bIncl:false});
+      next.push({a:c, b:s.b, aIncl:false, bIncl:s.bIncl});
+    }
+    segs = next;
+  }
+  const ranges = [];
+  for(const s of segs){
+    const r = segRange(fn, s, cuts);
+    if(r) ranges.push(r);
+  }
+  if(ranges.length === 0) return '∅';
+  // 合并相接区间
+  ranges.sort((p,q) => p.low - q.low);
+  const merged = [];
+  for(const r of ranges){
+    const last = merged[merged.length - 1];
+    if(last && (r.low < last.high || (r.low === last.high && (!r.lowOpen || !last.highOpen)))){
+      if(r.high > last.high){
+        last.high = r.high; last.highOpen = r.highOpen;
+      } else if(r.high === last.high){
+        last.highOpen = last.highOpen && r.highOpen;
+      }
+    } else merged.push({low:r.low, high:r.high, lowOpen:r.lowOpen, highOpen:r.highOpen});
+  }
+  if(merged.length > 3) return 'R';
+  const fmtE = v => (v === Infinity) ? '+∞' : (v === -Infinity) ? '-∞' : fmtNum(v);
+  return merged.map(r => (r.lowOpen || r.low === -Infinity ? '(' : '[') + fmtE(r.low) + ', ' + fmtE(r.high) + (r.highOpen || r.high === Infinity ? ')' : ']')).join(' ∪ ');
+}
+function computeParity(fn){
+  const xs = [];
+  for(const k of [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5]){
+    xs.push(k, k + 0.31, k + 0.77);
+  }
+  let even = true, odd = true, has = false;
+  for(const x of xs){
+    const fx = evalAt(fn, x), fnx = evalAt(fn, -x);
+    if(fx === null || fnx === null){
+      if(fx !== null || fnx !== null) return '非奇非偶（定义域不对称）';
+      continue;
+    }
+    if(!isFiniteNum(fx) || !isFiniteNum(fnx)) continue;
+    if(Math.abs(fx) < 1e-5 && Math.abs(fnx) < 1e-5) continue;
+    has = true;
+    const tol = 1e-6 * Math.max(1, Math.abs(fx));
+    if(Math.abs(fx - fnx) > tol) even = false;
+    if(Math.abs(fx + fnx) > tol) odd = false;
+  }
+  if(!has) return '—';
+  if(even && odd) return '既奇又偶';
+  if(even) return '偶函数';
+  if(odd) return '奇函数';
+  return '非奇非偶';
+}
+function computePeriod(fn){
+  // 定义域须覆盖 [0, 16]
+  for(const x of [0, 4, 8, 12, 16]){
+    if(!fn.domainOk(x) || evalAt(fn, x) === null) return null;
+  }
+  const N = 2048, dx = 16 / N;
+  const s = new Array(N);
+  for(let i = 0; i < N; i++){
+    const v = evalAt(fn, i * dx);
+    if(v === null || !isFiniteNum(v)) return null;
+    s[i] = v;
+  }
+  let mu = 0;
+  for(let i = 0; i < N; i++) mu += s[i];
+  mu /= N;
+  let den = 0;
+  for(let i = 0; i < N; i++) den += (s[i] - mu) * (s[i] - mu);
+  if(den < 1e-12) return '0'; // 常数函数：任意周期
+  let bestLag = -1, bestR = 0.9;
+  const maxLag = Math.floor(N * 0.85);
+  const R = lag => {
+    let num = 0, d1 = 0, d2 = 0;
+    for(let i = 0; i < N - lag; i++){
+      const a = s[i], b = s[i+lag];
+      num += a * b; d1 += a * a; d2 += b * b;
+    }
+    if(d1 < 1e-12 || d2 < 1e-12) return 0;
+    return num / Math.sqrt(d1 * d2);
+  };
+  for(let lag = 6; lag < maxLag; lag++){
+    const r = R(lag);
+    if(r > 0.9 && r >= R(lag - 1) && r >= R(lag + 1)){
+      if(r > bestR){ bestR = r; bestLag = lag; }
+    }
+  }
+  if(bestLag < 0) return null;
+  let T = bestLag * dx;
+  const verify = t => {
+    if(!isFiniteNum(t) || t <= 0) return false;
+    let err = 0, scale = 0, cnt = 0;
+    for(let i = 0; i < 24; i++){
+      const x = (i * 0.7 + 0.13) % 8;
+      const v1 = evalAt(fn, x), v2 = evalAt(fn, x + t);
+      if(v1 === null || v2 === null) return false;
+      err += Math.abs(v1 - v2);
+      scale += Math.abs(v1) + Math.abs(v2);
+      cnt++;
+    }
+    return err / Math.max(scale / cnt, 1e-6) < 1e-3 && err < 0.05;
+  };
+  const refine = t0 => {
+    let a = t0 * 0.6, b = t0 * 1.4;
+    const errF = t => {
+      let e = 0;
+      for(let i = 0; i < 16; i++){
+        const x = (i * 0.7 + 0.13) % 8;
+        const v1 = evalAt(fn, x), v2 = evalAt(fn, x + t);
+        if(v1 === null || v2 === null) return 1e9;
+        e += Math.abs(v1 - v2);
+      }
+      return e;
+    };
+    for(let k = 0; k < 50; k++){
+      const c = (b - a) * 0.382, x1 = a + c, x2 = b - c;
+      if(errF(x1) < errF(x2)) b = x2; else a = x1;
+    }
+    return (a + b) / 2;
+  };
+  if(!verify(T)){
+    T = refine(T);
+    if(!verify(T)) return null;
+  }
+  // 最小周期：尝试对半分
+  if(verify(T / 2)){ T /= 2; if(verify(T / 2)) T /= 2; }
+  // 格式化为 π 的倍数
+  const r = T / Math.PI;
+  const ir = Math.round(r);
+  if(Math.abs(r - ir) < 1e-4 && ir > 0){
+    if(ir === 1) return 'π';
+    if(ir === 2) return '2π';
+    return ir + 'π';
+  }
+  const hr = r * 2, ihr = Math.round(hr);
+  if(Math.abs(hr - ihr) < 1e-4 && ihr > 0){
+    if(ihr === 1) return 'π/2';
+    if(ihr === 3) return '3π/2';
+    return (ihr / 2) + 'π';
+  }
+  return T.toPrecision(3);
+}
+
+/* ================================================================
+ * 12. 渐近线检测
+ * ================================================================ */
+function findAsymptotes(fn){
+  const res = {v:[], h:[], s:[]};
+  // —— 垂直渐近线 ——
+  const LO = -50, HI = 50, N = 4000, step = (HI - LO) / N;
+  const cand = [];
+  function pushCand(x0){
+    // 二分细化找 |f| 最大点（若区间含无定义点则向无定义点收缩）
+    let a = x0 - step, b = x0 + step;
+    for(let k = 0; k < 40; k++){
+      const m = (a + b) / 2;
+      const vm = evalAt(fn, m);
+      const va = evalAt(fn, a), vb = evalAt(fn, b);
+      if(vm === null){
+        const ml = (a + m) / 2, mr = (m + b) / 2;
+        const vl = evalAt(fn, ml), vr = evalAt(fn, mr);
+        if(vl === null && vr !== null) b = m;
+        else if(vr === null && vl !== null) a = m;
+        else break;
+      } else if(va === null){ b = m; }
+      else if(vb === null){ a = m; }
+      else {
+        if(Math.abs(va) >= Math.abs(vb)) b = m; else a = m;
+      }
+    }
+    cand.push({x: (a + b) / 2, verified: false});
+  }
+  let lastX = null, lastV = null;
+  for(let i = 0; i <= N; i++){
+    const x = LO + i * step;
+    const v = evalAt(fn, x);
+    if(v !== null){
+      if(lastV !== null && x - lastX < 4 * step){
+        if((v * lastV < 0) && Math.abs(v) > 30 && Math.abs(lastV) > 30) pushCand(x);
+        if(Math.abs(v) > 1e3 && Math.abs(v) > 30 * Math.abs(lastV)) pushCand(x);
+      }
+      lastX = x; lastV = v;
+    }
+  }
+  // 偶次极点：无定义点两侧同号大值（如 1/x² 的 x=0）
+  for(let i = 1; i < N; i++){
+    const x = LO + i * step;
+    if(evalAt(fn, x) === null){
+      const vL = evalAt(fn, x - step), vR = evalAt(fn, x + step);
+      if(vL !== null && vR !== null && vL * vR > 0 && Math.abs(vL) > 50 && Math.abs(vR) > 50){
+        cand.push({x, verified: false});
+      }
+    }
+  }
+  // 定义域边界发散（如 ln(x) 在 x=0）
+  let prevValid = null;
+  for(let i = 0; i <= N; i++){
+    const x = LO + i * step;
+    const v = evalAt(fn, x);
+    const valid = v !== null;
+    if(prevValid !== null && valid !== prevValid){
+      const xb = prevValid ? x : x - step;
+      const dir = valid ? 1 : -1;
+      const vals = [];
+      for(const eps of [1e-3, 1e-6, 1e-9]){
+        const vv = evalAt(fn, xb + dir * eps);
+        if(vv === null || Math.abs(vv) > 1e8){ vals.length = 0; break; }
+        vals.push(vv);
+      }
+      if(vals.length === 3){
+        const s0 = Math.sign(vals[0]), s2 = Math.sign(vals[2]);
+        if(s0 !== 0 && s0 === s2 && Math.sign(vals[1]) === s0 &&
+           Math.abs(vals[1]) > Math.abs(vals[0]) * 1.4 &&
+           Math.abs(vals[2]) > Math.abs(vals[1]) * 1.4){
+          cand.push({x: xb, verified: true});
+        }
+      }
+    }
+    prevValid = valid;
+  }
+  // 合并候选 + 尖峰验证（排除 x³、eˣ 这类"值大但非渐近线"）
+  cand.sort((p,q) => p.x - q.x);
+  for(const it of cand){
+    const x0 = it.x;
+    const last = res.v[res.v.length - 1];
+    if(last !== undefined && Math.abs(x0 - last) < 0.05) continue;
+    if(it.verified){ res.v.push(x0); continue; }
+    let peak = 0;
+    for(const eps of [1e-5, 1e-7, 1e-9]){
+      const v1 = evalAt(fn, x0 - eps), v2 = evalAt(fn, x0 + eps);
+      if(v1 !== null) peak = Math.max(peak, Math.abs(v1));
+      if(v2 !== null) peak = Math.max(peak, Math.abs(v2));
+    }
+    let sideMax = 0;
+    for(const eps of [0.05, 0.1, 0.2]){
+      const v1 = evalAt(fn, x0 - eps), v2 = evalAt(fn, x0 + eps);
+      if(v1 !== null) sideMax = Math.max(sideMax, Math.abs(v1));
+      if(v2 !== null) sideMax = Math.max(sideMax, Math.abs(v2));
+    }
+    if(peak > 100 && (peak > sideMax * 5 || sideMax < 1e-3) && (peak > 1e3 || sideMax < 1)){
+      res.v.push(Math.abs(x0) < 1e-6 ? 0 : x0);
+    }
+  }
+  // —— 水平渐近线 ——
+  const xLimit = dir => {
+    const xs = [1e3, 1e4, 1e5, 1e6, 1e7].map(k => dir * k);
+    const vs = [];
+    for(const x of xs){ const v = evalAt(fn, x); if(v === null) return null; vs.push(v); }
+    if(Math.abs(vs[3] - vs[4]) > 1e-2) return null;
+    if(Math.abs(vs[1] - vs[4]) > 0.5) return null;
+    if(Math.abs(vs[4]) > 1e5) return null;
+    return Math.abs(vs[4]) < 1e-6 ? 0 : vs[4];
+  };
+  const lp = xLimit(1), ln = xLimit(-1);
+  if(lp !== null) res.h.push({y: lp, side: '+'});
+  if(ln !== null) res.h.push({y: ln, side: '-'});
+  if(res.h.length === 2 && Math.abs(res.h[0].y - res.h[1].y) < 1e-6){
+    res.h = [{y: res.h[0].y, side: '±'}];
+  }
+  // —— 斜渐近线 ——
+  const slant = dir => {
+    if(res.h.some(h => h.side === dir || h.side === '±')) return null;
+    const xs = [1e4, 1e5, 1e6, 1e7].map(k => dir * k);
+    const vs = [];
+    for(const x of xs){
+      const v = evalAt(fn, x);
+      if(v === null) return null;
+      vs.push(v);
+    }
+    const as = vs.map((v, i) => v / xs[i]);
+    if(Math.abs(as[2] - as[3]) > 1e-5) return null;
+    if(Math.abs(as[0] - as[3]) > 1e-3) return null;
+    // 斜率取理想值（避免 f−a·x 大数消元误差）：接近简单有理数时用之
+    let a = as[3];
+    for(const simple of [0.5, 1, 1.5, 2, 2.5, 3, -0.5, -1, -1.5, -2, -2.5, -3]){
+      if(Math.abs(a - simple) < 1e-4){ a = simple; break; }
+    }
+    const bs = vs.map((v, i) => v - a * xs[i]);
+    if(Math.abs(bs[2] - bs[3]) > 1e-2) return null;
+    if(Math.abs(a) < 1e-6) return null;
+    return {a, b: Math.abs(bs[3]) < 1e-6 ? 0 : bs[3], side: dir};
+  };
+  const flatD2 = simplify(fn.d2);
+  const isFlatFn = flatD2.t === 'num' && flatD2.v === 0;
+  const sp = isFlatFn ? null : slant(1), sn = isFlatFn ? null : slant(-1);
+  const candS = [];
+  if(sp) candS.push(sp);
+  if(sn) candS.push(sn);
+  const dedupS = [];
+  for(const s of candS){
+    let dup = false;
+    for(const o of dedupS){
+      if(Math.abs(o.a - s.a) < 1e-9 && Math.abs(o.b - s.b) < 1e-3){ dup = true; break; }
+    }
+    if(!dup) dedupS.push(s);
+  }
+  res.s = dedupS;
+  return res;
+}
+function asymToText(a){
+  const parts = [];
+  for(const x of a.v) parts.push('x=' + fmtNum(x));
+  for(const h of a.h) parts.push('y=' + fmtNum(h.y));
+  for(const s of a.s) parts.push(fmtSlant(s));
+  return parts.length ? parts.join('，') : '无';
+}
+function fmtSlant(s){
+  const aTxt = Math.abs(s.a - 1) < 1e-6 ? '' : Math.abs(s.a + 1) < 1e-6 ? '-' : fmtNum(s.a);
+  let t = 'y=' + aTxt + 'x';
+  if(Math.abs(s.b) > 1e-9) t += (s.b > 0 ? '+' : '') + fmtNum(s.b);
+  return t;
+}
+
+/* ================================================================
+ * 13. 状态管理
+ * ================================================================ */
+const state = { funcs: [], selectedId: null, hoverId: null, hoverPoint: null, modal: { editingId: null } };
+let uid = 0;
+function nextName(){
+  for(const n of FNAMES){ if(!state.funcs.some(f => f.name === n)) return n; }
+  return 'F';
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function addFunc(f){
+  const fnObj = Object.assign({id: ++uid, name: nextName(), color: COLORS[state.funcs.length % COLORS.length]}, f);
+  state.funcs.push(fnObj);
+  fnObj.analysis = analyzeFunc(fnObj);
+  renderTable();
+  draw();
+}
+function analyzeOne(fn){
+  fn.analysis = analyzeFunc(fn);
+}
+
+/* ================================================================
+ * 14. 坐标系渲染器
+ * ================================================================ */
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+const view = {unit: 48, ox: 0, oy: 0};
+let W = 0, H = 0, DPR = 1;
+function resize(){
+  const rect = canvas.getBoundingClientRect();
+  W = Math.max(200, rect.width); H = Math.max(200, rect.height);
+  DPR = window.devicePixelRatio || 1;
+  canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if(!view.ox && !view.oy){ view.ox = W / 2; view.oy = H / 2; }
+  draw();
+}
+const s2w = px => (px - view.ox) / view.unit;
+const s2wy = py => -(py - view.oy) / view.unit;
+const w2s = x => x * view.unit + view.ox;
+const w2sy = y => -y * view.unit + view.oy;
+function gridStep(unit){
+  const raw = 64 / unit;
+  const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / pow;
+  const m = n < 1.5 ? 1 : n < 3.5 ? 2 : n < 7.5 ? 5 : 10;
+  return m * pow;
+}
+function fmtTick(v){
+  if(Math.abs(v) < 1e-9) return '0';
+  if(Number.isInteger(v)) return String(v);
+  return parseFloat(v.toPrecision(4)).toString();
+}
+function roundRectPath(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function draw(){
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, W, H);
+  const wx0 = s2w(0), wx1 = s2w(W), wy0 = s2wy(H), wy1 = s2wy(0);
+  const step = gridStep(view.unit);
+  ctx.lineWidth = 1;
+  // 次网格
+  if(view.unit >= 26){
+    const sub = step >= 1 ? step / 5 : step / 4;
+    ctx.strokeStyle = 'rgba(214,224,238,0.55)';
+    for(let x = Math.ceil(wx0 / sub) * sub; x <= wx1; x += sub){
+      const sx = Math.round(w2s(x)) + 0.5;
+      ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+    }
+    for(let y = Math.ceil(wy0 / sub) * sub; y <= wy1; y += sub){
+      const sy = Math.round(w2sy(y)) + 0.5;
+      ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+    }
+  }
+  // 主网格
+  ctx.strokeStyle = '#E3E9F1';
+  for(let x = Math.ceil(wx0 / step) * step; x <= wx1; x += step){
+    const sx = Math.round(w2s(x)) + 0.5;
+    ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+  }
+  for(let y = Math.ceil(wy0 / step) * step; y <= wy1; y += step){
+    const sy = Math.round(w2sy(y)) + 0.5;
+    ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+  }
+  // 坐标轴
+  const x0 = w2s(0), y0 = w2sy(0);
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.6;
+  if(x0 >= 0 && x0 <= W){ ctx.beginPath(); ctx.moveTo(x0, 0); ctx.lineTo(x0, H); ctx.stroke(); }
+  if(y0 >= 0 && y0 <= H){ ctx.beginPath(); ctx.moveTo(0, y0); ctx.lineTo(W, y0); ctx.stroke(); }
+  // 刻度标签
+  ctx.fillStyle = '#64748B';
+  ctx.font = '11px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for(let x = Math.ceil(wx0 / step) * step; x <= wx1; x += step){
+    if(Math.abs(x) < 1e-9) continue;
+    const sx = Math.round(w2s(x)) + 0.5;
+    if(sx < 26 || sx > W - 26) continue;
+    ctx.fillText(fmtTick(x), sx, (y0 >= 0 && y0 <= H ? y0 : 0) + 4);
+  }
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for(let y = Math.ceil(wy0 / step) * step; y <= wy1; y += step){
+    if(Math.abs(y) < 1e-9) continue;
+    const sy = Math.round(w2sy(y)) + 0.5;
+    if(sy < 16 || sy > H - 16) continue;
+    ctx.fillText(fmtTick(y), (x0 >= 0 && x0 <= W ? x0 : W) - 5, sy);
+  }
+  if(x0 >= 8 && x0 <= W - 8 && y0 >= 8 && y0 <= H - 8){
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillStyle = '#94A3B8';
+    ctx.fillText('O', x0 + 4, y0 + 4);
+  }
+  // 渐近线
+  drawAsymptotes();
+  // 函数曲线
+  for(const fn of state.funcs){
+    drawFunc(fn, fn.id === state.selectedId, fn.id === state.hoverId);
+  }
+  // 悬停标签
+  if(state.hoverPoint) drawHoverTag(state.hoverPoint);
+  // 选中信息
+  const sel = state.funcs.find(f => f.id === state.selectedId);
+  if(sel) drawSelInfo(sel);
+}
+function drawFunc(fn, isSel, isHover){
+  const wx0 = s2w(0), wx1 = s2w(W);
+  const N = Math.min(W, 2400);
+  const step = (wx1 - wx0) / N;
+  ctx.strokeStyle = fn.color;
+  ctx.lineWidth = isSel ? 3.4 : isHover ? 2.8 : 2.2;
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.beginPath();
+  let pen = false;
+  const pts = [];
+  for(let x = wx0; x <= wx1; x += step){
+    const v = evalAt(fn, x);
+    if(v !== null && Math.abs(v) < 1e6){
+      const sx = w2s(x), sy = w2sy(v);
+      if(sx < -6000 || sx > W + 6000 || sy < -6000 || sy > H + 6000){ pen = false; continue; }
+      if(!pen){ ctx.moveTo(sx, sy); pen = true; }
+      else ctx.lineTo(sx, sy);
+      pts.push({x, y: v, sx, sy});
+    } else pen = false;
+  }
+  ctx.stroke();
+  fn._pts = pts;
+}
+function drawAsymptotes(){
+  const wx0 = s2w(0), wx1 = s2w(W);
+  ctx.setLineDash([5, 4]);
+  ctx.lineWidth = 1.1;
+  ctx.font = '11px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  for(const fn of state.funcs){
+    const a = fn.analysis && fn.analysis.asym;
+    if(!a) continue;
+    ctx.strokeStyle = 'rgba(199,77,77,0.55)';
+    let lastVLabel = -999;
+    for(const xv of a.v){
+      const sx = Math.round(w2s(xv)) + 0.5;
+      if(sx < -10 || sx > W + 10) continue;
+      ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+      if(Math.abs(sx - lastVLabel) > 56){
+        ctx.fillStyle = 'rgba(185,66,66,0.9)';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText('x=' + fmtNum(xv), sx + 5, 8);
+        lastVLabel = sx;
+      }
+    }
+    let lastHLabel = -999;
+    for(const h of a.h){
+      const sy = Math.round(w2sy(h.y)) + 0.5;
+      if(sy < -10 || sy > H + 10) continue;
+      ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(W, sy); ctx.stroke();
+      if(Math.abs(sy - lastHLabel) > 40){
+        ctx.fillStyle = 'rgba(185,66,66,0.9)';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillText('y=' + fmtNum(h.y), 8, sy + 4);
+        lastHLabel = sy;
+      }
+    }
+    for(const s of a.s){
+      const sy0 = w2sy(s.a * wx0 + s.b), sy1 = w2sy(s.a * wx1 + s.b);
+      if((sy0 < -10 && sy1 < -10) || (sy0 > H + 10 && sy1 > H + 10)) continue;
+      ctx.beginPath(); ctx.moveTo(0, sy0); ctx.lineTo(W, sy1); ctx.stroke();
+      ctx.fillStyle = 'rgba(185,66,66,0.9)';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillText(fmtSlant(s), 8, Math.min(sy0, sy1) - 3);
+    }
+  }
+  ctx.setLineDash([]);
+}
+function drawHoverTag(hp){
+  const p = hp.p;
+  const txt1 = hp.fn.name + '(x) = ' + astToText(hp.fn.ast);
+  const txt2 = '(' + fmtNum(p.x) + ', ' + fmtNum(p.y) + ')';
+  ctx.font = '600 12px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  const w1 = ctx.measureText(txt1).width, w2 = ctx.measureText(txt2).width;
+  const w = Math.max(w1, w2) + 22, h = 42;
+  let bx = p.sx + 16, by = p.sy - h - 10;
+  if(bx + w > W - 8) bx = p.sx - w - 16;
+  if(by < 8) by = p.sy + 12;
+  ctx.beginPath(); ctx.arc(p.sx, p.sy, 4, 0, TAU);
+  ctx.fillStyle = hp.fn.color; ctx.fill();
+  ctx.lineWidth = 2; ctx.strokeStyle = '#FFFFFF'; ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,0.96)';
+  roundRectPath(bx, by, w, h, 7); ctx.fill();
+  ctx.strokeStyle = hp.fn.color; ctx.lineWidth = 1.2;
+  roundRectPath(bx, by, w, h, 7); ctx.stroke();
+  ctx.fillStyle = '#1F2937'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(txt1, bx + 11, by + 12);
+  ctx.fillStyle = '#64748B'; ctx.font = '11px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.fillText(txt2, bx + 11, by + 29);
+}
+function drawSelInfo(fn){
+  const x = 12, y = 12;
+  ctx.font = '600 13px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  const txt = fn.name + '(x) = ' + astToText(fn.ast);
+  const w = ctx.measureText(txt).width + 36;
+  ctx.fillStyle = 'rgba(255,255,255,0.94)';
+  roundRectPath(x, y, w, 28, 8); ctx.fill();
+  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 1;
+  roundRectPath(x, y, w, 28, 8); ctx.stroke();
+  ctx.fillStyle = fn.color;
+  ctx.fillRect(x + 11, y + 9, 10, 10);
+  ctx.fillStyle = '#1F2937'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(txt, x + 27, y + 14);
+}
+
+/* ================================================================
+ * 15. Canvas 交互
+ * ================================================================ */
+function hitTest(px, py){
+  let best = null, bestD = 15;
+  for(const fn of state.funcs){
+    for(const p of (fn._pts || [])){
+      const d = Math.hypot(p.sx - px, p.sy - py);
+      if(d < bestD){ bestD = d; best = {fn, p}; }
+    }
+  }
+  return best;
+}
+let dragging = false, moved = 0, startPX = 0, startPY = 0, startOX = 0, startOY = 0;
+canvas.addEventListener('pointerdown', e => {
+  dragging = true; moved = 0;
+  startPX = e.offsetX; startPY = e.offsetY;
+  startOX = view.ox; startOY = view.oy;
+  try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
+});
+canvas.addEventListener('pointermove', e => {
+  const px = e.offsetX, py = e.offsetY;
+  if(dragging){
+    moved = Math.max(moved, Math.hypot(px - startPX, py - startPY));
+    view.ox = startOX + (px - startPX);
+    view.oy = startOY + (py - startPY);
+    draw();
+  } else {
+    const hit = hitTest(px, py);
+    state.hoverPoint = hit ? {fn: hit.fn, p: hit.p} : null;
+    state.hoverId = hit ? hit.fn.id : null;
+    draw();
+  }
+});
+canvas.addEventListener('pointerup', e => {
+  if(dragging && moved < 5){
+    const hit = hitTest(e.offsetX, e.offsetY);
+    if(hit){
+      state.selectedId = state.selectedId === hit.fn.id ? null : hit.fn.id;
+      renderTable();
+    }
+  }
+  dragging = false;
+  draw();
+});
+canvas.addEventListener('pointerleave', () => {
+  state.hoverPoint = null; state.hoverId = null;
+  if(!dragging) draw();
+});
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = Math.exp(-e.deltaY * 0.0015);
+  const newUnit = clamp(view.unit * factor, 2, 600);
+  const wx = s2w(e.offsetX), wy = s2wy(e.offsetY);
+  view.unit = newUnit;
+  view.ox = e.offsetX - wx * newUnit;
+  view.oy = e.offsetY + wy * newUnit;
+  draw();
+}, {passive: false});
+canvas.addEventListener('dblclick', () => {
+  view.unit = 48; view.ox = W / 2; view.oy = H / 2;
+  draw();
+});
+document.getElementById('zoomInBtn').addEventListener('click', () => { view.unit = clamp(view.unit * 1.3, 2, 600); draw(); });
+document.getElementById('zoomOutBtn').addEventListener('click', () => { view.unit = clamp(view.unit / 1.3, 2, 600); draw(); });
+document.getElementById('resetViewBtn').addEventListener('click', () => { view.unit = 48; view.ox = W / 2; view.oy = H / 2; draw(); });
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = '函数图像.png';
+  a.click();
+});
+
+/* ================================================================
+ * 16. 公式输入面板（遮罩层）
+ * ================================================================ */
+const exprInput = document.getElementById('exprInput');
+const domainInput = document.getElementById('domainInput');
+const previewText = document.getElementById('previewText');
+const previewCanvas = document.getElementById('previewCanvas');
+const pctx = previewCanvas.getContext('2d');
+const PAD_GROUPS = [
+  {title:'结构模板', items:[
+    {label:'分式 ⁄', ins:'( )/( )', sel:[1,2], tip:'分子/分母'},
+    {label:'根号 √', ins:'sqrt( )', sel:[5,6], tip:'√(x)'},
+    {label:'绝对值 |x|', ins:'| |', sel:[1,2], tip:'|x|'},
+    {label:'幂 xⁿ', ins:'( )^( )', sel:[1,2], tip:'底^(指数)'},
+    {label:'π', ins:'pi'},
+    {label:'自然底数 e', ins:'e'},
+    {label:'∞', ins:'inf'},
+  ]},
+  {title:'三角函数', items:['sin','cos','tan','cot','sec','csc','arcsin','arccos','arctan'].map(f => ({label:f, ins:f+'()', sel:[f.length+1, f.length+1]}))},
+  {title:'指数·对数·根式', items:['exp','ln','log','lg','sqrt','abs','cbrt','sign'].map(f => ({label:f, ins:f+'()', sel:[f.length+1, f.length+1]}))},
+  {title:'双曲函数', items:['sinh','cosh','tanh','asinh','acosh','atanh'].map(f => ({label:f, ins:f+'()', sel:[f.length+1, f.length+1]}))},
+  {title:'运算符', items:[
+    {label:'+ 加', ins:' + '}, {label:'− 减', ins:' - '}, {label:'× 乘', ins:' * '},
+    {label:'÷ 除', ins:' / '}, {label:'^ 幂', ins:'^'}
+  ]},
+];
+const DOMAIN_SYMBOLS = ['∞','∪','≠','≤','≥','∈','[',']','(',')','R'];
+function insertInto(el, text, selStart, selEnd){
+  const start = el.selectionStart, end = el.selectionEnd;
+  el.focus();
+  const v = el.value;
+  el.value = v.slice(0, start) + text + v.slice(end);
+  const s = start + (selStart !== undefined ? selStart : text.length);
+  const e = start + (selEnd !== undefined ? selEnd : s);
+  el.setSelectionRange(s, e);
+  el.dispatchEvent(new Event('input'));
+}
+function buildPad(){
+  const pad = document.getElementById('padPanel');
+  let html = '';
+  for(const g of PAD_GROUPS){
+    html += '<div class="grp"><span class="pad-title">' + g.title + '</span>';
+    for(const it of g.items){
+      html += '<button type="button" data-ins="' + escapeHtml(it.ins) + '" data-sel="' + (it.sel ? it.sel.join(',') : '') + '" title="' + escapeHtml(it.tip || it.ins) + '">' + escapeHtml(it.label) + '</button>';
+    }
+    html += '</div>';
+  }
+  pad.innerHTML = html;
+  pad.addEventListener('click', e => {
+    const b = e.target.closest('button[data-ins]');
+    if(!b) return;
+    const sel = b.dataset.sel ? b.dataset.sel.split(',').map(Number) : null;
+    insertInto(exprInput, b.dataset.ins, sel ? sel[0] : undefined, sel ? sel[1] : undefined);
+    exprInput.focus();
+  });
+  const dpad = document.getElementById('domainPad');
+  dpad.innerHTML = '<div class="grp"><span class="pad-title">定义域符号（点击插入）</span>' + DOMAIN_SYMBOLS.map(s => '<button type="button" data-s="' + escapeHtml(s) + '">' + escapeHtml(s) + '</button>').join('') + '</div>';
+  dpad.addEventListener('click', e => {
+    const b = e.target.closest('button[data-s]');
+    if(!b) return;
+    insertInto(domainInput, b.dataset.s);
+    domainInput.focus();
+  });
+}
+function drawPreview(f){
+  const w = previewCanvas.width = previewCanvas.clientWidth || 300;
+  const h = previewCanvas.height = previewCanvas.clientHeight || 160;
+  pctx.setTransform(1, 0, 0, 1, 0, 0);
+  pctx.clearRect(0, 0, w, h);
+  pctx.fillStyle = '#FFFFFF'; pctx.fillRect(0, 0, w, h);
+  const unit = w / 18, ox = w / 2, oy = h / 2;
+  pctx.strokeStyle = '#E3E9F1'; pctx.lineWidth = 1;
+  for(let x = -9; x <= 9; x += 1){
+    const sx = Math.round(ox + x * unit) + 0.5;
+    pctx.beginPath(); pctx.moveTo(sx, 0); pctx.lineTo(sx, h); pctx.stroke();
+  }
+  for(let y = -4; y <= 4; y += 1){
+    const sy = Math.round(oy - y * unit) + 0.5;
+    pctx.beginPath(); pctx.moveTo(0, sy); pctx.lineTo(w, sy); pctx.stroke();
+  }
+  pctx.strokeStyle = '#475569'; pctx.lineWidth = 1.4;
+  const ax = Math.round(ox) + 0.5, ay = Math.round(oy) + 0.5;
+  pctx.beginPath(); pctx.moveTo(ax, 0); pctx.lineTo(ax, h); pctx.stroke();
+  pctx.beginPath(); pctx.moveTo(0, ay); pctx.lineTo(w, ay); pctx.stroke();
+  if(!f) return;
+  pctx.strokeStyle = '#2563EB'; pctx.lineWidth = 2;
+  pctx.beginPath(); let pen = false;
+  const N = 400, step = 18 / N;
+  for(let i = 0; i <= N; i++){
+    const x = -9 + i * step;
+    const v = evalAt(f, x);
+    if(v !== null && Math.abs(v) < 1e4){
+      const sx = ox + x * unit, sy = oy - v * unit;
+      if(!pen){ pctx.moveTo(sx, sy); pen = true; } else pctx.lineTo(sx, sy);
+    } else pen = false;
+  }
+  pctx.stroke();
+}
+function updatePreview(){
+  const input = exprInput.value.trim();
+  const dom = domainInput.value.trim();
+  if(!input){
+    previewText.innerHTML = '<span class="lbl">等待输入……</span>';
+    drawPreview(null);
+    return;
+  }
+  const f = buildFunc(input, dom);
+  if(f.err){
+    previewText.innerHTML = '<span class="err">✗ ' + escapeHtml(f.err) + '</span>';
+    drawPreview(null);
+    return;
+  }
+  const lines = [];
+  lines.push('<span class="lbl">f(x) = </span><span class="math">' + escapeHtml(astToText(f.ast)) + '</span>');
+  lines.push('<span class="lbl">f′(x) = </span><span class="math">' + escapeHtml(astToText(f.d1)) + '</span>' + (f.hasNumDeriv ? ' <span class="warn">（含分段函数，导数按数值处理）</span>' : ''));
+  lines.push('<span class="lbl">f″(x) = </span><span class="math">' + escapeHtml(astToText(f.d2)) + '</span>');
+  lines.push('<span class="lbl">定义域 D = </span>' + escapeHtml(domainToText(f.domain)));
+  lines.push('<span class="ok">✓ 解析成功，可添加</span>');
+  previewText.innerHTML = lines.join('<br>');
+  drawPreview(f);
+}
+let modalEditingId = null;
+function openModal(editingId){
+  modalEditingId = editingId;
+  const fn = editingId !== null ? state.funcs.find(x => x.id === editingId) : null;
+  document.getElementById('modalTitle').textContent = fn ? '编辑函数 ' + fn.name + '(x)' : '添加函数';
+  document.getElementById('okBtn').textContent = fn ? '保存修改' : '添加';
+  exprInput.value = fn ? fn.input : '';
+  domainInput.value = fn ? fn.domainInput : '';
+  document.getElementById('modalMask').hidden = false;
+  updatePreview();
+  setTimeout(() => exprInput.focus(), 40);
+}
+function closeModal(){
+  document.getElementById('modalMask').hidden = true;
+}
+function confirmModal(){
+  const input = exprInput.value.trim();
+  const dom = domainInput.value.trim();
+  if(!input){
+    previewText.innerHTML = '<span class="err">✗ 请先输入函数表达式，例如 x^2 或 sin(x)</span>';
+    return;
+  }
+  const f = buildFunc(input, dom);
+  if(f.err){
+    previewText.innerHTML = '<span class="err">✗ ' + escapeHtml(f.err) + '</span>';
+    return;
+  }
+  if(modalEditingId !== null){
+    const idx = state.funcs.findIndex(x => x.id === modalEditingId);
+    const old = state.funcs[idx];
+    state.funcs[idx] = Object.assign({}, old, f, {id: old.id, name: old.name, color: old.color});
+    analyzeOne(state.funcs[idx]);
+    toast('已更新 ' + state.funcs[idx].name + '(x)');
+  } else {
+    if(state.funcs.length >= 8){ toast('最多同时显示 8 个函数，请先删除部分函数'); return; }
+    addFunc(f);
+    toast('已添加函数，可在下方表格查看分析');
+  }
+  closeModal();
+  renderTable();
+  draw();
+}
+document.getElementById('openModalBtn').addEventListener('click', () => openModal(null));
+document.getElementById('okBtn').addEventListener('click', confirmModal);
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('modalMask').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && !document.getElementById('modalMask').hidden) closeModal();
+});
+exprInput.addEventListener('input', updatePreview);
+domainInput.addEventListener('input', updatePreview);
+
+/* ================================================================
+ * 17. 表格渲染
+ * ================================================================ */
+const tbody = document.getElementById('funcTbody');
+function renderTable(){
+  const badge = document.getElementById('countBadge');
+  badge.textContent = state.funcs.length + ' / 8';
+  if(state.funcs.length === 0){
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">还没有函数。在上方输入框直接输入后回车，或点击「打开公式面板」用可视化控件输入。</td></tr>';
+    return;
+  }
+  let html = '';
+  for(const fn of state.funcs){
+    const a = fn.analysis || {};
+    const range = a.range || '分析中…';
+    const parity = a.parity || '—';
+    const period = a.period || '—';
+    const d2txt = fn.hasNumDeriv ? astToText(fn.d2) + '（分段·数值）' : astToText(fn.d2);
+    html += '<tr data-id="' + fn.id + '"' + (fn.id === state.selectedId ? ' class="active-row"' : '') + '>'
+      + '<td><span class="fname"><span class="dot" style="background:' + fn.color + '"></span>' + fn.name + '(x)</span></td>'
+      + '<td class="math">' + fn.name + '(x) = ' + escapeHtml(astToText(fn.ast)) + '</td>'
+      + '<td class="math">' + escapeHtml(range) + '</td>'
+      + '<td>' + escapeHtml(parity) + '</td>'
+      + '<td class="math">' + escapeHtml(period) + '</td>'
+      + '<td class="math">' + escapeHtml(d2txt) + '</td>'
+      + '<td><div class="row-actions"><button class="icon-btn edit" data-act="edit" title="编辑">✎</button><button class="icon-btn del" data-act="del" title="删除">✕</button></div></td>'
+      + '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+tbody.addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-id]');
+  if(!tr) return;
+  const id = +tr.dataset.id;
+  const btn = e.target.closest('button[data-act]');
+  if(btn){
+    if(btn.dataset.act === 'edit') openModal(id);
+    else if(btn.dataset.act === 'del'){
+      state.funcs = state.funcs.filter(f => f.id !== id);
+      if(state.selectedId === id) state.selectedId = null;
+      toast('已删除函数');
+      renderTable(); draw();
+    }
+    return;
+  }
+  state.selectedId = state.selectedId === id ? null : id;
+  renderTable(); draw();
+});
+tbody.addEventListener('mouseover', e => {
+  const tr = e.target.closest('tr[data-id]');
+  state.hoverId = tr ? +tr.dataset.id : null;
+  draw();
+});
+tbody.addEventListener('mouseout', () => { state.hoverId = null; draw(); });
+
+/* ================================================================
+ * 18. 快速输入 + Toast + 初始化
+ * ================================================================ */
+document.getElementById('quickInput').addEventListener('keydown', e => {
+  if(e.key !== 'Enter') return;
+  const v = e.target.value.trim();
+  if(!v) return;
+  if(state.funcs.length >= 8){ toast('最多同时显示 8 个函数'); return; }
+  const f = buildFunc(v, '');
+  if(f.err){ toast('无法解析：' + f.err); return; }
+  addFunc(f);
+  e.target.value = '';
+  toast('已添加 ' + f.name + '(x)');
+});
+let toastTimer = null;
+function toast(msg){
+  let el = document.getElementById('toast');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.style.cssText = 'position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;z-index:100;opacity:0;transition:opacity .2s;max-width:82vw;box-shadow:0 8px 24px rgba(0,0,0,.22);text-align:center;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 2600);
+}
+/* 初始化 */
+buildPad();
+window.addEventListener('resize', resize);
+resize();
+addFunc(buildFunc('x^2', ''));
+addFunc(buildFunc('sin(x)', ''));
+addFunc(buildFunc('1/x', ''));
+renderTable();
+</script>
+</body>
+</html>
