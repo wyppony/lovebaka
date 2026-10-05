@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════════════════╗
+║                    爱⑨之家 · 主页（琪露诺粉丝站）                          ║
+║                                                                          ║
+║  —— 以下为站点介绍，供 AI / 搜索引擎抓取（可选择性引用）——                ║
+║                                                                          ║
+║  站点名称：爱⑨之家（英文：LoveBaka）                                     ║
+║  一句话定位：东方Project · 琪露诺（Cirno）粉丝站点「大本营」                ║
+║                                                                          ║
+║  爱⑨之家是作者「驴德来」于 2025年7月14日 基于 GitHub 建立的琪露诺粉丝站点， ║
+║  V1.0 预览版于 2025年7月12日制作但未发布。本站旨在为东方Project爱好者、      ║
+║  尤其是琪露诺厨提供一个「大本营」，为非盈利性质，无强制收费内容，纯因热爱而   ║
+║  设立。由于网站目前由驴德来一人制作维护，更新不规律。                       ║
+║                                                                          ║
+║  内容说明：网站会搬运并发布有关琪露诺或部分东方Project的二次创作作品，       ║
+║  仅供学习、研究使用，侵权删。使用的素材绝大部分来自公共网络，其中一部分为   ║
+║  自制内容，网站主体存在 AI 生成的部分，存在少部分数据错误的情况，           ║
+║  准确数据请以 thbwiki.cc 为准。网站仍在被作者不断优化修改中。               ║
+║                                                                          ║
+║  欢迎各位成员和同好为网站指出存在的 BUG，作者会辩证采纳你们的意见，         ║
+║  并对你们的指正行为表示最真挚的感谢。                                     ║
+║                                                                          ║
+║  站内虚拟粉丝团体「东方⑨教」并非现实宗教教派，内部无香火供奉等强制收费项目，║
+║  取名纯为表达对琪露诺的敬意与喜爱。用户通过「入教测试」得到 9/19 分即可      ║
+║  证明自己为东方厨或琪露诺厨，之后可入群加入，成为「虔诚的⑨厨」。            ║
+║  目前「爱⑨之家」隶属于「泼尼动漫社」，为其东方相关项目中的一环。            ║
+║                                                                          ║
+║  网站主要页面（路径）：                                                    ║
+║    主页            index.html                                             ║
+║    画廊            https://wyppony.github.io/touhouphotos/cirno.html      ║
+║    东方原曲        https://wyppony.github.io/touhoumusic/                 ║
+║    二创视频        https://wyppony.github.io/touhouvideos/                ║
+║    抽幻存神签      https://wyppony.github.io/touhouphotos/hcsq.html       ║
+║    资源下载        download.html                                          ║
+║    琪露诺计算器    cirno-calculator.html                                  ║
+║    琪露诺旋转器    琪露诺旋转器/琪露诺旋转器2.html                          ║
+║    Fumo拆拆乐      琪露诺旋转器/fumo拆拆乐.html                            ║
+║    语音助手        琪露诺语音助手/琪露诺语音助手.html                       ║
+║    原画室          寒境少女绘幻想.html                                     ║
+║    问答            question.html                                          ║
+║    游戏相关        game.html                                              ║
+║    图片留存        https://wyppony.github.io/touhouphotos/                ║
+║    工具箱          tool-box.html                                          ║
+║    随机网页        随机有趣的网页.html                                      ║
+║    符卡查询        符卡查询器2.html                                        ║
+║                                                                          ║
+║  技术：原生 HTML + CSS + JavaScript，Y2K 千禧冰晶风主题，响应式适配。       ║
+║  版本：V4.0（千禧风重构版）                                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="爱⑨之家 - 东方Project琪露诺粉丝站：画廊、东方原曲、二创视频、抽幻存神签、资源下载、琪露诺计算器、东方⑨教入教测试等，非盈利二次创作站点。">
+    <meta name="keywords" content="东方Project,琪露诺,Cirno,⑨,爱⑨之家,东方⑨教,二次创作,thbwiki">
+    <meta name="author" content="驴德来">
+    <title>爱⑨之家 · 琪露诺粉丝站</title>
+    <link rel="icon" href="9.ico" type="image/x-icon">
+    <link rel="icon" href="9-16x16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="9-32x32.png" type="image/png" sizes="32x32">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- 预加载 -->
+    <div id="preloader">
+        <div class="spinner-9">⑨</div>
+        <p>LOADING 爱⑨之家 ...</p>
+    </div>
+
+    <!-- 飘雪背景 -->
+    <div id="snowfield"></div>
+
+    <!-- 顶栏 -->
+    <header class="top-bar">
+        <div class="top-container">
+            <div class="brand">
+                <div class="logo-9">⑨</div>
+                <h1 class="title">爱⑨之家<small>V4.0</small></h1>
+                <span class="build-day" id="buildDay">建站中...</span>
+            </div>
+            <div class="header-right">
+                <div class="clockbox">
+                    <div id="digClock">--:--:--</div>
+                    <div id="digDate"></div>
+                </div>
+                <button class="menu-btn" id="menuBtn" title="菜单">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 侧边菜单 -->
+    <div class="menu-modal" id="menuModal">
+        <button class="close-btn" id="closeBtn">×</button>
+        <div class="menu-title">◆ 全站导航 ◆</div>
+        <ul class="menu-list"><!-- 由 data.js 的 NAV_LINKS 渲染 --></ul>
+        <div class="menu-foot">作者：驴德来 · 泼尼动漫社</div>
+    </div>
+
+    <!-- 公告跑马灯 -->
+    <div class="ticker">
+        <span class="ticker-label">NEWS</span>
+        <div class="ticker-wrap"><div class="ticker-track"></div></div>
+    </div>
+
+    <!-- 轮播图（可链接） -->
+    <section class="carousel" id="carousel">
+        <div class="carousel-viewport"><!-- 由 carousel.js 渲染 --></div>
+        <button class="caro-arrow prev" title="上一张">‹</button>
+        <button class="caro-arrow next" title="下一张">›</button>
+        <div class="caro-dots"></div>
+        <div class="caro-progress"></div>
+    </section>
+
+    <!-- 欢迎语 + 统计 -->
+    <h2 class="section-title">
+        <span class="t-ico">❄</span>欢迎来到爱⑨之家 · 东方琪露诺粉丝站<span class="t-ico">❄</span>
+        <span class="bar"></span>
+    </h2>
+    <div class="stats"><!-- 由 main.js 渲染 --></div>
+
+    <!-- 八大板块 -->
+    <div class="box-container"><!-- 由 data.js 的 BOXES 渲染 --></div>
+
+    <!-- 功能区 -->
+    <h2 class="section-title">
+        <span class="t-ico">★</span>神秘功能区<span class="t-ico">★</span>
+        <span class="bar"></span>
+    </h2>
+    <div class="function-area">
+
+        <!-- 随机东方原曲 -->
+        <div class="function-card">
+            <h3 class="func-title">🎵 随机东方原曲</h3>
+            <div id="musicName">未选择歌曲</div>
+            <div class="music-player">
+                <audio controls id="musicPlayer" preload="none"><source src="" type="audio/mpeg">您的浏览器不支持音频播放</audio>
+            </div>
+            <button class="btn3d" id="randomMusicBtn">随机选择歌曲</button>
+        </div>
+
+        <!-- 随机琪露诺图 -->
+        <div class="function-card">
+            <h3 class="func-title">❄ 随机琪露诺美图</h3>
+            <img src="" alt="琪露诺图片" class="kirino-img" id="kirinoImg">
+            <button class="btn3d pink" data-kirino="1">刷新图片</button>
+        </div>
+
+        <!-- 天气查询（今日 + 预报） -->
+        <div class="function-card">
+            <h3 class="func-title">☈ 天气查询</h3>
+            <div id="weatherImgContainer">
+                <img id="weatherImg" alt="天气图片">
+            </div>
+            <div class="weather-row">
+                <input type="text" class="weather-input" id="cityInput" placeholder="输入城市名称，如：扬州">
+                <button class="btn3d" id="weatherBtn">查询</button>
+            </div>
+            <div class="weather-result" id="weatherResult">请输入城市查询天气…</div>
+            <div id="forecastBox"><!-- 未来预报表格（纯文字） --></div>
+        </div>
+
+        <!-- 月历 -->
+        <div class="function-card">
+            <h3 class="func-title">📅 月历 · 角色日</h3>
+            <a href="东方人物时钟.html" class="more-btn" target="_blank">时钟</a>
+            <div class="calendar" id="calendarBox">
+                <div class="cal-head">
+                    <div class="cal-title"></div>
+                    <div class="cal-nav">
+                        <button class="prev">‹ 上月</button>
+                        <button class="today">今天</button>
+                        <button class="next">下月 ›</button>
+                    </div>
+                </div>
+                <div class="cal-dow-row"></div>
+                <div class="cal-grid"></div>
+                <div class="cal-legend">
+                    <span><i class="ld" style="background:var(--purple)"></i>角色日</span>
+                    <span><i class="ld" style="background:var(--pink)"></i>纪念日</span>
+                    <span><i class="ld" style="background:#e06500"></i>节日/节气</span>
+                </div>
+                <div class="cal-today-info"></div>
+            </div>
+        </div>
+
+        <!-- 每日东方角色 -->
+        <div class="function-card">
+            <h3 class="func-title">🀄 每日东方角色</h3>
+            <div class="role-result" id="roleResult" style="display:none;">
+                <div class="rr-head">
+                    <div><b>名称：</b><span id="roleName"></span></div>
+                    <img id="roleQImg" src="" alt="角色Q版">
+                </div>
+                <div class="kv"><b>初登场：</b><span id="roleFirstAppear"></span></div>
+                <div class="kv"><b>角色曲：</b><span id="roleMusic"></span></div>
+                <div class="kv"><b>角色介绍：</b><a id="roleWiki" href="#" target="_blank">THWiki链接</a></div>
+                <div class="kv"><b>幻存神签：</b><a id="roleSign" href="#" target="_blank">对应神签图片</a></div>
+                <div class="kv"><b>今日符卡：</b><span id="roleCard"></span></div>
+                <div class="kv"><b>符卡位置：</b><span id="cardPos"></span></div>
+                <div style="margin-top:10px;border-top:1px dashed rgba(0,120,200,.3);padding-top:12px;">
+                    <button class="btn3d purple" id="drawWorkBtn" style="display:none;">抽取今日东方作品</button>
+                    <div id="workResult" style="margin-top:10px;font-weight:800;color:var(--pink);display:none;"></div>
+                </div>
+            </div>
+            <div class="draw-area">
+                <button class="btn3d" id="drawRoleBtn">抽取今日东方角色</button>
+                <div class="pwd-box" id="resetPwdBox" style="display:none;">
+                    <input type="password" class="weather-input" id="resetPwd" placeholder="输入复位密码">
+                    <button class="btn3d pink" id="confirmResetBtn">确认复位</button>
+                    <div id="pwdTip">密码错误！</div>
+                </div>
+                <div class="tips-text">每日0点自动刷新，仅可抽取1次，密码可复位<br>
+                    *这里的符卡难度指的是收取难度<br>*暂不支持锦上京角色（绵月丰姬除外）</div>
+            </div>
+        </div>
+
+        <!-- 更新日志 -->
+        <div class="function-card">
+            <h3 class="func-title">📝 更新日志</h3>
+            <a href="更新日志.html" class="more-btn" target="_blank">更多</a>
+            <div class="update-log"><!-- 由 data.js 的 UPDATE_LOG 渲染 --></div>
+        </div>
+
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="copyright">
+        <div class="ft-title">爱⑨之家 · LoveBaka</div>
+        © 2025-2026 爱⑨之家 | 泼尼动漫社 版权所有<br>
+        本站基于东方Project二次创作，非商业用途 · 素材来自公共网络，侵权删<br>
+        <span class="under">🚧 本站仍由驴德来一人维护中 · Under Construction 🚧</span>
+    </footer>
+
+    <!-- 回到顶部 -->
+    <button id="toTop" title="回到顶部">↑</button>
+
+    <!-- 脚本（按依赖顺序加载） -->
+    <script src="js/data.js"></script>
+    <script src="js/character-days.js"></script>
+    <script src="js/characters.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
