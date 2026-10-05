@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猜东方角色</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%23c94040'/%3E%3Ctext x='12' y='17' font-size='14' text-anchor='middle' fill='%23fff'%3E?%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --red:#c94040; --deepred:#8b1a1a; --paper:#faf6ef; --ink:#2b2320;
+    --head:#2e3a5c; --ok:#c6efce; --near:#ffeb9c; --no:#ffffff;
+    --border:#d9d4c8; --line:#e7e1d4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink); background:var(--paper);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(201,64,64,.10), transparent 38%),
+      radial-gradient(circle at 88% 20%, rgba(201,64,64,.07), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(46,58,92,.08), transparent 45%);
+    min-height:100vh;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:36px 20px 60px;}
+  header{text-align:center; margin-bottom:28px;}
+  .torii{width:64px; height:52px; margin:0 auto 10px; display:block;}
+  h1{
+    font-family:"Noto Serif SC","Songti SC","SimSun",serif;
+    font-size:40px; font-weight:900; letter-spacing:4px; color:var(--deepred);
+  }
+  .sub{color:#8a7f72; font-size:14px; margin-top:8px;}
+  .card{
+    background:#fffdf8; border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 6px 24px rgba(80,50,30,.08); padding:24px 26px; margin-bottom:22px;
+  }
+  .ctrl{display:flex; flex-wrap:wrap; gap:12px; align-items:stretch;}
+  .field{flex:1 1 300px; position:relative;}
+  .field input{
+    width:100%; height:46px; padding:0 14px; font-size:16px;
+    border:2px solid var(--border); border-radius:10px; background:#fff;
+    color:var(--ink); outline:none; transition:border-color .15s;
+  }
+  .field input:focus{border-color:var(--red);}
+  .field input:disabled{background:#f1ece2; color:#9a9185; cursor:not-allowed;}
+  .btn{
+    height:46px; padding:0 24px; border:none; border-radius:10px;
+    font-size:16px; font-weight:700; cursor:pointer; color:#fff;
+    background:linear-gradient(180deg,var(--red),var(--deepred));
+    box-shadow:0 3px 8px rgba(139,26,26,.25); transition:transform .08s, filter .15s;
+  }
+  .btn:hover{filter:brightness(1.06);}
+  .btn:active{transform:translateY(1px);}
+  .btn:disabled{background:#c9c2b4; box-shadow:none; cursor:not-allowed;}
+  .btn.ghost{background:#fff; color:var(--deepred); border:2px solid var(--red); box-shadow:none;}
+  .btn.ghost:hover{background:#fdecec;}
+  .msg{margin-top:16px; padding:12px 16px; border-radius:10px; font-size:16px; font-weight:600;}
+  .msg.info{background:#eaf0fb; color:#2e3a5c; border:1px solid #cdd8ee;}
+  .msg.ok{background:#e2f3e4; color:#2c6e3f; border:1px solid #bfe2c4;}
+  .msg.bad{background:#fdecec; color:#a43030; border:1px solid #f3c7c7;}
+  .msg.warn{background:#fdf6e3; color:#8a6d1f; border:1px solid #ecd9a0;}
+  .legend{margin-top:14px; display:flex; flex-wrap:wrap; gap:16px; font-size:13px; color:#6f675c;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .sw{width:16px; height:16px; border-radius:4px; border:1px solid #d0c9ba; display:inline-block;}
+  .hud{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px;}
+  .hud h2{font-family:"Noto Serif SC","Songti SC",serif; font-size:20px; color:var(--deepred);}
+  .hud .count{font-size:14px; color:#8a7f72;}
+  .tablebox{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  table{width:100%; border-collapse:collapse; table-layout:fixed; min-width:760px;}
+  thead th{
+    background:var(--head); color:#fff; font-weight:700; font-size:14px;
+    padding:12px 8px; border:1px solid #27304b; text-align:center; line-height:1.4;
+  }
+  colgroup col{ }
+  tbody td{
+    border:1px solid var(--line); padding:10px 8px; text-align:center; font-size:14px;
+    color:#000; vertical-align:middle;
+  }
+  tbody tr:first-child td{border-top:2px solid var(--head);}
+  .cell-ok{background:var(--ok);}
+  .cell-near{background:var(--near);}
+  .cell-no{background:var(--no);}
+  .seg{display:inline-block; padding:1px 6px; border-radius:6px; margin:1px 0;}
+  .seg-ok{background:var(--ok);}
+  .seg-near{background:var(--near);}
+  .seg-no{background:var(--no);}
+  .correct-row{outline:2px solid #2c6e3f; outline-offset:-2px;}
+  td:nth-child(1){font-weight:600;}
+  .note{font-size:12px; color:#a09789; margin-top:10px; line-height:1.7;}
+  .answer{margin-top:16px;}
+  .answer-info{border:2px solid #2c6e3f; border-radius:12px; background:#e2f3e4; padding:14px 18px;}
+  .answer-name{font-family:"Noto Serif SC","Songti SC","SimSun",serif; font-size:20px; font-weight:700; color:#2c6e3f; margin-bottom:10px;}
+  .answer-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px 14px;}
+  .a-row{display:flex; flex-direction:column; font-size:13px; background:#f6fbf7; border:1px solid #cfe6d3; border-radius:8px; padding:6px 10px;}
+  .a-k{color:#5a8a63; font-size:11px;}
+  .a-v{color:#000; font-weight:600; margin-top:2px;}
+  @media (max-width:520px){
+    h1{font-size:30px;}
+    .card{padding:18px 14px;}
+    .btn{padding:0 16px; flex:1;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="torii" viewBox="0 0 64 52" aria-hidden="true">
+      <path d="M6 6 L58 6 L52 14 L12 14 Z" fill="#c94040"/>
+      <path d="M6 6 L6 12 M58 6 L58 12" stroke="#8b1a1a" stroke-width="3"/>
+      <path d="M10 14 L16 46 L12 46 L8 14 Z M46 14 L52 46 L48 46 L44 14 Z" fill="#8b1a1a"/>
+      <rect x="30" y="14" width="4" height="32" fill="#c94040"/>
+      <rect x="4" y="46" width="56" height="5" fill="#8b1a1a"/>
+    </svg>
+    <h1>猜东方角色</h1>
+    <p class="sub">系统随机想一位角色，你来猜。每猜一次都会给出对照提示，直到猜中。</p>
+  </header>
+
+  <section class="card">
+    <div class="ctrl">
+      <div class="field">
+        <input id="guessInput" list="charList" placeholder="输入或选择一位角色名…" autocomplete="off" disabled>
+        <datalist id="charList"></datalist>
+      </div>
+      <button id="startBtn" class="btn">开始猜</button>
+      <button id="guessBtn" class="btn ghost" disabled>猜</button>
+      <button id="revealBtn" class="btn ghost" disabled>公布答案</button>
+    </div>
+    <div id="msg"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:#c6efce"></i>绿 · 正确</span>
+      <span><i class="sw" style="background:#ffeb9c"></i>黄 · 接近</span>
+      <span><i class="sw" style="background:#ffffff"></i>白 · 不符</span>
+      <span>年份 ↑ 想晚一些 · ↓ 想早一些</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="hud">
+      <h2>对照表</h2>
+      <span class="count" id="guessCount"></span>
+    </div>
+    <div class="tablebox">
+      <table>
+        <colgroup>
+          <col style="width:17%"><col style="width:12%"><col style="width:14%">
+          <col style="width:11%"><col style="width:21%"><col style="width:11%"><col style="width:14%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>角色名</th><th>初登场年份</th><th>初登场作品</th><th>发色</th>
+            <th>是敌人吗(整数非对战新作)</th><th>是自机吗</th><th>种族</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div id="answerBox" class="answer"></div>
+    <p class="note">提示：点击「开始猜」后系统随机选一位角色。猜中时该行全部变绿；年份旁的 ↑/↓ 提示答案比它更晚/更早；敌人面的黄块表示面数对得上或相差 ±1；种族只要有一个相同汉字即标黄。猜不出可点「公布答案」直接显示答案并重开。</p>
+  </section>
+</div>
+
+<script src="猜东方角色.js"></script>
+</body>
+</html>
