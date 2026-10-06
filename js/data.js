@@ -126,6 +126,7 @@ const MEMORIAL_DAYS = {
 
 /* ---------- 全站导航（侧边菜单） ---------- */
 const NAV_LINKS = [
+    { label: "回归旧版", url: "https://wyppony.github.io/lovebaka" },
     { label: "关于本网站的使用说明", url: "sysm.html" },
     { label: "关于⑨教", url: "https://wyppony.github.io/lovebaka/9jiao.html" },
     { label: "关于pony社", url: "https://wyppony.github.io/lovebaka/pony-anime-club.html" },
@@ -140,11 +141,11 @@ const NAV_LINKS = [
     { label: "工具箱", url: "https://wyppony.github.io/lovebaka/tool-box.html" },
     { label: "随机有趣的网页", url: "随机有趣的网页.html" },
     { label: "东方符卡查询器", url: "符卡查询器2.html" },
-    { label: "东方符卡查询器", url: "符卡查询器2.html" },
+    { label: "猜东方角色", url: "猜东方角色.html" },
     { label: "东方本命角色测试", url: "http://readalittle.net/sort/" },
     { label: "东方原曲认知链接", url: "https://quiz.touhou.page/" },
     { label: "莉莉云东方下载链接", url: "https://cloud.lilywhite.cc/" },
-    { label: "糯米诺诺弹幕视频网站", url: "https://www.nuomill.com/" },
+    { label: "糯米洛洛弹幕视频网站", url: "https://www.nuomill.com/" },
     { label: "支持作者", url: "支持作者.html" }
 ];
 
