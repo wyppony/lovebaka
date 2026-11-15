@@ -1,0 +1,700 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猜东方角色 · 爱⑨之家</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    }
+    body {
+        background-color: #add8e6;
+        background-attachment: fixed;
+        color: #333;
+        min-height: 100vh;
+    }
+    /* 顶栏 */
+    .top-bar {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 2px solid #61a5ff;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .top-container {
+        width: 90%;
+        max-width: 1080px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+    }
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+    .brand-mark {
+        height: 46px;
+        width: auto;
+        flex: 0 0 auto;
+        display: block;
+        filter: drop-shadow(0 2px 6px rgba(45, 90, 255, 0.18));
+    }
+    .title {
+        font-size: 26px;
+        font-weight: bold;
+        color: #2d5aff;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
+    }
+    .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 0 0 auto;
+    }
+    .author {
+        font-size: 14px;
+        color: #666;
+        text-decoration: none;
+    }
+    .author:hover {
+        color: #2d5aff;
+        text-decoration: underline;
+    }
+    .back-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #61a5ff;
+        color: #fff;
+        border-radius: 8px;
+        font-size: 14px;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background-color 0.3s;
+    }
+    .back-btn:hover {
+        background-color: #2d5aff;
+    }
+    /* 主体 */
+    .wrap {
+        width: 90%;
+        max-width: 1080px;
+        margin: 28px auto 0;
+    }
+    .intro {
+        text-align: center;
+        color: #fff;
+        font-size: 15px;
+        margin-bottom: 22px;
+        text-shadow: 1px 1px 2px rgba(45, 90, 255, 0.25);
+    }
+    .card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        padding: 22px;
+        margin-bottom: 22px;
+        position: relative;
+    }
+    .card-title {
+        font-size: 20px;
+        color: #2d5aff;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0efff;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+    }
+    .card-count {
+        font-size: 13px;
+        color: #666;
+        font-weight: normal;
+    }
+    .ctrl {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: stretch;
+    }
+    .field {
+        flex: 1 1 280px;
+        min-width: 0;
+        position: relative;
+    }
+    .field input {
+        width: 100%;
+        height: 46px;
+        padding: 0 14px;
+        font-size: 16px;
+        color: #333;
+        background-color: #fff;
+        border: 1px solid #e0efff;
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus {
+        border-color: #61a5ff;
+        box-shadow: 0 0 0 3px rgba(97, 165, 255, 0.2);
+    }
+    .field input:disabled {
+        background-color: #f5f9ff;
+        color: #9fb3cc;
+        cursor: not-allowed;
+    }
+    .btn {
+        height: 46px;
+        padding: 0 22px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #61a5ff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        white-space: nowrap;
+    }
+    .btn:hover {
+        background-color: #2d5aff;
+    }
+    .btn.ghost {
+        background-color: #fff;
+        color: #2d5aff;
+        border: 1px solid #61a5ff;
+    }
+    .btn.ghost:hover {
+        background-color: #f5f9ff;
+    }
+    .btn:disabled {
+        background-color: #cddcef;
+        cursor: not-allowed;
+    }
+    .btn.ghost:disabled {
+        background-color: #f7fafd;
+        color: #a9bcd3;
+        border-color: #e2ecf8;
+    }
+    .msg {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.5;
+    }
+    .msg.info {
+        background-color: #f5f9ff;
+        color: #2d5aff;
+        border: 1px solid #e0efff;
+    }
+    .msg.ok {
+        background-color: #e8f8ec;
+        color: #23794a;
+        border: 1px solid #bfe6cd;
+    }
+    .msg.bad {
+        background-color: #fdf2f2;
+        color: #b03a3a;
+        border: 1px solid #f3cdcd;
+    }
+    .msg.warn {
+        background-color: #fdf8ea;
+        color: #8a6a16;
+        border: 1px solid #eddcab;
+    }
+    .legend {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        font-size: 13px;
+        color: #666;
+        line-height: 1.7;
+    }
+    .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .sw {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        border: 1px solid #dbe7f7;
+        display: inline-block;
+    }
+    /* 表格 */
+    .tablebox {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 8px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        min-width: 760px;
+    }
+    thead th {
+        background-color: #2d5aff;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 12px 8px;
+        text-align: center;
+        line-height: 1.4;
+    }
+    tbody td {
+        border: 1px solid #e0efff;
+        padding: 10px 8px;
+        text-align: center;
+        font-size: 14px;
+        color: #000;
+        vertical-align: middle;
+        background-color: #fff;
+    }
+    tbody td:first-child {
+        font-weight: bold;
+    }
+    .cell-ok {
+        background-color: #c6efce;
+    }
+    .cell-near {
+        background-color: #ffeb9c;
+    }
+    .cell-no {
+        background-color: #fff;
+    }
+    /* 手机端：表格换成逐条卡片，避免横向滑动看不到发色/种族 */
+    .m-rows {
+        display: none;
+    }
+    .m-item {
+        border: 1px solid #e0efff;
+        border-radius: 10px;
+        background-color: #fff;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .m-item.correct {
+        box-shadow: inset 0 0 0 1px #2c8a4f;
+    }
+    .m-cell {
+        border: 1px solid #eef4fc;
+        border-radius: 6px;
+        padding: 6px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+    }
+    .m-cell.wide {
+        grid-column: 1 / -1;
+    }
+    .m-k {
+        font-size: 11px;
+        color: #7d93ad;
+    }
+    .m-v {
+        font-size: 13px;
+        font-weight: bold;
+        color: #000;
+        overflow-wrap: anywhere;
+    }
+    .m-cell.cell-ok {
+        background-color: #c6efce;
+        border-color: #a9dcb7;
+    }
+    .m-cell.cell-near {
+        background-color: #ffeb9c;
+        border-color: #f0d878;
+    }
+    .correct-row td {
+        box-shadow: inset 0 0 0 1px #2c8a4f;
+    }
+    /* 答案 */
+    .answer {
+        margin-top: 16px;
+    }
+    .answer-info {
+        border: 2px solid #61a5ff;
+        border-radius: 12px;
+        background-color: #f5f9ff;
+        padding: 16px;
+    }
+    .answer-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2d5aff;
+        margin-bottom: 12px;
+    }
+    .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px 12px;
+    }
+    .a-row {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border: 1px solid #e0efff;
+        border-radius: 8px;
+        padding: 8px 10px;
+    }
+    .a-k {
+        font-size: 12px;
+        color: #666;
+    }
+    .a-v {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin-top: 2px;
+    }
+    .tablewrap.is-empty {
+        display: none;
+    }
+    .empty-hint {
+        margin-top: 12px;
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+        padding: 14px 10px;
+        background-color: #f5f9ff;
+        border: 1px dashed #cfe0f7;
+        border-radius: 8px;
+    }
+    .note {
+        margin-top: 12px;
+        font-size: 12px;
+        color: #666;
+        line-height: 1.8;
+    }
+    /* 版权 */
+    .copyright {
+        width: 100%;
+        background-color: #D0D0D0;
+        color: #fff;
+        text-align: center;
+        padding: 20px 0;
+        font-size: 14px;
+        margin-top: 40px;
+        line-height: 1.8;
+    }
+    @media (max-width: 640px) {
+        .tablebox {
+            display: none;
+        }
+        .m-rows {
+            display: grid;
+            gap: 12px;
+        }
+    }
+    @media (max-width: 768px) {
+        .title {
+            font-size: 20px;
+        }
+        .brand-mark {
+            height: 34px;
+        }
+        .author {
+            display: none;
+        }
+        .back-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        .wrap {
+            width: 94%;
+            margin-top: 20px;
+        }
+        .card {
+            padding: 16px;
+        }
+        .btn {
+            flex: 1 1 auto;
+            padding: 0 16px;
+        }
+    }
+</style>
+</head>
+<body>
+<header class="top-bar">
+    <div class="top-container">
+        <div class="brand">
+            <img class="brand-mark" src="data:image/png;base64,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" alt="爱⑨之家">
+            <h1 class="title">猜东方角色</h1>
+        </div>
+        <div class="top-actions">
+            <a href="https://space.bilibili.com/" class="author" target="_blank">作者: 驴德来</a>
+            <a href="https://wyppony.github.io/lovebaka/" class="back-btn">返回主页</a>
+        </div>
+    </div>
+</header>
+
+<div class="wrap">
+    <p class="intro">系统随机想一位角色，你来猜。每猜一次都会给出对照提示，直到猜中。</p>
+
+    <section class="card">
+        <h2 class="card-title">开始猜</h2>
+        <div class="ctrl">
+            <div class="field">
+                <input id="guessInput" list="charList" placeholder="输入或选择一位角色名…" autocomplete="off" disabled>
+                <datalist id="charList"></datalist>
+            </div>
+            <button id="startBtn" class="btn">开始猜</button>
+            <button id="guessBtn" class="btn ghost" disabled>猜</button>
+            <button id="revealBtn" class="btn ghost" disabled>公布答案</button>
+        </div>
+        <div id="msg"></div>
+        <div class="legend">
+            <span><i class="sw" style="background:#c6efce"></i>绿 · 完全对上</span>
+            <span><i class="sw" style="background:#ffeb9c"></i>黄 · 接近（有一种颜色/一个汉字对上）</span>
+            <span><i class="sw" style="background:#ffffff"></i>白 · 不符</span>
+            <span>年份 ↑ 想晚一些 · ↓ 想早一些</span>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">对照表 <span class="card-count" id="guessCount"></span></h2>
+        <div class="tablewrap is-empty" id="tableWrap">
+        <div class="tablebox">
+            <table>
+                <colgroup>
+                    <col style="width:17%"><col style="width:12%"><col style="width:14%">
+                    <col style="width:11%"><col style="width:21%"><col style="width:11%"><col style="width:14%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>角色名</th><th>初登场年份</th><th>初登场作品</th><th>发色</th>
+                        <th>是敌人吗(整数非对战新作)</th><th>是自机吗</th><th>种族</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        </div>
+        <p class="empty-hint" id="emptyHint">还没有猜测记录 · 点「开始猜」，每猜一次就在这张表里加一行对照</p>
+        <div id="mobileRows" class="m-rows"></div>
+        <div id="answerBox" class="answer"></div>
+        <p class="note">提示：点「开始猜」后系统随机选一位角色；猜中时该行全部变绿。年份旁的 ↑/↓ 表示答案比它更晚/更早；敌人面的黄块表示面数对得上或相差 ±1。<b>发色</b>：去掉「色」字后只要有任意一种颜色与答案重合就标黄（只是一起带个「色」字不算重合，完全一致才变绿）；<b>种族</b>：只要有一个相同汉字即标黄。实在想不出可点「公布答案」。</p>
+    </section>
+</div>
+
+<footer class="copyright">
+    爱⑨之家 · 猜东方角色　|　角色资料整理自 THBWiki
+</footer>
+
+<script>
+/* ===== 猜东方角色 · 游戏逻辑 ===== */
+const CHARACTERS = [{"name": "博丽灵梦", "year": 1997, "work": "东方灵异传", "hair": "黑色/棕色", "enemy": "是 四面", "self": "是", "race": "人类"}, {"name": "雾雨魔理沙", "year": 1997, "work": "东方封魔录", "hair": "金色", "enemy": "是 四面", "self": "是", "race": "人类"}, {"name": "蕾米莉亚·斯卡蕾特", "year": 2002, "work": "东方红魔乡", "hair": "蓝色", "enemy": "是 六面", "self": "是", "race": "吸血鬼"}, {"name": "小恶魔", "year": 2002, "work": "东方红魔乡", "hair": "红色", "enemy": "是 四面", "self": "否", "race": "恶魔"}, {"name": "大妖精", "year": 2002, "work": "东方红魔乡", "hair": "绿色", "enemy": "是 二面", "self": "否", "race": "妖精"}, {"name": "琪露诺", "year": 2002, "work": "东方红魔乡", "hair": "蓝色", "enemy": "是 二面", "self": "是", "race": "妖精"}, {"name": "帕秋莉·诺蕾姬", "year": 2002, "work": "东方红魔乡", "hair": "紫色", "enemy": "是 四面", "self": "是", "race": "魔法使"}, {"name": "露米娅", "year": 2002, "work": "东方红魔乡", "hair": "金色", "enemy": "是 一面", "self": "否", "race": "妖怪"}, {"name": "红美铃", "year": 2002, "work": "东方红魔乡", "hair": "红色", "enemy": "是 三面", "self": "是", "race": "妖怪"}, {"name": "十六夜咲夜", "year": 2002, "work": "东方红魔乡", "hair": "白色/银色/灰色", "enemy": "是 五面", "self": "是", "race": "人类"}, {"name": "芙兰朵露·斯卡蕾特", "year": 2002, "work": "东方红魔乡", "hair": "金色", "enemy": "是 EX/PH面", "self": "是", "race": "吸血鬼"}, {"name": "蕾蒂·霍瓦特洛克", "year": 2003, "work": "东方妖妖梦", "hair": "白色/蓝色", "enemy": "是 一面", "self": "否", "race": "妖怪"}, {"name": "梅露兰·普莉兹姆利巴", "year": 2003, "work": "东方妖妖梦", "hair": "白色/蓝色", "enemy": "是 四面", "self": "是", "race": "妖怪/骚灵"}, {"name": "橙", "year": 2003, "work": "东方妖妖梦", "hair": "棕色", "enemy": "是 二面", "self": "否", "race": "妖怪"}, {"name": "莉莉霍瓦特", "year": 2003, "work": "东方妖妖梦", "hair": "金色", "enemy": "是 三面/四面", "self": "否", "race": "妖精"}, {"name": "魂魄妖梦", "year": 2003, "work": "东方妖妖梦", "hair": "白色/银色", "enemy": "是 五面", "self": "是", "race": "半人半灵"}, {"name": "八云蓝", "year": 2003, "work": "东方妖妖梦", "hair": "金色", "enemy": "是 EX/PH面", "self": "是", "race": "妖怪/妖兽"}, {"name": "露娜萨·普莉兹姆利巴", "year": 2003, "work": "东方妖妖梦", "hair": "金色", "enemy": "是 四面", "self": "是", "race": "妖怪/骚灵"}, {"name": "莉莉卡·普莉兹姆利巴", "year": 2003, "work": "东方妖妖梦", "hair": "棕色", "enemy": "是 四面", "self": "是", "race": "妖怪/骚灵"}, {"name": "爱丽丝·玛格特洛依德", "year": 2003, "work": "东方妖妖梦", "hair": "金色", "enemy": "是 三面", "self": "是", "race": "妖怪/魔法使"}, {"name": "西行寺幽幽子", "year": 2003, "work": "东方妖妖梦", "hair": "粉色", "enemy": "是 六面", "self": "是", "race": "亡灵"}, {"name": "八云紫", "year": 2003, "work": "东方妖妖梦", "hair": "金色", "enemy": "是 EX/PH面", "self": "是", "race": "妖怪"}, {"name": "米斯蒂娅·萝蕾拉", "year": 2004, "work": "东方永夜抄", "hair": "粉色", "enemy": "是 二面", "self": "是", "race": "妖怪"}, {"name": "蓬莱山辉夜", "year": 2004, "work": "东方永夜抄", "hair": "黑色", "enemy": "是 六面", "self": "否", "race": "月人"}, {"name": "铃仙·优昙华院·因幡", "year": 2004, "work": "东方永夜抄", "hair": "紫色", "enemy": "是 五面", "self": "是", "race": "月兔"}, {"name": "莉格露·奈特巴格", "year": 2004, "work": "东方永夜抄", "hair": "绿色", "enemy": "是 一面", "self": "否", "race": "妖怪"}, {"name": "八意永琳", "year": 2004, "work": "东方永夜抄", "hair": "白色/银色", "enemy": "是 六面", "self": "否", "race": "月人"}, {"name": "上白泽慧音", "year": 2004, "work": "东方永夜抄", "hair": "白色/蓝色/绿色", "enemy": "是 三面/EX/PH面", "self": "否", "race": "半人/半白泽"}, {"name": "因幡天为", "year": 2004, "work": "东方永夜抄", "hair": "黑色", "enemy": "是 五面", "self": "是", "race": "妖怪/妖怪兔"}, {"name": "藤原妹红", "year": 2004, "work": "东方永夜抄", "hair": "白色", "enemy": "是 EX/PH面", "self": "是", "race": "人类"}, {"name": "梅蒂欣·梅兰可莉", "year": 2005, "work": "东方花映塚", "hair": "金色", "enemy": "不是", "self": "是", "race": "人偶"}, {"name": "四季映姬·夜摩仙那度", "year": 2005, "work": "东方花映塚", "hair": "绿色", "enemy": "不是", "self": "是", "race": "阎魔"}, {"name": "风见幽香", "year": 2005, "work": "东方花映塚", "hair": "绿色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "小野塚小町", "year": 2005, "work": "东方花映塚", "hair": "红色", "enemy": "不是", "self": "是", "race": "死神"}, {"name": "河城荷取", "year": 2007, "work": "东方风神录", "hair": "蓝色", "enemy": "是 三面", "self": "是", "race": "河童"}, {"name": "东风谷早苗", "year": 2007, "work": "东方风神录", "hair": "绿色", "enemy": "是 五面/EX/PH面", "self": "是", "race": "人类"}, {"name": "秋静叶", "year": 2007, "work": "东方风神录", "hair": "金色", "enemy": "是 一面", "self": "否", "race": "神明"}, {"name": "洩矢诹访子", "year": 2007, "work": "东方风神录", "hair": "金色", "enemy": "是 EX/PH面", "self": "是", "race": "神明"}, {"name": "键山雏", "year": 2007, "work": "东方风神录", "hair": "绿色", "enemy": "是 二面", "self": "否", "race": "神明"}, {"name": "秋穰子", "year": 2007, "work": "东方风神录", "hair": "金色", "enemy": "是 一面", "self": "否", "race": "神明"}, {"name": "八坂神奈子", "year": 2007, "work": "东方风神录", "hair": "蓝色/紫色", "enemy": "是 六面/EX/PH面", "self": "是", "race": "神明"}, {"name": "犬走椛", "year": 2007, "work": "东方风神录", "hair": "白色", "enemy": "是 四面", "self": "否", "race": "天狗/白狼天狗"}, {"name": "火焰猫燐", "year": 2008, "work": "东方地灵殿", "hair": "红色", "enemy": "是 四面/五面/六面", "self": "是", "race": "妖怪/火车"}, {"name": "水桥帕露西", "year": 2008, "work": "东方地灵殿", "hair": "金色", "enemy": "是 二面", "self": "否", "race": "妖怪"}, {"name": "古明地觉", "year": 2008, "work": "东方地灵殿", "hair": "粉色", "enemy": "是 四面", "self": "否", "race": "妖怪/觉"}, {"name": "琪斯美", "year": 2008, "work": "东方地灵殿", "hair": "绿色", "enemy": "是 一面", "self": "否", "race": "妖怪"}, {"name": "星熊勇仪", "year": 2008, "work": "东方地灵殿", "hair": "金色", "enemy": "是 三面", "self": "否", "race": "鬼"}, {"name": "灵乌路空", "year": 2008, "work": "东方地灵殿", "hair": "黑色", "enemy": "是 六面", "self": "是", "race": "地狱鸦"}, {"name": "黑谷山女", "year": 2008, "work": "东方地灵殿", "hair": "金色", "enemy": "是 一面", "self": "否", "race": "妖怪/土蜘蛛"}, {"name": "古明地恋", "year": 2008, "work": "东方地灵殿", "hair": "绿色", "enemy": "是 EX/PH面", "self": "是", "race": "妖怪/觉"}, {"name": "娜兹玲", "year": 2009, "work": "东方星莲船", "hair": "灰色", "enemy": "是 一面/五面", "self": "是", "race": "妖怪/妖怪鼠"}, {"name": "圣白莲", "year": 2009, "work": "东方星莲船", "hair": "紫色/金色", "enemy": "是 六面", "self": "是", "race": "魔法使"}, {"name": "封兽鵺", "year": 2009, "work": "东方星莲船", "hair": "黑色", "enemy": "是 EX/PH面", "self": "否", "race": "妖怪"}, {"name": "村纱水蜜", "year": 2009, "work": "东方星莲船", "hair": "黑色", "enemy": "是 四面", "self": "是", "race": "幽灵"}, {"name": "多多良小伞", "year": 2009, "work": "东方星莲船", "hair": "蓝色", "enemy": "是 二面/三面/EX/PH面", "self": "否", "race": "付葬神/伞妖"}, {"name": "云居一轮", "year": 2009, "work": "东方星莲船", "hair": "蓝色", "enemy": "是 三面", "self": "是", "race": "妖怪"}, {"name": "寅丸星", "year": 2009, "work": "东方星莲船", "hair": "金色/黑色", "enemy": "是 五面", "self": "否", "race": "妖怪"}, {"name": "霍青娥", "year": 2011, "work": "东方神灵庙", "hair": "蓝色", "enemy": "是 四面", "self": "否", "race": "邪仙"}, {"name": "物部布都", "year": 2011, "work": "东方神灵庙", "hair": "灰色", "enemy": "是 五面", "self": "是", "race": "人类/尸解仙"}, {"name": "幽谷响子", "year": 2011, "work": "东方神灵庙", "hair": "蓝色", "enemy": "是 二面", "self": "否", "race": "妖怪"}, {"name": "苏我屠自古", "year": 2011, "work": "东方神灵庙", "hair": "绿色", "enemy": "是 五面", "self": "否", "race": "亡灵"}, {"name": "宫古芳香", "year": 2011, "work": "东方神灵庙", "hair": "紫色", "enemy": "是 三面", "self": "否", "race": "僵尸"}, {"name": "二岩猯藏", "year": 2011, "work": "东方神灵庙", "hair": "棕色", "enemy": "是 EX/PH面", "self": "是", "race": "妖怪/妖怪狸"}, {"name": "丰聪耳神子", "year": 2011, "work": "东方神灵庙", "hair": "金色", "enemy": "是 六面", "self": "是", "race": "圣人"}, {"name": "今泉影狼", "year": 2013, "work": "东方辉针城", "hair": "棕色", "enemy": "是 三面", "self": "否", "race": "妖怪/狼女"}, {"name": "九十九弁弁", "year": 2013, "work": "东方辉针城", "hair": "紫色", "enemy": "是 四面/EX/PH面", "self": "否", "race": "付葬神"}, {"name": "堀川雷鼓", "year": 2013, "work": "东方辉针城", "hair": "红色", "enemy": "是 EX/PH面", "self": "否", "race": "付葬神"}, {"name": "若鹭姬", "year": 2013, "work": "东方辉针城", "hair": "蓝色", "enemy": "是 一面", "self": "否", "race": "妖怪/人鱼"}, {"name": "鬼人正邪", "year": 2013, "work": "东方辉针城", "hair": "黑色/红色/白色", "enemy": "是 五面", "self": "是", "race": "天邪鬼"}, {"name": "九十九八桥", "year": 2013, "work": "东方辉针城", "hair": "棕色", "enemy": "是 四面/EX/PH面", "self": "否", "race": "付葬神"}, {"name": "赤蛮奇", "year": 2013, "work": "东方辉针城", "hair": "红色", "enemy": "是 二面", "self": "否", "race": "妖怪/飞头蛮"}, {"name": "少名针妙丸", "year": 2013, "work": "东方辉针城", "hair": "紫色", "enemy": "是 六面", "self": "是", "race": "小人"}, {"name": "清兰", "year": 2015, "work": "东方绀珠传", "hair": "蓝色", "enemy": "是 一面", "self": "是", "race": "月兔"}, {"name": "哆来咪·苏伊特", "year": 2015, "work": "东方绀珠传", "hair": "蓝色", "enemy": "是 三面/EX/PH面", "self": "是", "race": "妖怪/貘"}, {"name": "铃瑚", "year": 2015, "work": "东方绀珠传", "hair": "金色", "enemy": "是 二面", "self": "否", "race": "月兔"}, {"name": "赫卡提亚·拉碧斯拉祖利", "year": 2015, "work": "东方绀珠传", "hair": "红色/蓝色/金色", "enemy": "是 EX/PH面", "self": "否", "race": "神明"}, {"name": "克劳恩皮丝", "year": 2015, "work": "东方绀珠传", "hair": "金色", "enemy": "是 五面", "self": "否", "race": "妖精"}, {"name": "稀神探女", "year": 2015, "work": "东方绀珠传", "hair": "白色/银色", "enemy": "是 四面", "self": "否", "race": "月人"}, {"name": "纯狐", "year": 2015, "work": "东方绀珠传", "hair": "金色", "enemy": "是 六面/EX/PH面", "self": "否", "race": "神灵"}, {"name": "矢田寺成美", "year": 2017, "work": "东方天空璋", "hair": "黑色", "enemy": "是 四面", "self": "否", "race": "魔法使"}, {"name": "坂田合欢", "year": 2017, "work": "东方天空璋", "hair": "白色", "enemy": "是 二面", "self": "否", "race": "山姥"}, {"name": "丁礼田舞", "year": 2017, "work": "东方天空璋", "hair": "绿色", "enemy": "是 五面/EX/PH面", "self": "否", "race": "人类/？"}, {"name": "高丽野阿吽", "year": 2017, "work": "东方天空璋", "hair": "绿色", "enemy": "是 三面", "self": "是", "race": "妖怪"}, {"name": "尔子田里乃", "year": 2017, "work": "东方天空璋", "hair": "棕色", "enemy": "是 五面/EX/PH面", "self": "否", "race": "人类/？"}, {"name": "爱塔妮缇拉尔瓦", "year": 2017, "work": "东方天空璋", "hair": "蓝色", "enemy": "是 一面", "self": "否", "race": "妖精"}, {"name": "摩多罗隐岐奈", "year": 2017, "work": "东方天空璋", "hair": "金色", "enemy": "是 六面/EX/PH面", "self": "否", "race": "神明/秘神"}, {"name": "庭渡久侘歌", "year": 2019, "work": "东方鬼形兽", "hair": "金色", "enemy": "是 三面/EX/PH面", "self": "否", "race": "神明"}, {"name": "埴安神袿姬", "year": 2019, "work": "东方鬼形兽", "hair": "蓝色", "enemy": "是 六面", "self": "否", "race": "神明"}, {"name": "吉吊八千慧", "year": 2019, "work": "东方鬼形兽", "hair": "金色", "enemy": "是 四面", "self": "是", "race": "妖怪"}, {"name": "戎璎花", "year": 2019, "work": "东方鬼形兽", "hair": "白色/粉色", "enemy": "是 一面", "self": "否", "race": "水子之灵"}, {"name": "牛崎润美", "year": 2019, "work": "东方鬼形兽", "hair": "黑色/白色", "enemy": "是 二面", "self": "否", "race": "妖怪/牛鬼"}, {"name": "骊驹早鬼", "year": 2019, "work": "东方鬼形兽", "hair": "黑色", "enemy": "是 EX/PH面", "self": "是", "race": "妖怪"}, {"name": "杖刀偶磨弓", "year": 2019, "work": "东方鬼形兽", "hair": "金色", "enemy": "是 五面", "self": "否", "race": "埴轮"}, {"name": "驹草山如", "year": 2021, "work": "东方虹龙洞", "hair": "紫色", "enemy": "是 三面", "self": "否", "race": "妖怪/山女郎"}, {"name": "菅牧典", "year": 2021, "work": "东方虹龙洞", "hair": "金色", "enemy": "是 五面/六面/EX/PH面", "self": "是", "race": "妖怪/管狐"}, {"name": "姬虫百百世", "year": 2021, "work": "东方虹龙洞", "hair": "灰色", "enemy": "是 EX/PH面", "self": "否", "race": "妖怪/大蜈蚣"}, {"name": "饭纲丸龙", "year": 2021, "work": "东方虹龙洞", "hair": "蓝色/黑色", "enemy": "是 五面", "self": "否", "race": "天狗/大天狗"}, {"name": "山城高岭", "year": 2021, "work": "东方虹龙洞", "hair": "绿色", "enemy": "是 二面", "self": "否", "race": "山童"}, {"name": "玉造魅须丸", "year": 2021, "work": "东方虹龙洞", "hair": "金色", "enemy": "是 四面", "self": "否", "race": "神明"}, {"name": "天弓千亦", "year": 2021, "work": "东方虹龙洞", "hair": "紫色", "enemy": "是 六面", "self": "否", "race": "神明"}, {"name": "豪德寺三花", "year": 2021, "work": "东方虹龙洞", "hair": "白色/橙色/棕色", "enemy": "是 一面", "self": "否", "race": "妖怪/招财猫"}, {"name": "孙美天", "year": 2023, "work": "东方兽王园", "hair": "棕色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "豫母都日狭美", "year": 2023, "work": "东方兽王园", "hair": "紫色", "enemy": "不是", "self": "是", "race": "妖怪/黄泉丑女"}, {"name": "天火人血枪", "year": 2023, "work": "东方兽王园", "hair": "紫色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "三头慧之子", "year": 2023, "work": "东方兽王园", "hair": "紫色/白色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "日白残无", "year": 2023, "work": "东方兽王园", "hair": "黑色", "enemy": "不是", "self": "是", "race": "鬼/人鬼"}, {"name": "斯塔萨菲雅", "year": 2005, "work": "东方三月精", "hair": "黑色", "enemy": "不是", "self": "否", "race": "妖精"}, {"name": "露娜切露德", "year": 2005, "work": "东方三月精", "hair": "金色", "enemy": "不是", "self": "否", "race": "妖精"}, {"name": "桑尼米尔克", "year": 2005, "work": "东方三月精", "hair": "橙色", "enemy": "不是", "self": "否", "race": "妖精"}, {"name": "绵月丰姬", "year": 2007, "work": "东方儚月抄", "hair": "金色", "enemy": "是 五面", "self": "否", "race": "月人"}, {"name": "绵月依姬", "year": 2007, "work": "东方儚月抄", "hair": "紫色", "enemy": "不是", "self": "否", "race": "月人"}, {"name": "Reisen", "year": 2007, "work": "东方儚月抄", "hair": "蓝色", "enemy": "不是", "self": "否", "race": "月兔"}, {"name": "茨木华扇", "year": 2011, "work": "东方茨歌仙", "hair": "粉色", "enemy": "不是", "self": "是", "race": "鬼/仙人"}, {"name": "本居小铃", "year": 2012, "work": "东方铃奈庵", "hair": "金色", "enemy": "不是", "self": "否", "race": "人类"}, {"name": "奥野田美宵", "year": 2019, "work": "东方醉蝶华", "hair": "粉色", "enemy": "不是", "self": "否", "race": "座敷童子"}, {"name": "宫出口瑞灵", "year": 2019, "work": "东方智灵奇传", "hair": "蓝色", "enemy": "不是", "self": "否", "race": "怨灵"}, {"name": "稗田阿求", "year": 2006, "work": "东方求闻史纪", "hair": "紫色", "enemy": "不是", "self": "否", "race": "人类"}, {"name": "伊吹萃香", "year": 2004, "work": "东方萃梦想", "hair": "棕色", "enemy": "不是", "self": "是", "race": "鬼"}, {"name": "永江衣玖", "year": 2008, "work": "东方绯想天", "hair": "紫色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "比那名居天子", "year": 2008, "work": "东方绯想天", "hair": "蓝色", "enemy": "不是", "self": "是", "race": "天人"}, {"name": "秦心", "year": 2013, "work": "东方心绮楼", "hair": "粉色", "enemy": "不是", "self": "是", "race": "面气灵"}, {"name": "宇佐见堇子", "year": 2015, "work": "东方深秘录", "hair": "棕色", "enemy": "不是", "self": "是", "race": "人类"}, {"name": "依神紫苑", "year": 2017, "work": "东方凭依华", "hair": "蓝色", "enemy": "不是", "self": "是", "race": "疾病神"}, {"name": "依神女苑", "year": 2017, "work": "东方凭依华", "hair": "棕色", "enemy": "不是", "self": "是", "race": "疾病神"}, {"name": "饕餮尤魔", "year": 2021, "work": "东方刚欲异闻", "hair": "白色", "enemy": "不是", "self": "是", "race": "妖怪"}, {"name": "玛艾露贝莉·赫恩", "year": 2003, "work": "莲台野夜行", "hair": "金色", "enemy": "不是", "self": "否", "race": "人类"}, {"name": "宇佐见莲子", "year": 2003, "work": "莲台野夜行", "hair": "棕色", "enemy": "不是", "self": "否", "race": "人类"}, {"name": "无名的读书妖怪", "year": 2004, "work": "东方香霖堂", "hair": "紫色/白色", "enemy": "不是", "self": "否", "race": "妖怪"}, {"name": "森近霖之助", "year": 2004, "work": "东方香霖堂", "hair": "白色", "enemy": "不是", "self": "否", "race": "人类"}, {"name": "射命丸文", "year": 2005, "work": "东方文花帖", "hair": "黑色", "enemy": "是 四面", "self": "是", "race": "天狗/鸦天狗"}, {"name": "姬海棠果", "year": 2010, "work": "东方文花帖DS", "hair": "棕色", "enemy": "不是", "self": "是", "race": "天狗/鸦天狗"}];
+
+/* ---------- 工具 ---------- */
+const $ = id => document.getElementById(id);
+const faceVal = {一面:1,二面:2,三面:3,四面:4,五面:5,六面:6};
+function parseFaces(s){
+  if(!s || s.indexOf('是')!==0) return [];
+  return s.replace('是','').split('/').map(t=>t.trim()).filter(Boolean);
+}
+function fnum(t){ return faceVal[t]!==undefined ? faceVal[t] : (t==='EX/PH面' ? 'EX' : null); }
+function zhChars(s){ return Array.from(new Set((s||'').match(/[\u4e00-\u9fff]/g)||[])); }
+function hairTokens(s){ return (s||'').split('/').map(x=>x.trim()).filter(Boolean); }
+// 先去掉末尾的「色」字，避免两个不相干的颜色只因为都带「色」就算重合
+function hairKeys(s){
+  return hairTokens(s).map(function(t){
+    let k=t;
+    if(k.length>1 && k.charAt(k.length-1)==='色') k=k.slice(0,-1);
+    return k;
+  }).filter(function(k){ return k && k!=='色'; });
+}
+function overlap(a,b){ return a.some(function(x){ return b.some(function(y){ return y.indexOf(x)>-1 || x.indexOf(y)>-1; }); }); }
+
+/* ---------- 单元格判定 ---------- */
+// cls: ok=正确(绿) / near=接近(黄) / no=不符(白)
+function cell(cls,text){ return {cls,text}; }
+function yearCell(gy,sy){
+  if(gy===sy) return cell('ok',''+gy);
+  return cell('no', ''+gy+' '+(gy<sy?'↑':'↓'));   // 猜得比答案早→↑(考虑更晚)；比答案晚→↓(考虑更早)
+}
+function workCell(g,s){ return cell(g===s?'ok':'no', g); }
+function hairCell(g,s){
+  const gs=hairTokens(g), ss=hairTokens(s);
+  if(gs.length===ss.length && gs.every(x=>ss.includes(x))) return cell('ok', g);
+  // 颜色关键字匹配：去掉「色」字后，猜的发色里有任意一种与答案重合 → 整格标黄（表示接近）
+  return cell(overlap(hairKeys(g), hairKeys(s))?'near':'no', g);
+}
+function enemyCell(g,s){
+  const gf=parseFaces(g), sf=parseFaces(s);
+  const gIs=gf.length>0, sIs=sf.length>0;
+  if(!gIs && !sIs) return cell('ok','不是');
+  if(gIs && sIs){
+    const eq = gf.length===sf.length && gf.every(t=>sf.includes(t));
+    if(eq) return cell('ok', g);
+    // 只要任意一面与答案面数相同或相差 ±1 → 整格填黄（不标注具体面数，避免泄露答案）
+    const anyMatch = gf.some(t=>{
+      if(sf.includes(t)) return true;
+      const n=fnum(t);
+      if(typeof n==='number') return sf.some(st=>{const m=fnum(st); return typeof m==='number' && Math.abs(m-n)<=1;});
+      return false;
+    });
+    return cell(anyMatch?'near':'no', g);
+  }
+  return cell('no', g||'不是');
+}
+function selfCell(g,s){ return cell(g===s?'ok':'no', g||'否'); }
+function raceCell(g,s){
+  if(g===s) return cell('ok',g);
+  const gc=zhChars(g), sc=zhChars(s);
+  return cell(gc.some(c=>sc.includes(c))?'near':'no', g);
+}
+
+/* ---------- 行构建 ---------- */
+function buildRow(gc, sc){
+  return {
+    name: cell(gc.name===sc.name?'ok':'no', gc.name),
+    year: yearCell(gc.year, sc.year),
+    work: workCell(gc.work, sc.work),
+    hair: hairCell(gc.hair, sc.hair),
+    enemy: enemyCell(gc.enemy, sc.enemy),
+    self: selfCell(gc.self, sc.self),
+    race: raceCell(gc.race, sc.race),
+    correct: gc.name===sc.name
+  };
+}
+
+/* ---------- 渲染 ---------- */
+function td(text,cls){ const e=document.createElement('td'); e.className='cell-'+cls; e.textContent=text; return e; }
+function renderRow(row){
+  const tb=$('tableBody');
+  const tr=document.createElement('tr');
+  if(row.correct) tr.className='correct-row';
+  tr.appendChild(td(row.name.text, row.name.cls));
+  tr.appendChild(td(row.year.text, row.year.cls));
+  tr.appendChild(td(row.work.text, row.work.cls));
+  tr.appendChild(td(row.hair.text, row.hair.cls));
+  // 敌人面数列：整格按判定填色，不标注具体面数
+  tr.appendChild(td(row.enemy.text, row.enemy.cls));
+  tr.appendChild(td(row.self.text, row.self.cls));
+  tr.appendChild(td(row.race.text, row.race.cls));
+  tb.appendChild(tr);
+  // 手机端用卡片呈现同样的七项对照
+  const mr=$('mobileRows');
+  const item=document.createElement('div');
+  item.className='m-item'+(row.correct?' correct':'');
+  const fields=[['角色名',row.name,true],['年份',row.year,false],['作品',row.work,false],
+                ['发色',row.hair,false],['敌人',row.enemy,false],['自机',row.self,false],['种族',row.race,false]];
+  item.innerHTML=fields.map(function(f){
+    return '<div class="m-cell cell-'+f[1].cls+(f[2]?' wide':'')+'">'+
+      '<span class="m-k">'+f[0]+'</span><span class="m-v">'+f[1].text+'</span></div>';
+  }).join('');
+  mr.appendChild(item);
+}
+
+/* ---------- 游戏状态 ---------- */
+const state = { secret:null, guesses:[] };
+
+function setMsg(type, html){ $('msg').innerHTML='<div class="msg '+type+'">'+html+'</div>'; }
+
+function startGame(){
+  state.secret = CHARACTERS[Math.floor(Math.random()*CHARACTERS.length)];
+  state.guesses = [];
+  $('tableBody').innerHTML='';
+  if($('mobileRows')) $('mobileRows').innerHTML='';
+  $('guessCount').textContent='';
+  $('answerBox').innerHTML='';
+  $('guessInput').value='';
+  $('guessInput').disabled=false;
+  $('guessBtn').disabled=false;
+  $('revealBtn').disabled=false;
+  $('startBtn').disabled=true;
+  setMsg('info','我选好了，请用户来猜！');
+  $('emptyHint').style.display='block';
+  $('tableWrap').classList.add('is-empty');
+  $('guessInput').focus();
+}
+
+function submitGuess(){
+  if(!state.secret){ setMsg('warn','请先点击「开始猜」'); return; }
+  const name=$('guessInput').value.trim();
+  if(!name){ setMsg('warn','请输入或选择一个角色名'); return; }
+  const ch=CHARACTERS.find(c=>c.name===name);
+  if(!ch){ setMsg('warn','角色表中没有「'+name+'」，请从下拉列表选择'); return; }
+  const row=buildRow(ch, state.secret);
+  state.guesses.push(row);
+  renderRow(row);
+  $('emptyHint').style.display='none';
+  $('tableWrap').classList.remove('is-empty');
+  $('guessCount').textContent='已猜 '+state.guesses.length+' 次';
+  if(row.correct){
+    setMsg('ok','猜对了，就是'+ch.name+'！');
+    $('emptyHint').style.display='none';
+    $('guessInput').value='';
+    $('guessInput').disabled=true; $('guessBtn').disabled=true; $('revealBtn').disabled=true; $('startBtn').disabled=false;
+  } else {
+    setMsg('bad','猜错了，再试试');
+    $('guessInput').value=''; $('guessInput').focus();
+  }
+}
+
+/* ---------- 公布答案 ---------- */
+function revealAnswer(){
+  if(!state.secret){ setMsg('warn','请先点击「开始猜」'); return; }
+  const s=state.secret;
+  $('answerBox').innerHTML = buildAnswerInfo(s);
+  $('emptyHint').style.display='none';
+  $('tableWrap').classList.add('is-empty');
+  setMsg('info','公布正确答案：'+s.name);
+  // 按猜对流程结束：表格消失，可重新开始猜
+  $('tableBody').innerHTML='';
+  if($('mobileRows')) $('mobileRows').innerHTML='';
+  $('guessCount').textContent='';
+  $('guessInput').value='';
+  $('guessInput').disabled=true; $('guessBtn').disabled=true; $('revealBtn').disabled=true;
+  $('startBtn').disabled=false;
+}
+function buildAnswerInfo(s){
+  const row=(k,v)=>'<div class="a-row"><span class="a-k">'+k+'</span><span class="a-v">'+v+'</span></div>';
+  return '<div class="answer-info">'+
+    '<div class="answer-name">'+s.name+'</div>'+
+    '<div class="answer-grid">'+
+      row('初登场年份', s.year)+
+      row('初登场作品', s.work)+
+      row('发色', s.hair)+
+      row('是敌人吗', s.enemy)+
+      row('是自机吗', s.self)+
+      row('种族', s.race)+
+    '</div></div>';
+}
+
+/* ---------- 初始化 ---------- */
+function init(){
+  const dl=$('charList');
+  CHARACTERS.forEach(c=>{ const o=document.createElement('option'); o.value=c.name; dl.appendChild(o); });
+  $('guessInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitGuess(); });
+  $('startBtn').addEventListener('click', startGame);
+  $('guessBtn').addEventListener('click', submitGuess);
+  $('revealBtn').addEventListener('click', revealAnswer);
+}
+document.addEventListener('DOMContentLoaded', init);
+//（注：内容由AI生成）
+
+</script>
+</body>
+</html>

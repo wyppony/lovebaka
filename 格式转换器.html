@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>爱⑨之家 · 格式转换器</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC",sans-serif}
+[hidden]{display:none!important}
+html,body{background-color:#add8e6;background-attachment:fixed}
+body{color:#333;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ===== 顶栏 ===== */
+.top-bar{
+  position:sticky;top:0;z-index:99;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(8px);
+  border-bottom:2px solid #61a5ff;
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+.top-container{
+  width:90%;max-width:1200px;margin:0 auto;padding:11px 0;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand-logo{width:46px;height:auto;flex:0 0 46px}
+.brand-name{
+  font-size:23px;font-weight:bold;color:#2d5aff;line-height:1.2;
+  text-shadow:1px 1px 3px rgba(0,0,0,.1);white-space:nowrap;
+}
+.brand-sub{font-size:11px;color:#61a5ff;letter-spacing:.14em;white-space:nowrap}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 11px;border-radius:20px;
+  background:#f5f9ff;border:1px solid #e0efff;
+  color:#5b7fa8;font-size:12px;white-space:nowrap;
+}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:#61a5ff;flex:0 0 7px}
+.chip[data-tone="busy"] .dot{background:#ffb020;animation:pulse 1.1s infinite}
+.chip[data-tone="ok"] .dot{background:#2fc48d}
+.chip[data-tone="ok"]{color:#1d9c72;border-color:#c8efe2;background:#f2fdf9}
+.chip[data-tone="bad"]{cursor:pointer;color:#c94a3b;border-color:#ffd2cb;background:#fff5f3}
+.chip[data-tone="bad"] .dot{background:#ff7a6b}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+.home-btn{
+  display:inline-block;padding:8px 16px;border-radius:8px;
+  background:#fff;border:2px solid #61a5ff;color:#2d5aff;
+  font-size:14px;font-weight:bold;text-decoration:none;
+  transition:background-color .3s,color .3s;white-space:nowrap;
+}
+.home-btn:hover{background:#61a5ff;color:#fff}
+
+/* ===== 首屏 ===== */
+.hero{width:90%;max-width:1200px;margin:34px auto 0;text-align:center}
+.hero h1{
+  font-size:30px;font-weight:bold;color:#2d5aff;letter-spacing:.02em;
+  text-shadow:1px 1px 3px rgba(0,0,0,.1);
+}
+.hero p{margin:10px auto 0;max-width:64ch;color:#25415a;font-size:14px}
+.notes{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}
+.note{
+  background:rgba(255,255,255,.9);border:1px solid #cfe4ff;border-radius:20px;
+  padding:4px 12px;font-size:12px;color:#2d5aff;
+}
+
+/* ===== 工位 ===== */
+.stations{
+  width:90%;max-width:1200px;margin:24px auto 0;
+  display:grid;grid-template-columns:1fr;gap:25px;
+}
+@media (min-width:900px){.stations{grid-template-columns:1fr 1fr}}
+.station{
+  background:rgba(255,255,255,.95);border-radius:12px;padding:20px;
+  box-shadow:0 3px 15px rgba(0,0,0,.1);
+  display:flex;flex-direction:column;gap:11px;
+}
+.station-head{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.station-head h2{font-size:19px;font-weight:bold;color:#2d5aff;line-height:1.35}
+.tag{
+  margin-left:auto;flex:0 0 auto;
+  font-size:11px;color:#7a90a8;background:#f5f9ff;border:1px solid #e0efff;
+  border-radius:20px;padding:3px 9px;white-space:nowrap;
+}
+.flow{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:12px;letter-spacing:.06em;color:#61a5ff;
+  padding-bottom:10px;border-bottom:1px solid #e0efff;
+}
+.flow .to{color:#2d5aff;font-weight:bold}
+.flow .ar{width:24px;height:8px;flex:0 0 24px;color:#9cc6ff}
+.desc{font-size:13.5px;color:#666;line-height:1.65}
+
+/* 拖放区 */
+.drop{
+  display:block;position:relative;cursor:pointer;
+  border:2px dashed #9cc6ff;border-radius:8px;background:#f5f9ff;
+  padding:18px 12px;text-align:center;min-height:108px;
+  transition:background-color .3s,border-color .3s;
+}
+.drop:hover{background:#e9f3ff;border-color:#61a5ff}
+.drop.over{border-color:#2d5aff;background:#e0efff}
+.drop .ic{width:26px;height:26px;color:#61a5ff;margin:0 auto 5px;display:block}
+.drop strong{display:block;font-size:14px;font-weight:bold;color:#2d5aff}
+.drop span{display:block;margin-top:3px;font-size:12px;color:#7a90a8}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:0;top:0}
+
+/* 选项 */
+.opts{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12px;color:#666}
+.field select,.field input{
+  font-family:inherit;font-size:14px;color:#333;background:#fff;
+  border:1px solid #e0efff;border-radius:8px;padding:9px 10px;
+  min-width:96px;min-height:40px;outline:none;
+  transition:border-color .3s,box-shadow .3s;
+}
+.field input{width:78px;min-width:78px}
+.field select:focus,.field input:focus{border-color:#61a5ff;box-shadow:0 0 0 3px rgba(97,165,255,.2)}
+.run{
+  margin-left:auto;padding:11px 20px;min-height:42px;
+  background:#61a5ff;color:#fff;border:none;border-radius:8px;
+  font-family:inherit;font-size:15px;font-weight:bold;cursor:pointer;
+  transition:background-color .3s;
+}
+.run:hover:not(:disabled){background:#2d5aff}
+.run:disabled{background:#dfe9f7;color:#95abd0;cursor:not-allowed}
+
+/* 队列 */
+.qhead{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;color:#7a90a8;
+}
+.qhead button{
+  margin-left:auto;background:none;border:none;color:#61a5ff;
+  font-family:inherit;font-size:12px;cursor:pointer;padding:4px 2px;
+}
+.qhead button:hover{color:#2d5aff;text-decoration:underline}
+.queue{list-style:none}
+.queue .empty{
+  padding:14px 0;border-top:1px dashed #e0efff;
+  font-size:12px;color:#9aadc2;
+}
+.queue .row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px dashed #e0efff}
+.thumb{
+  width:40px;height:40px;flex:0 0 40px;border-radius:6px;
+  border:1px solid #e0efff;background:#f7fbff center/contain no-repeat;
+  display:grid;place-items:center;font-size:11px;color:#a7b9cc;overflow:hidden;
+}
+.row .body{flex:1 1 auto;min-width:0}
+.row .name{font-size:14px;font-weight:bold;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .sub{margin-top:3px;display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:#7a90a8}
+.row .sub .bad{color:#c94a3b}
+.bar{position:relative;margin-top:8px;height:8px;border-radius:4px;background:#e0efff;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:#61a5ff;transition:width .16s linear}
+.row .act{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.dl{
+  display:inline-block;padding:6px 12px;border-radius:6px;
+  border:1px solid #61a5ff;color:#2d5aff;background:#fff;
+  font-size:12px;text-decoration:none;transition:.3s;
+}
+.dl:hover{background:#61a5ff;color:#fff}
+.err-tag{font-size:12px;color:#c94a3b}
+
+/* ===== 页脚 ===== */
+.foot-wrap{width:90%;max-width:1200px;margin:28px auto 0}
+.foot-note{
+  background:rgba(255,255,255,.9);border-radius:12px;padding:16px 20px;
+  font-size:12.5px;color:#5b6b7c;line-height:1.9;
+  box-shadow:0 3px 15px rgba(0,0,0,.1);
+}
+.foot-note b{color:#2d5aff}
+.copyright{
+  margin-top:44px;background-color:#D0D0D0;color:#fff;
+  text-align:center;padding:20px 16px;font-size:14px;line-height:1.8;
+}
+.copyright a{color:#fff;text-decoration:underline}
+
+@media (max-width:520px){
+  .hero h1{font-size:24px}
+  .brand-name{font-size:18px}
+  .brand-sub{display:none}
+  .run{width:100%;margin-left:0;margin-top:2px}
+  .top-right{margin-left:0;width:100%;justify-content:space-between}
+  .tag{margin-left:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-container">
+    <a class="brand" href="https://wyppony.github.io/lovebaka/">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="爱⑨之家">
+      <div>
+        <div class="brand-name">爱⑨之家格式转换器</div>
+        <div class="brand-sub">AOSORA CONVERTER</div>
+      </div>
+    </a>
+    <div class="top-right">
+      <span class="chip" id="chip" data-tone=""><i class="dot"></i><span id="chip-text">引擎未加载</span></span>
+      <a class="home-btn" href="https://wyppony.github.io/lovebaka/">返回主页</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>格式转换器</h1>
+  <p>四种常用互转集中在这四个工位。所有处理都在你的浏览器内完成，文件不会离开这台电脑；音视频由运行在浏览器里的 FFmpeg 引擎处理，首次使用需联网下载约 32MB 核心，之后由浏览器缓存，不再重复下载。</p>
+  <div class="notes">
+    <span class="note">本机处理，不上传</span>
+    <span class="note">单文件 ≤ 200 MB</span>
+    <span class="note">无需登录</span>
+    <span class="note">建议 Chrome / Edge</span>
+  </div>
+</section>
+
+<main class="stations">
+
+  <article class="station" id="st-img">
+    <div class="station-head">
+      <h2>图片格式转换</h2>
+      <span class="tag">无需引擎</span>
+    </div>
+    <div class="flow">
+      <span>WEBP / AVIF</span>
+      <svg class="ar" viewBox="0 0 26 8" aria-hidden="true" fill="none" stroke="currentColor"><path d="M0 4h20" stroke-width="1"/><path d="M16 1l4 3-4 3" stroke-width="1"/></svg>
+      <span class="to">PNG / ICO</span>
+    </div>
+    <p class="desc">PNG 保留透明通道、无损存储；ICO 自动生成 16 / 32 / 48 / 64 / 128 / 256 px 六个尺寸，可直接做网站图标。</p>
+    <label class="drop" data-role="drop">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 17V4"/><path d="M12 4l-4.5 4.5"/><path d="M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <strong>把图片拖到这里</strong>
+      <span>或点击选择 · 支持多选</span>
+      <input type="file" data-role="input" multiple accept=".webp,.avif,image/webp,image/avif,image/png,image/jpeg,image/bmp,image/gif">
+    </label>
+    <div class="opts">
+      <label class="field">输出格式
+        <select id="img-target">
+          <option value="png">PNG</option>
+          <option value="ico">ICO</option>
+        </select>
+      </label>
+      <button type="button" class="run" data-role="run" disabled>开始转换</button>
+    </div>
+    <div class="qhead" data-role="qhead" hidden><span data-role="count">队列 0</span><button type="button" data-role="clear">清空</button></div>
+    <ul class="queue" data-role="queue"><li class="empty">队列为空 — 先选几张图</li></ul>
+  </article>
+
+  <article class="station" id="st-audio">
+    <div class="station-head">
+      <h2>音频转 MP3</h2>
+      <span class="tag">首次需下载引擎</span>
+    </div>
+    <div class="flow">
+      <span>FLAC / WMA / OGG</span>
+      <svg class="ar" viewBox="0 0 26 8" aria-hidden="true" fill="none" stroke="currentColor"><path d="M0 4h20" stroke-width="1"/><path d="M16 1l4 3-4 3" stroke-width="1"/></svg>
+      <span class="to">MP3</span>
+    </div>
+    <p class="desc">无损与老式封装统一压成通用 MP3，手机、车机、老播放器都能直接播。</p>
+    <label class="drop" data-role="drop">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 17V4"/><path d="M12 4l-4.5 4.5"/><path d="M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <strong>把音频拖到这里</strong>
+      <span>FLAC · WMA · OGG · 支持多选</span>
+      <input type="file" data-role="input" multiple accept=".flac,.wma,.ogg,.oga,audio/flac,audio/x-ms-wma,audio/ogg">
+    </label>
+    <div class="opts">
+      <label class="field">码率
+        <select id="audio-bitrate">
+          <option value="128k">128 kbps</option>
+          <option value="192k" selected>192 kbps</option>
+          <option value="320k">320 kbps</option>
+        </select>
+      </label>
+      <button type="button" class="run" data-role="run" disabled>开始转换</button>
+    </div>
+    <div class="qhead" data-role="qhead" hidden><span data-role="count">队列 0</span><button type="button" data-role="clear">清空</button></div>
+    <ul class="queue" data-role="queue"><li class="empty">队列为空 — 先选几个音频</li></ul>
+  </article>
+
+  <article class="station" id="st-video">
+    <div class="station-head">
+      <h2>视频互转</h2>
+      <span class="tag">首次需下载引擎</span>
+    </div>
+    <div class="flow">
+      <span>AVI → MP4</span>
+      <svg class="ar" viewBox="0 0 26 8" aria-hidden="true" fill="none" stroke="currentColor"><path d="M0 4h20" stroke-width="1"/><path d="M16 1l4 3-4 3" stroke-width="1"/></svg>
+      <span class="to">MP4 → GIF</span>
+    </div>
+    <p class="desc" data-role="hint">把 AVI 等旧封装重新编码为 H.264 + AAC 的 MP4，主流播放器与社交平台都能直接打开。</p>
+    <label class="drop" data-role="drop">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 17V4"/><path d="M12 4l-4.5 4.5"/><path d="M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <strong>把视频拖到这里</strong>
+      <span>AVI · MP4 · MOV · FLV（≤ 200 MB）</span>
+      <input type="file" data-role="input" multiple accept=".avi,.mp4,.mov,.flv,.mkv,.m4v,video/*">
+    </label>
+    <div class="opts">
+      <label class="field">目标格式
+        <select id="video-target">
+          <option value="mp4">MP4</option>
+          <option value="gif">GIF</option>
+        </select>
+      </label>
+      <div class="opts" id="gif-opts" hidden style="margin:0;gap:12px;flex:1 1 auto">
+        <label class="field">帧率
+          <select id="gif-fps">
+            <option value="8">8 fps</option>
+            <option value="12" selected>12 fps</option>
+            <option value="16">16 fps</option>
+            <option value="20">20 fps</option>
+          </select>
+        </label>
+        <label class="field">宽度
+          <select id="gif-width">
+            <option value="320">320 px</option>
+            <option value="480" selected>480 px</option>
+            <option value="640">640 px</option>
+          </select>
+        </label>
+        <label class="field">截取
+          <input type="number" id="gif-dur" value="10" min="1" max="60" step="1">
+        </label>
+      </div>
+      <button type="button" class="run" data-role="run" disabled>开始转换</button>
+    </div>
+    <div class="qhead" data-role="qhead" hidden><span data-role="count">队列 0</span><button type="button" data-role="clear">清空</button></div>
+    <ul class="queue" data-role="queue"><li class="empty">队列为空 — 先选一个视频</li></ul>
+  </article>
+
+  <article class="station" id="st-split">
+    <div class="station-head">
+      <h2>音视频分离</h2>
+      <span class="tag">首次需下载引擎</span>
+    </div>
+    <div class="flow">
+      <span>MP4</span>
+      <svg class="ar" viewBox="0 0 26 8" aria-hidden="true" fill="none" stroke="currentColor"><path d="M0 4h20" stroke-width="1"/><path d="M16 1l4 3-4 3" stroke-width="1"/></svg>
+      <span class="to">MP3（仅音轨）</span>
+    </div>
+    <p class="desc">只抽取原 MP4 里的第一轨音频，画面丢弃、不解码视频，所以速度只跟时长有关。</p>
+    <label class="drop" data-role="drop">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 17V4"/><path d="M12 4l-4.5 4.5"/><path d="M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <strong>把视频拖到这里</strong>
+      <span>MP4 · MOV · MKV（≤ 200 MB）</span>
+      <input type="file" data-role="input" multiple accept=".mp4,.mov,.m4v,.mkv,.avi,video/*">
+    </label>
+    <div class="opts">
+      <label class="field">码率
+        <select id="split-bitrate">
+          <option value="128k">128 kbps</option>
+          <option value="192k" selected>192 kbps</option>
+          <option value="320k">320 kbps</option>
+        </select>
+      </label>
+      <button type="button" class="run" data-role="run" disabled>开始转换</button>
+    </div>
+    <div class="qhead" data-role="qhead" hidden><span data-role="count">队列 0</span><button type="button" data-role="clear">清空</button></div>
+    <ul class="queue" data-role="queue"><li class="empty">队列为空 — 先选一个视频</li></ul>
+  </article>
+
+</main>
+
+<div class="foot-wrap">
+  <p class="foot-note"><b>引擎</b>：FFmpeg.wasm 核心在本地 Worker 中运行，页面不需要任何服务器。首次点击音视频转换会从 CDN 下载约 32MB 核心，浏览器会缓存（状态显示在右上角，失败可点击重试）。<b>限制</b>：单文件不超过 200 MB；转 GIF 只截取设定秒数；超大文件转换较慢，请让页面保持在前台。<b>说明</b>：音视频分离只读取原文件的第一条音频轨，不重新编码视频。</p>
+</div>
+
+<footer class="copyright">
+  爱⑨之家 · 格式转换器　|　所有转换都在本地浏览器完成，文件不会上传<br>
+  <a href="https://wyppony.github.io/lovebaka/">返回爱⑨之家主页</a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================
+     0. 基础工具
+     ===================================================== */
+  var MAX_BYTES = 200 * 1024 * 1024;
+  var $ = function(s){ return document.querySelector(s); };
+
+  function fileExt(name){
+    var m = /\.([a-z0-9]+)$/i.exec(name || "");
+    return m ? m[1].toLowerCase() : "";
+  }
+  function stripExt(name){
+    return (name || "file").replace(/\.([a-z0-9]+)$/i, "");
+  }
+  function humanSize(n){
+    if (!n && n !== 0) return "—";
+    if (n < 1024) return n + " B";
+    if (n < 1048576) return (n / 1024).toFixed(1) + " KB";
+    if (n < 1073741824) return (n / 1048576).toFixed(1) + " MB";
+    return (n / 1073741824).toFixed(2) + " GB";
+  }
+  function canvasToBlob(canvas, type, quality){
+    return new Promise(function(res, rej){
+      canvas.toBlob(function(b){
+        if (b) res(b); else rej(new Error("浏览器无法输出 " + type));
+      }, type, quality);
+    });
+  }
+  function decodeImage(file){
+    if (typeof createImageBitmap === "function"){
+      return createImageBitmap(file).catch(function(){ return decodeByImageElement(file); });
+    }
+    return decodeByImageElement(file);
+  }
+  function decodeByImageElement(file){
+    var url = URL.createObjectURL(file);
+    return new Promise(function(res, rej){
+      var img = new Image();
+      img.onload = function(){ res(img); };
+      img.onerror = function(){ rej(new Error("当前浏览器无法解码这张图（AVIF 需要新版浏览器）")); };
+      img.src = url;
+    });
+  }
+
+  /* =====================================================
+     1. 工作线程：直接驱动 ffmpeg 核心
+     （该函数会被 toString 后放进 Worker，不能引用外部变量）
+     ===================================================== */
+  function workerMain(){
+    var core = null;
+    var booting = false;
+
+    function send(msg, transfer){
+      self.postMessage(msg, transfer || []);
+    }
+    function logLine(m){
+      send({ t: "log", m: String(m).slice(0, 400) });
+    }
+
+    function boot(opts){
+      if (booting) return;
+      booting = true;
+      Promise.resolve(self.createFFmpegCore({
+        wasmBinary: opts.wasm,
+        mainScriptUrlOrBlob: opts.mainUrl || "",
+        locateFile: function(p){ return opts.wasmUrl || p; },
+        print: logLine,
+        printErr: logLine
+      })).then(function(inst){
+        core = inst;
+        core.setLogger(function(d){ if (d && d.message) logLine(d.message); });
+        core.setProgress(function(d){
+          if (d && typeof d.progress === "number") send({ t: "prog", p: d.progress });
+        });
+        send({ t: "ready" });
+      }).catch(function(err){
+        send({ t: "boot-error", m: String((err && err.message) || err) });
+      });
+    }
+
+    self.onmessage = function(ev){
+      var m = ev.data;
+      if (!m || !m.cmd) return;
+      if (m.cmd === "init"){ boot(m); return; }
+      if (!core){ send({ t: "err", id: m.id, m: "引擎尚未就绪" }); return; }
+      try {
+        if (m.cmd === "write"){
+          core.FS.writeFile(m.path, new Uint8Array(m.data));
+          send({ t: "ok", id: m.id });
+        } else if (m.cmd === "unlink"){
+          try { core.FS.unlink(m.path); } catch(e){}
+          send({ t: "ok", id: m.id });
+        } else if (m.cmd === "read"){
+          var out = core.FS.readFile(m.path);
+          var bytes = (out instanceof Uint8Array) ? out : new Uint8Array(out);
+          send({ t: "data", id: m.id, data: bytes.buffer }, [bytes.buffer]);
+        } else if (m.cmd === "exec"){
+          core.setTimeout(-1);
+          core.exec.apply(core, m.args);
+          var ret = core.ret;
+          core.reset();
+          send({ t: "exec", id: m.id, ret: ret });
+        } else {
+          send({ t: "err", id: m.id, m: "未知指令" });
+        }
+      } catch (err) {
+        send({ t: "err", id: m.id, m: String((err && err.message) || err) });
+      }
+    };
+  }
+
+  /* =====================================================
+     2. 引擎管理（下载、启动、消息收发）
+     ===================================================== */
+  var CORE_PATH = "@ffmpeg/core@0.12.6/dist/esm/";
+  var CDN_BASES = [
+    "https://fastly.jsdelivr.net/npm/" + CORE_PATH,
+    "https://cdn.jsdelivr.net/npm/" + CORE_PATH,
+    "https://unpkg.com/" + CORE_PATH
+  ];
+
+  var chip = $("#chip");
+  var chipText = $("#chip-text");
+
+  var ENG = {
+    worker: null, ready: false, promise: null,
+    seq: 0, waiters: Object.create(null),
+    progress: null, logs: [], wasmUrl: "", coreSource: ""
+  };
+
+  function setChip(text, tone){
+    chipText.textContent = text;
+    if (tone) chip.setAttribute("data-tone", tone);
+    else chip.removeAttribute("data-tone");
+  }
+  function engLog(m){
+    ENG.logs.push(String(m));
+    if (ENG.logs.length > 80) ENG.logs.shift();
+  }
+
+  function attachWorker(w){
+    w.onmessage = function(ev){
+      var d = ev.data || {};
+      if (d.t === "log"){ engLog(d.m); return; }
+      if (d.t === "prog"){ if (ENG.progress) ENG.progress(d.p); return; }
+      var key = (d.id !== undefined) ? d.id : d.t;
+      var waiter = ENG.waiters[key];
+      if (waiter){ delete ENG.waiters[key]; waiter(d); }
+    };
+    w.onerror = function(e){
+      var msg = "引擎运行出错：" + ((e && e.message) || "未知错误");
+      ENG.ready = false;
+      ENG.worker = null;
+      ENG.promise = null;
+      setChip("引擎不可用", "bad");
+      Object.keys(ENG.waiters).forEach(function(k){
+        var waiter = ENG.waiters[k];
+        delete ENG.waiters[k];
+        waiter({ t: "err", m: msg });
+      });
+    };
+  }
+
+  function send(cmd, payload, transfer){
+    return new Promise(function(resolve, reject){
+      if (!ENG.worker){ reject(new Error("引擎未初始化")); return; }
+      var id = ++ENG.seq;
+      ENG.waiters[id] = function(d){
+        if (d.t === "err") reject(new Error(d.m || "引擎错误"));
+        else resolve(d);
+      };
+      var msg = { cmd: cmd, id: id };
+      if (payload) Object.keys(payload).forEach(function(k){ msg[k] = payload[k]; });
+      ENG.worker.postMessage(msg, transfer || []);
+    });
+  }
+
+  function fetchWithProgress(url, onP, timeoutMs){
+    var ctrl = new AbortController();
+    var timer = null;
+    // 只要还在进数据就一直等；连续 45 秒没有任何数据才算断流
+    function arm(){
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function(){ ctrl.abort(); }, timeoutMs || 45000);
+    }
+    arm();
+    return fetch(url, { mode: "cors", signal: ctrl.signal }).then(function(res){
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      var total = parseInt(res.headers.get("content-length") || "0", 10);
+      if (!res.body || typeof res.body.getReader !== "function"){
+        return res.arrayBuffer().then(function(buf){
+          clearTimeout(timer);
+          if (onP) onP(1);
+          return { buffer: buf, total: buf.byteLength };
+        });
+      }
+      var reader = res.body.getReader();
+      var chunks = [];
+      var received = 0;
+      function pump(){
+        return reader.read().then(function(r){
+          if (r.done){
+            if (onP) onP(1);
+            return new Blob(chunks).arrayBuffer().then(function(buf){
+              clearTimeout(timer);
+              return { buffer: buf, total: total || received };
+            });
+          }
+          chunks.push(r.value);
+          received += r.value.length;
+          arm();
+          if (onP) onP(total ? received / total : 0, received, total);
+          return pump();
+        });
+      }
+      return pump();
+    }, function(err){
+      clearTimeout(timer);
+      throw err;
+    });
+  }
+
+  function patchCore(js){
+    return js
+      .replace(/export\s+default\s+createFFmpegCore\s*;/, "self.createFFmpegCore = createFFmpegCore;")
+      .replace(/import\.meta\.url/g, "self.location.href");
+  }
+
+  function fetchCoreJs(){
+    var bases = CDN_BASES.slice();
+    var failed = [];
+    var chain = Promise.resolve();
+    var result = null;
+    bases.forEach(function(base){
+      chain = chain.then(function(){
+        if (result) return null;
+        var ctrl = new AbortController();
+        var t = setTimeout(function(){ ctrl.abort(); }, 20000);
+        return fetch(base + "ffmpeg-core.js", { mode: "cors", signal: ctrl.signal })
+          .then(function(res){
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.text();
+          })
+          .then(function(text){
+            if (!text || text.indexOf("createFFmpegCore") < 0) throw new Error("内容异常");
+            result = { text: text, base: base };
+          })
+          .catch(function(e){ failed.push(base + " " + e.message); })
+          .then(function(){ clearTimeout(t); });
+      });
+    });
+    return chain.then(function(){
+      if (!result) throw new Error("无法从 CDN 取到引擎（" + failed.join("；") + "）");
+      return result;
+    });
+  }
+
+  function fetchCoreWasm(preferredBase){
+    var order = [preferredBase].concat(CDN_BASES.filter(function(b){ return b !== preferredBase; }));
+    var chain = Promise.resolve();
+    var result = null;
+    var lastErr = null;
+    order.forEach(function(base, i){
+      chain = chain.then(function(){
+        if (result) return null;
+        setChip(i === 0 ? "下载核心 0%" : "换源重试 0%", "busy");
+        return fetchWithProgress(base + "ffmpeg-core.wasm", function(p, got){
+          if (p >= 1) setChip("校验核心…", "busy");
+          else setChip("下载核心 " + Math.round(p * 100) + "%", "busy");
+        }).then(function(r){
+          result = { buffer: r.buffer, base: base };
+        }).catch(function(e){ lastErr = e; });
+      });
+    });
+    return chain.then(function(){
+      if (!result) throw new Error("核心下载失败：" + ((lastErr && lastErr.message) || "网络中断"));
+      return result;
+    });
+  }
+
+  function bootWorker(wasmBuf, wasmUrl){
+    var src = ENG.coreSource + "\n;(" + workerMain.toString() + ")();";
+    var url = URL.createObjectURL(new Blob([src], { type: "text/javascript" }));
+    var w = new Worker(url);
+    attachWorker(w);
+    ENG.worker = w;
+    ENG.wasmUrl = wasmUrl || "";
+    return new Promise(function(resolve, reject){
+      ENG.waiters["ready"] = function(){ resolve(); };
+      ENG.waiters["boot-error"] = function(d){ reject(new Error(d.m || "核心初始化失败")); };
+      w.postMessage({ cmd: "init", wasm: wasmBuf, wasmUrl: wasmUrl || "" }, [wasmBuf]);
+    });
+  }
+
+  function loadEngine(){
+    if (ENG.ready) return Promise.resolve(ENG.worker);
+    if (ENG.promise) return ENG.promise;
+
+    setChip("连接引擎…", "busy");
+    ENG.promise = fetchCoreJs()
+      .then(function(core){
+        ENG.coreSource = patchCore(core.text);
+        return fetchCoreWasm(core.base);
+      })
+      .then(function(w){
+        setChip("启动引擎…", "busy");
+        return bootWorker(w.buffer, w.base + "ffmpeg-core.wasm");
+      })
+      .then(function(){
+        ENG.ready = true;
+        setChip("引擎就绪", "ok");
+        return ENG.worker;
+      })
+      .catch(function(err){
+        ENG.promise = null;
+        ENG.ready = false;
+        setChip("引擎不可用（点击重试）", "bad");
+        throw err;
+      });
+
+    return ENG.promise;
+  }
+
+  /* 同一时刻只跑一个任务 */
+  var ENGINE_QUEUE = Promise.resolve();
+  function withEngine(fn){
+    var run = ENGINE_QUEUE.then(fn, fn);
+    ENGINE_QUEUE = run.then(function(){}, function(){});
+    return run;
+  }
+
+  function friendlyEngineError(ret){
+    var hits = ENG.logs.filter(function(l){
+      return /error|invalid|no stream|not supported|could not|unrecognized|unable|unknown encoder/i.test(l);
+    });
+    var text = hits.slice(-2).join(" / ");
+    if (/matches no streams|does not contain any stream|no audio/i.test(text)) return "这个文件没有音轨，提取不出音频";
+    if (/invalid data found/i.test(text)) return "无法识别这个文件（可能损坏或不是标准的视频封装）";
+    if (/unknown encoder|encoder .* not found/i.test(text)) return "引擎缺少对应编码器";
+    return "转换失败（错误码 " + ret + "）" + (text ? "：" + text : "");
+  }
+
+  function cleanupFiles(names){
+    ENG.progress = null;
+    names.forEach(function(p){
+      send("unlink", { path: p }).catch(function(){});
+    });
+  }
+
+  var fileSeq = 0;
+  function convertWithEngine(file, buildArgs, outExt, mime, onProgress){
+    return withEngine(function(){
+      return loadEngine().then(function(){
+        var stamp = (++fileSeq) + "_" + Date.now();
+        var inName = "in_" + stamp + "." + (fileExt(file.name) || "bin");
+        var outName = "out_" + stamp + "." + outExt;// 输出名
+        var paths = [inName, outName];
+
+        onProgress(0.02);
+        return file.arrayBuffer().then(function(buf){
+          return send("write", { path: inName, data: buf }, [buf]);
+        }).then(function(){
+          ENG.progress = function(p){
+            onProgress(Math.max(0.03, Math.min(0.985, p)));
+          };
+          ENG.logs.length = 0;
+          return send("exec", { args: ["-y", "-i", inName].concat(buildArgs(outName)) });
+        }).then(function(d){
+          if (d.ret !== 0) throw new Error(friendlyEngineError(d.ret));
+          return send("read", { path: outName });
+        }).then(function(d){
+          onProgress(1);
+          return new Blob([d.data], { type: mime });
+        }).then(function(blob){
+          cleanupFiles(paths);
+          return blob;
+        }, function(err){
+          cleanupFiles(paths);
+          throw err;
+        });
+      });
+    });
+  }
+
+  chip.addEventListener("click", function(){
+    if (ENG.ready || ENG.promise) return;
+    setChip("重新加载…", "busy");
+    loadEngine().catch(function(){});
+  });
+
+  /* =====================================================
+     3. ICO 打包
+     ===================================================== */
+  function buildIco(entries){
+    var n = entries.length;
+    var headLen = 6 + 16 * n;
+    var total = headLen;
+    entries.forEach(function(e){ total += e.data.length; });
+    var out = new Uint8Array(total);
+    out[0] = 0; out[1] = 0; out[2] = 1; out[3] = 0;
+    out[4] = n & 255; out[5] = (n >> 8) & 255;
+    var offset = headLen;
+    entries.forEach(function(e, i){
+      var p = 6 + i * 16;
+      var s = e.size >= 256 ? 0 : e.size;
+      out[p] = s; out[p + 1] = s; out[p + 2] = 0; out[p + 3] = 0;
+      out[p + 4] = 1; out[p + 5] = 0;
+      out[p + 6] = 32; out[p + 7] = 0;
+      var len = e.data.length;
+      out[p + 8] = len & 255;
+      out[p + 9] = (len >> 8) & 255;
+      out[p + 10] = (len >> 16) & 255;
+      out[p + 11] = (len >> 24) & 255;
+      out[p + 12] = offset & 255;
+      out[p + 13] = (offset >> 8) & 255;
+      out[p + 14] = (offset >> 16) & 255;
+      out[p + 15] = (offset >> 24) & 255;
+      out.set(e.data, offset);
+      offset += len;
+    });
+    return out;
+  }
+
+  function makeIco(source, onProgress){
+    var sizes = [256, 128, 64, 48, 32, 16];
+    var entries = [];
+    var thumb = "";
+    var i = 0;
+    function step(){
+      if (i >= sizes.length){
+        return Promise.resolve({
+          blob: new Blob([buildIco(entries)], { type: "image/x-icon" }),
+          thumb: thumb
+        });
+      }
+      var size = sizes[i];
+      var c = document.createElement("canvas");
+      c.width = size; c.height = size;
+      var ctx = c.getContext("2d");
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      var sw = source.width || source.naturalWidth;
+      var sh = source.height || source.naturalHeight;
+      var ratio = Math.min(size / sw, size / sh);
+      var w = Math.max(1, Math.round(sw * ratio));
+      var h = Math.max(1, Math.round(sh * ratio));
+      ctx.drawImage(source, Math.round((size - w) / 2), Math.round((size - h) / 2), w, h);
+      if (size === 64){
+        try { thumb = c.toDataURL("image/png"); } catch(e){ thumb = ""; }
+      }
+      return canvasToBlob(c, "image/png").then(function(blob){
+        return blob.arrayBuffer();
+      }).then(function(buf){
+        entries.push({ size: size, data: new Uint8Array(buf) });
+        i++;
+        if (onProgress) onProgress(i / sizes.length);
+        return step();
+      });
+    }
+    return step();
+  }
+
+  /* =====================================================
+     4. 工位骨架
+     ===================================================== */
+  function setupStation(cfg){
+    var root = document.querySelector(cfg.sel);
+    var input = root.querySelector('[data-role="input"]');
+    var queueEl = root.querySelector('[data-role="queue"]');
+    var btn = root.querySelector('[data-role="run"]');
+    var drop = root.querySelector('[data-role="drop"]');
+    var qhead = root.querySelector('[data-role="qhead"]');
+    var countEl = root.querySelector('[data-role="count"]');
+    var clearBtn = root.querySelector('[data-role="clear"]');
+
+    var st = {
+      root: root, input: input, queueEl: queueEl, btn: btn, drop: drop,
+      thumb: !!cfg.thumb, emptyHint: cfg.emptyHint, accepts: cfg.accepts,
+      invalidMsg: cfg.invalidMsg, readOptions: cfg.readOptions, convert: cfg.convert,
+      items: [], seq: 1, running: false
+    };
+
+    function pendingCount(){
+      return st.items.filter(function(i){ return i.state === "pending"; }).length;
+    }
+    function paintBtn(){
+      var pending = pendingCount();
+      btn.disabled = st.running || pending === 0;
+      btn.textContent = st.running ? "转换中…" : (pending ? "开始转换（" + pending + "）" : "开始转换");
+      root.querySelectorAll("select, input[type=number]").forEach(function(el){
+        el.disabled = st.running;
+      });
+    }
+
+    function updateProgress(item){
+      if (item._fill) item._fill.style.width = (Math.max(0, Math.min(1, item.progress)) * 100).toFixed(1) + "%";
+      if (item._pct) item._pct.textContent = Math.round(item.progress * 100) + "%";
+    }
+
+    function renderQueue(){
+      queueEl.innerHTML = "";
+      if (!st.items.length){
+        var empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = st.emptyHint;
+        queueEl.appendChild(empty);
+      } else {
+        st.items.forEach(function(item){
+          var li = document.createElement("li");
+          li.className = "row";
+
+          var thumbEl = null;
+          if (st.thumb){
+            thumbEl = document.createElement("div");
+            thumbEl.className = "thumb";
+            li.appendChild(thumbEl);
+          }
+
+          var body = document.createElement("div");
+          body.className = "body";
+
+          var nameEl = document.createElement("div");
+          nameEl.className = "name";
+          nameEl.textContent = item.file.name;
+
+          var sub = document.createElement("div");
+          sub.className = "sub";
+          var stateEl = document.createElement("span");
+          var pctEl = document.createElement("span");
+          sub.appendChild(stateEl);
+          sub.appendChild(pctEl);
+
+          var bar = document.createElement("div");
+          bar.className = "bar";
+          var fill = document.createElement("i");
+          bar.appendChild(fill);
+
+          body.appendChild(nameEl);
+          body.appendChild(sub);
+          body.appendChild(bar);
+          li.appendChild(body);
+
+          var act = document.createElement("div");
+          act.className = "act";
+          li.appendChild(act);
+
+          item._fill = fill;
+          item._pct = pctEl;
+
+          if (item.state === "pending"){
+            bar.style.display = "none";
+            pctEl.textContent = "";
+            stateEl.textContent = humanSize(item.file.size);
+          } else if (item.state === "running"){
+            stateEl.textContent = "转换中";
+            pctEl.textContent = Math.round(item.progress * 100) + "%";
+          } else if (item.state === "done"){
+            stateEl.textContent = humanSize(item.blob.size) + " · 完成";
+            pctEl.textContent = "100%";
+            var a = document.createElement("a");
+            a.className = "dl";
+            a.href = item.url;
+            a.download = item.outName;
+            a.textContent = "下载";
+            act.appendChild(a);
+            if (st.thumb && thumbEl && item.thumbUrl){
+              thumbEl.style.backgroundImage = 'url("' + item.thumbUrl + '")';
+              thumbEl.textContent = "";
+            }
+          } else {
+            bar.style.display = "none";
+            pctEl.textContent = "";
+            stateEl.className = "bad";
+            stateEl.textContent = "失败：" + (item.message || "未知错误");
+            var tag = document.createElement("span");
+            tag.className = "err-tag";
+            tag.textContent = "×";
+            act.appendChild(tag);
+          }
+
+          if (st.thumb && thumbEl && !(item.state === "done" && item.thumbUrl)){
+            thumbEl.textContent = "IMG";
+          }
+
+          updateProgress(item);
+          queueEl.appendChild(li);
+        });
+      }
+
+      qhead.hidden = st.items.length === 0;
+      countEl.textContent = "队列 " + st.items.length;
+      paintBtn();
+    }
+
+    function addFiles(fileList){
+      var arr = Array.prototype.slice.call(fileList || []);
+      if (!arr.length) return;
+      arr.forEach(function(f){
+        var item = {
+          id: st.seq++, file: f, state: "pending", progress: 0,
+          blob: null, url: null, outName: "", thumbUrl: "", message: ""
+        };
+        st.items.push(item);
+        if (f.size > MAX_BYTES){
+          item.state = "error";
+          item.message = "文件 " + humanSize(f.size) + "，超过 200 MB 上限";
+        } else if (f.size === 0){
+          item.state = "error";
+          item.message = "空文件";
+        } else if (!st.accepts(f)){
+          item.state = "error";
+          item.message = st.invalidMsg;
+        }
+      });
+      renderQueue();
+    }
+
+    function runStation(){
+      if (st.running) return;
+      if (!st.items.some(function(i){ return i.state === "pending"; })) return;
+      st.running = true;
+      renderQueue();
+
+      var chain = Promise.resolve();
+      st.items.forEach(function(item){
+        chain = chain.then(function(){
+          if (item.state !== "pending") return null;
+          item.state = "running";
+          item.progress = 0.01;
+          renderQueue();
+          var opts = {};
+          try { opts = st.readOptions(); } catch(e){}
+          return Promise.resolve()
+            .then(function(){ return st.convert(item, opts, function(p){ item.progress = p; updateProgress(item); }); })
+            .then(function(res){
+              item.blob = res.blob;
+              item.url = URL.createObjectURL(res.blob);
+              item.outName = res.name;
+              item.thumbUrl = res.thumb || item.url;
+              item.state = "done";
+              item.progress = 1;
+            })
+            .catch(function(err){
+              item.state = "error";
+              item.message = (err && err.message) ? err.message : "转换失败";
+              if (/Failed to fetch|NetworkError|核心下载失败|无法从 CDN/i.test(item.message)){
+                item.message = "引擎下载失败（网络原因），点右上角状态可重试";
+              }
+            })
+            .then(function(){ renderQueue(); });
+        });
+      });
+
+      chain.then(function(){ st.running = false; renderQueue(); },
+                 function(){ st.running = false; renderQueue(); });
+    }
+
+    drop.addEventListener("dragenter", function(e){ e.preventDefault(); drop.classList.add("over"); });
+    drop.addEventListener("dragover", function(e){ e.preventDefault(); drop.classList.add("over"); });
+    drop.addEventListener("dragleave", function(e){
+      e.preventDefault();
+      if (e.target === drop) drop.classList.remove("over");
+    });
+    drop.addEventListener("drop", function(e){
+      e.preventDefault();
+      drop.classList.remove("over");
+      addFiles(e.dataTransfer && e.dataTransfer.files);
+    });
+
+    input.addEventListener("change", function(){
+      addFiles(input.files);
+      input.value = "";
+    });
+
+    btn.addEventListener("click", runStation);
+
+    if (clearBtn){
+      clearBtn.addEventListener("click", function(){
+        st.items = st.items.filter(function(i){
+          if (i.state === "running") return true;
+          if (i.url){ try { URL.revokeObjectURL(i.url); } catch(e){} }
+          return false;
+        });
+        renderQueue();
+      });
+    }
+
+    renderQueue();
+    return st;
+  }
+
+  /* =====================================================
+     5. 四个工位
+     ===================================================== */
+  setupStation({
+    sel: "#st-img",
+    thumb: true,
+    emptyHint: "队列为空 — 先选几张图",
+    accepts: function(f){
+      if (/^image\//.test(f.type)) return true;
+      return ["webp","avif","png","jpg","jpeg","bmp","gif","svg"].indexOf(fileExt(f.name)) > -1;
+    },
+    invalidMsg: "需要图片文件（WEBP / AVIF / PNG / JPG）",
+    readOptions: function(){ return { target: $("#img-target").value }; },
+    convert: function(item, opts, onP){
+      var file = item.file;
+      onP(0.08);
+      return decodeImage(file).then(function(src){
+        onP(0.42);
+        if (opts.target === "ico"){
+          return makeIco(src, function(p){ onP(0.42 + p * 0.5); }).then(function(ico){
+            onP(1);
+            return { blob: ico.blob, name: stripExt(file.name) + ".ico", thumb: ico.thumb };
+          });
+        }
+        var sw = src.width || src.naturalWidth;
+        var sh = src.height || src.naturalHeight;
+        var c = document.createElement("canvas");
+        c.width = sw; c.height = sh;
+        c.getContext("2d").drawImage(src, 0, 0, sw, sh);
+        onP(0.85);
+        return canvasToBlob(c, "image/png").then(function(blob){
+          onP(1);
+          return { blob: blob, name: stripExt(file.name) + ".png" };
+        });
+      });
+    }
+  });
+
+  setupStation({
+    sel: "#st-audio",
+    emptyHint: "队列为空 — 先选几个音频",
+    accepts: function(f){
+      var e = fileExt(f.name);
+      return ["flac","wma","ogg","oga","opus","wav","m4a","aac","aiff"].indexOf(e) > -1 || /^audio\//.test(f.type);
+    },
+    invalidMsg: "需要音频文件（FLAC / WMA / OGG）",
+    readOptions: function(){ return { bitrate: $("#audio-bitrate").value }; },
+    convert: function(item, opts, onP){
+      return convertWithEngine(item.file, function(out){
+        return ["-vn", "-c:a", "libmp3lame", "-b:a", opts.bitrate, "-ar", "44100", out];
+      }, "mp3", "audio/mpeg", onP).then(function(blob){
+        return { blob: blob, name: stripExt(item.file.name) + ".mp3" };
+      });
+    }
+  });
+
+  var videoStation = setupStation({
+    sel: "#st-video",
+    emptyHint: "队列为空 — 先选一个视频",
+    accepts: function(f){
+      var e = fileExt(f.name);
+      return ["avi","mp4","mov","flv","mkv","m4v","wmv","webm","mpg","mpeg","ts"].indexOf(e) > -1 || /^video\//.test(f.type);
+    },
+    invalidMsg: "需要视频文件（AVI / MP4 / MOV / FLV）",
+    readOptions: function(){
+      return {
+        target: $("#video-target").value,
+        fps: parseInt($("#gif-fps").value, 10) || 12,
+        width: parseInt($("#gif-width").value, 10) || 480,
+        duration: Math.min(60, Math.max(1, parseInt($("#gif-dur").value, 10) || 10))
+      };
+    },
+    convert: function(item, opts, onP){
+      var isGif = opts.target === "gif";
+      var outExt = isGif ? "gif" : "mp4";
+      var mime = isGif ? "image/gif" : "video/mp4";
+      return convertWithEngine(item.file, function(out){
+        if (isGif){
+          return [
+            "-t", String(opts.duration),
+            "-an",
+            "-vf", "fps=" + opts.fps + ",scale=" + opts.width + ":-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=3",
+            out
+          ];
+        }
+        return [
+          "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+          "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+          "-pix_fmt", "yuv420p",
+          "-c:a", "aac", "-b:a", "128k",
+          out
+        ];
+      }, outExt, mime, onP).then(function(blob){
+        return { blob: blob, name: stripExt(item.file.name) + "." + outExt };
+      });
+    }
+  });
+
+  setupStation({
+    sel: "#st-split",
+    emptyHint: "队列为空 — 先选一个视频",
+    accepts: function(f){
+      var e = fileExt(f.name);
+      return ["mp4","mov","m4v","mkv","avi","webm","flv","wmv","ts","mpg","mpeg"].indexOf(e) > -1 || /^video\//.test(f.type);
+    },
+    invalidMsg: "需要视频文件（MP4 / MOV / MKV）",
+    readOptions: function(){ return { bitrate: $("#split-bitrate").value }; },
+    convert: function(item, opts, onP){
+      return convertWithEngine(item.file, function(out){
+        return ["-map", "0:a:0", "-vn", "-c:a", "libmp3lame", "-b:a", opts.bitrate, "-ar", "44100", out];
+      }, "mp3", "audio/mpeg", onP).then(function(blob){
+        return { blob: blob, name: stripExt(item.file.name) + ".mp3" };
+      });
+    }
+  });
+
+  /* =====================================================
+     6. 视频工位：目标格式切换
+     ===================================================== */
+  var vTarget = $("#video-target");
+  var gifOpts = $("#gif-opts");
+  var vHint = videoStation.root.querySelector('[data-role="hint"]');
+
+  function syncVideoMode(){
+    var isGif = vTarget.value === "gif";
+    gifOpts.hidden = !isGif;
+    vHint.textContent = isGif
+      ? "按下方设定截取片头若干秒做成 GIF：帧率与宽度越小，文件越小，加载越快。"
+      : "把 AVI 等旧封装重新编码为 H.264 + AAC 的 MP4，主流播放器与社交平台都能直接打开。";
+  }
+  vTarget.addEventListener("change", syncVideoMode);
+  syncVideoMode();
+
+  /* 拖到页面空白处不要让浏览器直接打开文件 */
+  window.addEventListener("dragover", function(e){ e.preventDefault(); });
+  window.addEventListener("drop", function(e){ e.preventDefault(); });
+
+})();
+</script>
+</body>
+</html>
